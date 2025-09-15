@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmMono.variable} ${dmSans.variable} antialiased`}>
         <ThemeProvider attribute="class">
-          <main className="mx-auto h-full w-full max-w-3xl p-8 pt-32">{children}</main>
+          <main className="mx-auto h-full w-full max-w-2xl p-8 pt-32">{children}</main>
         </ThemeProvider>
       </body>
     </html>
