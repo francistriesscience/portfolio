@@ -5,9 +5,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 export default function Home() {
   return (
     <div className="flex h-full w-full flex-col items-start gap-16">
-      <div className="flex flex-col items-start gap-2">
-        <h1 className="font-georgia text-4xl font-medium">Francis Ignacio</h1>
-        <p className="text-muted-foreground text-sm">
+      <div className="flex flex-col items-start gap-4">
+        <div className="flex flex-col items-start">
+          <h1 className="font-georgia text-4xl font-medium">Francis Ignacio</h1>
+          <h2 className="text-muted-foreground text-sm">Software Engineer</h2>
+        </div>
+        <p className="text-muted-foreground text-sm italic">
           Loves teaching and sharing what I have learned—practical tips, stories, and workflows that
           help others grow. By training I am a software engineer, but I am deeply curious about data
           science and enjoy applying data-driven thinking to real problems.
@@ -22,9 +25,9 @@ export default function Home() {
             <CardHeader className="p-0">
               <div className="h-40 w-full rounded-xl border bg-transparent" />
             </CardHeader>
-            <CardContent className="w-full p-0">
+            <CardContent className="flex w-full flex-col gap-1 p-0">
               <CardTitle>Motion Primitives Pro</CardTitle>
-              <CardDescription className="line-clamp-2 w-full max-w-xs">
+              <CardDescription className="line-clamp-2 text-xs">
                 Advanced components and templates to craft beautiful websites.
               </CardDescription>
             </CardContent>
@@ -34,9 +37,9 @@ export default function Home() {
             <CardHeader className="p-0">
               <div className="h-40 w-full rounded-xl border bg-transparent" />
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="flex w-full flex-col gap-1 p-0">
               <CardTitle>Motion Primitives Pro</CardTitle>
-              <CardDescription className="line-clamp-2">
+              <CardDescription className="line-clamp-2 text-xs">
                 Advanced components and templates to craft beautiful websites.
               </CardDescription>
             </CardContent>
