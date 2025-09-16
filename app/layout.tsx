@@ -19,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmMono.variable} ${dmSans.variable} antialiased`}>
-        <ThemeProvider attribute="class">
-          <main className="mx-auto h-full w-full max-w-2xl p-8 pt-32">{children}</main>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <main className="mx-auto h-full w-full max-w-2xl p-8 py-32 tracking-tight">
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>
