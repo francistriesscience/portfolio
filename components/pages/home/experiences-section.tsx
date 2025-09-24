@@ -1,6 +1,5 @@
 import * as React from "react"
 import Link from "next/link"
-import { LinkedinIcon } from "lucide-react"
 
 import experiencesData from "@/data/experiences.json"
 
@@ -9,7 +8,17 @@ import { Card, CardContent } from "@/components/ui"
 export function ExperiencesSection() {
   return (
     <div className="flex w-full flex-col items-start gap-4">
-      <h2 className="text-xl font-medium">Experiences</h2>
+      <div className="flex w-full items-end justify-between">
+        <h2 className="text-xl font-medium">Experiences</h2>
+        <div className="flex w-full justify-end">
+          <Link
+            className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
+            href={"https://www.linkedin.com/in/noeyislearning"}
+          >
+            View more on LinkedIn
+          </Link>
+        </div>
+      </div>
       <div className="flex w-full flex-col gap-2">
         {experiencesData.map((e, i) => {
           const start = e.dates?.start ?? ""
@@ -30,15 +39,6 @@ export function ExperiencesSection() {
             </Card>
           )
         })}
-      </div>
-      <div className="flex w-full justify-end">
-        <Link
-          className="text-muted-foreground flex flex-row items-center gap-1 text-xs"
-          href={"https://www.linkedin.com/in/noeyislearning"}
-        >
-          View more on LinkedIn
-          <LinkedinIcon className="size-3" />
-        </Link>
       </div>
     </div>
   )
