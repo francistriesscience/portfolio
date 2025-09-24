@@ -1,4 +1,10 @@
 /**
+ * Background
+ */
+export { RippleBackground } from "./background/ripple-background"
+/**
+ */
+/**
  * Card
  */
 export { Card } from "./card/card"
@@ -12,3 +18,9 @@ export { CardFooter } from "./card/card-footer"
  * Button
  */
 export { Button } from "./button/button"
+/**
+ * Avatar
+ */
+export { Avatar } from "./avatar/avatar"
+export { AvatarImage } from "./avatar/avatar-image"
+export { AvatarFallback } from "./avatar/avatar-fallback"
