@@ -10,6 +10,9 @@ import {
   CardDescription,
   CardContent,
   RippleBackground,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
 } from "@/components/ui"
 
 type Project = {
@@ -27,12 +30,19 @@ export function ProjectsSection() {
       <div className="flex w-full items-end justify-between">
         <h2 className="text-xl font-medium">Projects</h2>
         <div className="flex w-full justify-end">
-          <Link
-            className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
-            href={"mailto:hello@francistries.science"}
-          >
-            Let&apos;s collaborate!
-          </Link>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
+                href={"mailto:hello@francistries.science"}
+              >
+                Let&apos;s collaborate!
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>I&apos;d love to hear from you!</span>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
       {items.length > 0 ? (
