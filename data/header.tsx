@@ -33,7 +33,7 @@ export const header: Header = {
   name: "Francis Ignacio.",
   subtitle: "Software Engineer, Data Scientist",
   intro:
-    "Loves teaching and sharing what I have learned—practical tips, stories, and workflows that help others grow. By training I am a software engineer, but I am deeply curious about data science and enjoy applying data-driven thinking to real problems.",
+    "Loves teaching and sharing what I have learned—practical tips, stories, and workflows that help others grow. By training I am a software engineer and I am deeply curious about data science and enjoy applying data-driven thinking to real problems.",
   skills: [
     { name: "Python", icon: PythonIcon },
     { name: "TypeScript", icon: TypeScriptIcon },
