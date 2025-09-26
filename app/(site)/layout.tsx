@@ -59,9 +59,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         <div className="mx-auto flex w-full flex-row items-center justify-between gap-2 pt-10">
           <Tooltip>
             <TooltipTrigger asChild>
-              <div>
-                <AnimatedThemeToggler />
-              </div>
+              <AnimatedThemeToggler />
             </TooltipTrigger>
             <TooltipContent>
               <p>Toggle between light and dark theme</p>
