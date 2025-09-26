@@ -4,7 +4,7 @@ import * as React from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 
-import { header } from "@/data/header"
+import { header, type SkillItem } from "@/data/header"
 
 import {
   Avatar,
@@ -42,11 +42,17 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             </div>
             <p className="text-muted-foreground text-sm italic">{header.intro}</p>
             <div className="-mt-2 flex w-full flex-wrap items-start gap-2">
-              {header.skills.slice(0, 14).map((skill, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {skill}
-                </Badge>
-              ))}
+              {header.skills.slice(0, 14).map((skill: SkillItem, index: number) => {
+                const IconComponent = skill.icon
+                return (
+                  <Badge key={index} variant="outline" className="text-xs">
+                    <div className="flex items-center gap-1">
+                      {IconComponent && <IconComponent className="h-3 w-3" />}
+                      <span>{skill.name}</span>
+                    </div>
+                  </Badge>
+                )
+              })}
               {header.skills.length > 14 && (
                 <Badge variant="secondary" className="text-xs">
                   +{header.skills.length - 14} more
