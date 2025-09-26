@@ -34,7 +34,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     }
 
     return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  } catch (error) {
+  } catch {
     return []
   }
 }
@@ -67,7 +67,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     }
 
     return post
-  } catch (error) {
+  } catch {
     return null
   }
 }
