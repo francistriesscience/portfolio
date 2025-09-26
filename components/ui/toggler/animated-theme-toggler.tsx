@@ -6,14 +6,6 @@ import { flushSync } from "react-dom"
 
 import { cn } from "@/lib/utils"
 
-declare global {
-  interface Document {
-    startViewTransition?: (callback: () => void) => {
-      ready: Promise<void>
-    }
-  }
-}
-
 type Props = {
   className?: string
 }
@@ -41,8 +33,12 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
   const toggleTheme = React.useCallback(async () => {
     if (!buttonRef.current) return
 
-    if (typeof document.startViewTransition === "function") {
-      await document.startViewTransition(() => {
+    const startViewTransition = (
+      document as { startViewTransition?: (callback: () => void) => { ready: Promise<void> } }
+    ).startViewTransition
+
+    if (typeof startViewTransition === "function") {
+      await startViewTransition(() => {
         flushSync(() => {
           const newTheme = !isDark
           setIsDark(newTheme)
@@ -57,7 +53,7 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
       localStorage.setItem("theme", newTheme ? "dark" : "light")
     }
 
-    if (typeof document.startViewTransition === "function") {
+    if (typeof startViewTransition === "function") {
       const { top, left, width, height } = buttonRef.current.getBoundingClientRect()
       const x = left + width / 2
       const y = top + height / 2
