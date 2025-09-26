@@ -8,9 +8,9 @@ import { getPostBySlug, getAllPosts } from "@/lib/mdx"
 import { Badge } from "@/components/ui"
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
