@@ -22,7 +22,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   const isBlogPost = pathname.match(/^\/blog\/.+$/)
 
   return (
-    <div className="mx-auto h-full w-full max-w-2xl p-8 py-32 tracking-tight">
+    <div className="mx-auto h-full w-full max-w-2xl p-4 py-32 tracking-tight">
       <div className="flex h-full w-full flex-col items-start gap-8">
         {!isBlogPost && (
           <div className="flex flex-col items-start gap-4">
