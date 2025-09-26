@@ -39,7 +39,7 @@ export function ExperiencesSection() {
                 className="block"
               >
                 <Card className="border-primary from-primary/5 via-background to-primary/10 relative w-full cursor-pointer overflow-hidden rounded-xl border border-dashed bg-gradient-to-br transition-all hover:shadow-md">
-                  <div className="flex flex-col gap-2 p-4">
+                  <div className="flex flex-col gap-2 p-3">
                     <div className="flex items-center justify-between">
                       <Badge>
                         <SearchIcon className="size-4 rotate-90" />

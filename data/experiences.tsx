@@ -21,7 +21,7 @@ export type JobSeekingStatus = {
 
 export const jobSeekingStatus: JobSeekingStatus = {
   isActivelyLooking: true,
-  targetPosition: "Software Engineer / Data Scientist / Tech Lead",
+  targetPosition: "Data Scientist / Software Engineer  / Tech Lead",
   contactInfo: "hello@francistries.science",
   description:
     "Passionate about building scalable web applications, machine learning models, and leading development teams.",

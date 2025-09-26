@@ -1,0 +1,85 @@
+"use client"
+
+import * as React from "react"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
+
+import { header } from "@/data/header"
+
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  Badge,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui"
+import { AnimatedThemeToggler } from "@/components/ui/toggler/animated-theme-toggler"
+
+export default function SiteLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const isBlogPost = pathname.match(/^\/blog\/.+$/)
+
+  return (
+    <div className="mx-auto h-full w-full max-w-2xl p-8 py-32 tracking-tight">
+      <div className="flex h-full w-full flex-col items-start gap-8">
+        {!isBlogPost && (
+          <div className="flex flex-col items-start gap-4">
+            <div className="flex w-full flex-row items-center justify-between">
+              <div className="flex flex-col items-start">
+                <div className="flex flex-row items-center gap-2">
+                  <Avatar className="border-border border">
+                    <AvatarImage src={header.avatar} />
+                    <AvatarFallback>FI</AvatarFallback>
+                  </Avatar>
+                  <h1 className="font-georgia text-4xl font-medium tracking-tighter">
+                    {header.name}
+                  </h1>
+                </div>
+                <h2 className="text-muted-foreground text-sm">{header.subtitle}</h2>
+              </div>
+            </div>
+            <p className="text-muted-foreground text-sm italic">{header.intro}</p>
+            <div className="-mt-2 flex w-full flex-wrap items-start gap-2">
+              {header.skills.slice(0, 14).map((skill, index) => (
+                <Badge key={index} variant="outline" className="text-xs">
+                  {skill}
+                </Badge>
+              ))}
+              {header.skills.length > 14 && (
+                <Badge variant="secondary" className="text-xs">
+                  +{header.skills.length - 14} more
+                </Badge>
+              )}
+            </div>
+          </div>
+        )}
+        {children}
+        <div className="mx-auto flex w-full flex-row items-center justify-between gap-2 pt-10">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <AnimatedThemeToggler />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Toggle between light and dark theme</p>
+            </TooltipContent>
+          </Tooltip>
+          <div className="text-muted-foreground text-xs">
+            Build by{" "}
+            <Link
+              href="https://linkedin.com/in/francistriesscience"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary font-medium underline decoration-dashed underline-offset-2"
+            >
+              Francis Ignacio
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
