@@ -1,37 +1,47 @@
 import * as React from "react"
 import Link from "next/link"
-import { MailsIcon, GitlabIcon, LinkedinIcon } from "lucide-react"
+
+import { socials } from "@/data/socials"
+import { renderIcon } from "@/helper/render-icon"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui"
 
 export function ConnectSection() {
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <h2 className="text-xl font-medium">Connect</h2>
       <div className="flex flex-col items-start gap-4">
-        <div className="text-muted-foreground flex flex-row flex-wrap items-center gap-2 text-sm">
+        <div className="text-muted-foreground flex flex-row flex-wrap items-center gap-1 text-sm">
           <span className="whitespace-nowrap">Feel free to contact me at</span>
-          <div className="flex items-center gap-1">
-            <MailsIcon className="size-4" />
-            <Link
-              className="text-primary underline underline-offset-4"
-              href="mailto:hello@francistries.science"
-            >
-              hello@francistries.science.
-            </Link>
-          </div>
+          <Link
+            className="text-primary flex items-center gap-2 underline decoration-dashed underline-offset-4"
+            href={"mailto:hello@francistries.science"}
+          >
+            <span>hello@francistries.science</span>
+          </Link>
         </div>
-        <div className="text-muted-foreground flex flex-row items-center gap-2">
-          <Link
-            className="text-primary underline underline-offset-4"
-            href="https://gitlab.com/francistriesscience"
-          >
-            <GitlabIcon className="size-5" />
-          </Link>
-          <Link
-            className="text-primary underline underline-offset-4"
-            href="https://www.linkedin.com/in/noeyislearning"
-          >
-            <LinkedinIcon className="size-5" />
-          </Link>
+        <div className="flex flex-row items-center gap-2">
+          <div className="text-muted-foreground flex flex-row items-center gap-2">
+            {socials.map((social) => {
+              const urlWithoutProtocol = social.tooltip
+              return (
+                <Tooltip key={social.name}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      target="_blank"
+                      className="text-primary underline underline-offset-4"
+                      href={social.url}
+                    >
+                      {renderIcon(social.icon)}
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span>{urlWithoutProtocol}</span>
+                  </TooltipContent>
+                </Tooltip>
+              )
+            })}
+          </div>
+          <span className="text-muted-foreground text-xs">you can also find me on these</span>
         </div>
       </div>
     </div>
