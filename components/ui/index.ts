@@ -43,3 +43,11 @@ export { Accordion } from "./accordion/accordion"
 export { AccordionItem } from "./accordion/accordion-item"
 export { AccordionTrigger } from "./accordion/accordion-trigger"
 export { AccordionContent } from "./accordion/accordion-content"
+/**
+ * Separator
+ */
+export { Separator } from "./separator/separator"
+/**
+ * MDX
+ */
+export { MDXContent } from "./mdx/mdx"
