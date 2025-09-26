@@ -30,6 +30,18 @@ export { AvatarFallback } from "./avatar/avatar-fallback"
  * Icon
  */
 export { BlueskySocialLineIcon } from "./icon/bluesky-social-line-icon"
+export { GoIcon } from "./icon/go-icon"
+export { PythonIcon } from "./icon/python-icon"
+export { TypeScriptIcon } from "./icon/typescript-icon"
+export { TensorFlowIcon } from "./icon/tensorflow-icon"
+export { PyTorchIcon } from "./icon/pytorch-icon"
+export { DjangoIcon } from "./icon/django-icon"
+export { NextJsIcon } from "./icon/next-js-icon"
+export { NodeJsIcon } from "./icon/node-js-icon"
+export { HonoIcon } from "./icon/hono-icon"
+export { PostgreSQLIcon } from "./icon/postgresql-icon"
+export { DockerIcon } from "./icon/docker-icon"
+export { AWSIcon } from "./icon/aws-icon"
 /**
  * Tooltip
  */
