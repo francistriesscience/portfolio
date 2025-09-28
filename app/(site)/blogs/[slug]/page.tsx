@@ -22,11 +22,11 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   return (
-    <div className="mx-auto">
-      <div className="mx-auto max-w-3xl">
+    <div className="mx-auto w-full">
+      <div className="mx-auto w-full max-w-3xl">
         <article className="mb-8">
           <header className="mb-8">
-            <h1 className="font-georgia text-foreground mb-4 text-4xl font-medium tracking-tight">
+            <h1 className="font-georgia text-foreground mb-4 w-full text-4xl font-medium tracking-tight">
               {post.title}
             </h1>
             <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-4 text-sm">
