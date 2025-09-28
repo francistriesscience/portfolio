@@ -11,9 +11,9 @@ export function ConnectSection() {
       <h2 className="text-xl font-medium">Connect</h2>
       <div className="flex flex-col items-start gap-4">
         <div className="text-muted-foreground flex flex-row flex-wrap items-center gap-1 text-sm">
-          <span className="whitespace-nowrap">Feel free to contact me at</span>
+          <span className="whitespace-nowrap">Slide into my inbox at</span>
           <Link
-            className="text-primary flex items-center gap-2 underline decoration-dashed underline-offset-4"
+            className="text-primary flex items-center gap-2 underline decoration-dashed underline-offset-2"
             href={"mailto:hello@francistries.science"}
           >
             <span>hello@francistries.science</span>
