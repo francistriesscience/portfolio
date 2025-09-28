@@ -31,25 +31,18 @@ export default async function BlogPage() {
       {posts.length > 0 ? (
         <div className="flex w-full flex-col items-start gap-2">
           {posts.map((post) => (
-            <Card
-              key={post.slug}
-              className="group hover:border-primary w-full cursor-pointer p-3 transition-all"
-            >
-              <Link href={`/blog/${post.slug}`}>
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 space-y-1">
-                      <CardTitle className="group-hover:text-primary line-clamp-2 text-sm leading-tight font-medium transition-colors">
-                        {post.title}
-                      </CardTitle>
-                      <CardDescription className="line-clamp-2 text-xs leading-relaxed">
-                        {post.description}
-                      </CardDescription>
-                    </div>
-                  </div>
+            <Link key={post.slug} href={`/blogs/${post.slug}`} className="w-full">
+              <Card className="group hover:border-primary cursor-pointer p-3 transition-all">
+                <CardHeader className="flex flex-col items-start justify-between">
+                  <CardTitle className="group-hover:text-primary line-clamp-2 text-sm leading-tight font-medium transition-colors">
+                    {post.title}
+                  </CardTitle>
+                  <CardDescription className="line-clamp-2 text-xs leading-relaxed">
+                    {post.description}
+                  </CardDescription>
                 </CardHeader>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
           ))}
         </div>
       ) : (

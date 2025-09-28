@@ -15,7 +15,7 @@ export interface BlogPost {
 
 const CONTENT_DIR = path.join(process.cwd(), "content/blog")
 
-export async function getAllPosts(): Promise<BlogPost[]> {
+export async function getAllPosts(limit?: number): Promise<BlogPost[]> {
   if (!fs.existsSync(CONTENT_DIR)) {
     return []
   }
@@ -33,7 +33,11 @@ export async function getAllPosts(): Promise<BlogPost[]> {
       }
     }
 
-    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    const sortedPosts = posts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    )
+
+    return limit ? sortedPosts.slice(0, limit) : sortedPosts
   } catch {
     return []
   }
