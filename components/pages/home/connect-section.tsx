@@ -19,7 +19,7 @@ export function ConnectSection() {
             <span>hello@francistries.science</span>
           </Link>
         </div>
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row flex-wrap items-center gap-2">
           <div className="text-muted-foreground flex flex-row items-center gap-2">
             {socials.map((social) => {
               const urlWithoutProtocol = social.tooltip
