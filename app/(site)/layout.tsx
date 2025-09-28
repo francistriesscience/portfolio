@@ -19,7 +19,7 @@ import { AnimatedThemeToggler } from "@/components/ui/toggler/animated-theme-tog
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isBlogPost = pathname.match(/^\/blog\/.+$/)
+  const isBlogPost = pathname.match(/^\/blogs\/.+$/)
 
   return (
     <div className="mx-auto h-full w-full max-w-2xl p-4 py-32 tracking-tight">
