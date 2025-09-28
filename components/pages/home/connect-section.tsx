@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { socials } from "@/data/socials"
 import { renderIcon } from "@/helper/render-icon"
+
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui"
 
 export function ConnectSection() {
