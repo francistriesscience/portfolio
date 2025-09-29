@@ -8,25 +8,36 @@ export interface BlogPost {
   date: string
   description: string
   tags: string[]
-  author: string
+  authors: [
+    {
+      name: string
+      url: string
+      imageUrl: string
+    },
+  ]
   content: string
   readingTime: number
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "content/blog")
+// Content can be in public directory (production) or content directory (development)
+const CONTENT_DIR = path.join(process.cwd(), "public/content/blog")
+const FALLBACK_CONTENT_DIR = path.join(process.cwd(), "content/blog")
 
 export async function getAllPosts(limit?: number): Promise<BlogPost[]> {
-  if (!fs.existsSync(CONTENT_DIR)) {
+  // Check both locations for content files
+  const contentDir = fs.existsSync(CONTENT_DIR) ? CONTENT_DIR : FALLBACK_CONTENT_DIR
+
+  if (!fs.existsSync(contentDir)) {
     return []
   }
 
   try {
-    const files = fs.readdirSync(CONTENT_DIR)
+    const files = fs.readdirSync(contentDir)
     const posts: BlogPost[] = []
 
     for (const file of files) {
       if (file.endsWith(".mdx")) {
-        const post = await getPostBySlug(file.replace(".mdx", ""))
+        const post = await getPostBySlug(file.replace(".mdx", ""), contentDir)
         if (post) {
           posts.push(post)
         }
@@ -43,9 +54,10 @@ export async function getAllPosts(limit?: number): Promise<BlogPost[]> {
   }
 }
 
-export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+export async function getPostBySlug(slug: string, contentDir?: string): Promise<BlogPost | null> {
   try {
-    const filePath = path.join(CONTENT_DIR, `${slug}.mdx`)
+    const dir = contentDir || (fs.existsSync(CONTENT_DIR) ? CONTENT_DIR : FALLBACK_CONTENT_DIR)
+    const filePath = path.join(dir, `${slug}.mdx`)
 
     if (!fs.existsSync(filePath)) {
       return null
@@ -65,7 +77,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
       date: data.date || new Date().toISOString(),
       description: data.description || "",
       tags: data.tags || [],
-      author: data.author || "Anonymous",
+      authors: data.authors || [],
       content,
       readingTime,
     }
