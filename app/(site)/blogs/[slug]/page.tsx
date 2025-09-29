@@ -1,11 +1,12 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { MDXRemote } from "next-mdx-remote/rsc"
-import { mdxComponents } from "@/components/ui/mdx/mdx"
 
 import { getPostBySlug, getAllPosts } from "@/lib/mdx"
 
-import { Badge } from "@/components/ui"
+import { Badge, Avatar, AvatarImage, AvatarFallback } from "@/components/ui"
+import { mdxComponents } from "@/components/ui/mdx/mdx"
+import Link from "next/link"
 
 interface PageProps {
   params: Promise<{
@@ -24,12 +25,44 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <div className="mx-auto w-full">
       <div className="mx-auto w-full max-w-3xl">
-        <article className="mb-8">
-          <header className="mb-8">
+        <article>
+          <header>
+            {post.tags.length > 0 && (
+              <div className="mb-6 flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="text-xs uppercase">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
             <h1 className="font-georgia text-foreground mb-4 w-full text-4xl font-medium tracking-tight">
               {post.title}
             </h1>
             <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                {post.authors.map((author, index) => (
+                  <div key={author.name} className="flex items-center gap-2">
+                    {index > 0 && <span className="text-muted-foreground">, </span>}
+                    <Avatar className="size-5">
+                      <AvatarImage src={author.imageUrl} alt={author.name} />
+                      <AvatarFallback className="text-xs">
+                        {author.name.split(" ")[0][0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <Link
+                      href={author.url}
+                      target="_blank "
+                      className="decoration-dashed underline-offset-2 hover:underline"
+                    >
+                      {author.name}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+              <span className="text-muted-foreground">·</span>
+              <span>{post.readingTime} min read</span>
+              <span className="text-muted-foreground">·</span>
               <time dateTime={post.date}>
                 {new Date(post.date).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -37,19 +70,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   day: "numeric",
                 })}
               </time>
-              <span>{post.readingTime} min read</span>
-              <span>By {post.author}</span>
             </div>
-
-            {post.tags.length > 0 && (
-              <div className="mb-6 flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </header>
 
           <div className="prose prose-neutral dark:prose-invert max-w-none">
@@ -74,13 +95,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${post.title} - Francis Ignacio`,
     description: post.description,
-    authors: [{ name: post.author }],
+    authors: post.authors.map((author) => ({ name: author.name })),
     openGraph: {
       title: post.title,
       description: post.description,
       type: "article",
       publishedTime: post.date,
-      authors: [post.author],
+      authors: post.authors.map((author) => author.name),
     },
   }
 }
