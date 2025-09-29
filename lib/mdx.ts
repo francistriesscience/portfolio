@@ -19,12 +19,10 @@ export interface BlogPost {
   readingTime: number
 }
 
-// Content can be in public directory (production) or content directory (development)
-const CONTENT_DIR = path.join(process.cwd(), "public/content/blog")
+const CONTENT_DIR = path.join(process.cwd(), "public/blog")
 const FALLBACK_CONTENT_DIR = path.join(process.cwd(), "content/blog")
 
 export async function getAllPosts(limit?: number): Promise<BlogPost[]> {
-  // Check both locations for content files
   const contentDir = fs.existsSync(CONTENT_DIR) ? CONTENT_DIR : FALLBACK_CONTENT_DIR
 
   if (!fs.existsSync(contentDir)) {

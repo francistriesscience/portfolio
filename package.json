@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:content": "mkdir -p public && cp -r content/* public/",
+    "build:content": "mkdir -p public/blog && cp content/blog/*.mdx public/blog/",
     "build:cloudflare": "npm run build:content && opennextjs-cloudflare build"
   },
   "dependencies": {
