@@ -1,15 +1,18 @@
 import * as React from "react"
 import Link from "next/link"
 
+import { getAllPosts, type BlogPost } from "@/lib/mdx"
+import { formatDate } from "@/helper/format-date"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
   RippleBackground,
 } from "@/components/ui"
-import { getAllPosts, type BlogPost } from "@/lib/mdx"
 
 export async function BlogsSection() {
   let posts: BlogPost[] = []
@@ -42,6 +45,10 @@ export async function BlogsSection() {
                   <CardDescription className="line-clamp-2 text-xs leading-relaxed">
                     {post.description}
                   </CardDescription>
+                  <CardFooter className="line-clamp-2 flex w-full flex-row justify-between text-xs leading-relaxed">
+                    <span className="text-muted-foreground text-xs">{post.tags.join(", ")}</span>
+                    {formatDate(post.date)}
+                  </CardFooter>
                 </CardHeader>
               </Card>
             </Link>
