@@ -2,16 +2,9 @@ import * as React from "react"
 import Link from "next/link"
 
 import { getAllPosts } from "@/lib/mdx"
+import { BlogCard } from "@/components/card/blog-card"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Button,
-  RippleBackground,
-} from "@/components/ui"
+import { Card, CardContent, Button, RippleBackground } from "@/components/ui"
 
 export default async function BlogPage() {
   const posts = await getAllPosts()
@@ -31,18 +24,7 @@ export default async function BlogPage() {
       {posts.length > 0 ? (
         <div className="flex w-full flex-col items-start gap-2">
           {posts.map((post) => (
-            <Link key={post.slug} href={`/blogs/${post.slug}`} className="w-full">
-              <Card className="group hover:border-primary cursor-pointer p-3 transition-all">
-                <CardHeader className="flex flex-col items-start justify-between">
-                  <CardTitle className="group-hover:text-primary line-clamp-2 text-sm leading-tight font-medium transition-colors">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription className="line-clamp-2 text-xs leading-relaxed">
-                    {post.description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
+            <BlogCard key={post.slug} post={post} />
           ))}
         </div>
       ) : (
