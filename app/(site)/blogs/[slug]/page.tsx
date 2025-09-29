@@ -4,7 +4,7 @@ import { MDXRemote } from "next-mdx-remote/rsc"
 
 import { getPostBySlug, getAllPosts } from "@/lib/mdx"
 
-import { Badge, Avatar, AvatarImage, AvatarFallback } from "@/components/ui"
+import { Badge, Avatar, AvatarImage, AvatarFallback, Button } from "@/components/ui"
 import { mdxComponents } from "@/components/ui/mdx/mdx"
 import Link from "next/link"
 
@@ -27,15 +27,24 @@ export default async function BlogPostPage({ params }: PageProps) {
       <div className="mx-auto w-full max-w-3xl">
         <article>
           <header>
-            {post.tags.length > 0 && (
-              <div className="mb-6 flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="text-xs uppercase">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
+            <div className="flex flex-row items-center justify-between gap-2">
+              {post.tags.length > 0 && (
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="text-xs uppercase">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              <Button
+                variant="link"
+                size="sm"
+                className="text-muted-foreground hover:text-primary h-auto p-0 text-xs underline decoration-dashed"
+              >
+                <Link href={"/blogs"}>View more blogs</Link>
+              </Button>
+            </div>
             <h1 className="font-georgia text-foreground mb-4 w-full text-4xl font-medium tracking-tight">
               {post.title}
             </h1>
