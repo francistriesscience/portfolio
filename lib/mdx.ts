@@ -19,11 +19,10 @@ export interface BlogPost {
   readingTime: number
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "public/blog")
-const FALLBACK_CONTENT_DIR = path.join(process.cwd(), "content/blog")
+const CONTENT_DIR = path.join(process.cwd(), "content/blog")
 
 export async function getAllPosts(limit?: number): Promise<BlogPost[]> {
-  const contentDir = fs.existsSync(CONTENT_DIR) ? CONTENT_DIR : FALLBACK_CONTENT_DIR
+  const contentDir = CONTENT_DIR
 
   if (!fs.existsSync(contentDir)) {
     return []
@@ -54,7 +53,7 @@ export async function getAllPosts(limit?: number): Promise<BlogPost[]> {
 
 export async function getPostBySlug(slug: string, contentDir?: string): Promise<BlogPost | null> {
   try {
-    const dir = contentDir || (fs.existsSync(CONTENT_DIR) ? CONTENT_DIR : FALLBACK_CONTENT_DIR)
+    const dir = contentDir || CONTENT_DIR
     const filePath = path.join(dir, `${slug}.mdx`)
 
     if (!fs.existsSync(filePath)) {
