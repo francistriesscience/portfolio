@@ -42,7 +42,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             </div>
             <p className="text-muted-foreground text-sm italic">{header.intro}</p>
             <div className="-mt-2 flex w-full flex-wrap items-start gap-2">
-              {header.skills.slice(0, 14).map((skill: SkillItem, index: number) => {
+              {header.skills.slice(0, 19).map((skill: SkillItem, index: number) => {
                 const IconComponent = skill.icon
                 return (
                   <Badge key={index} variant="outline" className="text-xs">
@@ -53,9 +53,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                   </Badge>
                 )
               })}
-              {header.skills.length > 14 && (
+              {header.skills.length > 19 && (
                 <Badge variant="secondary" className="text-xs">
-                  +{header.skills.length - 14} more
+                  +{header.skills.length - 19} more
                 </Badge>
               )}
             </div>

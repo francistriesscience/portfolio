@@ -21,7 +21,7 @@ export type JobSeekingStatus = {
 
 export const jobSeekingStatus: JobSeekingStatus = {
   isActivelyLooking: true,
-  targetPosition: "Data Scientist / Software Engineer  / Tech Lead",
+  targetPosition: "Tech Lead / Software Engineer / Data Scientist",
   contactInfo: "hello@francistries.science",
   description:
     "Passionate about building scalable web applications, machine learning models, and leading development teams.",
@@ -45,7 +45,7 @@ export const experiences: Experience[] = [
     location: "Philippines",
     dates: {
       start: "Aug 2023",
-      end: "Present",
+      end: "Oct 2025",
     },
   },
   {
@@ -58,7 +58,7 @@ export const experiences: Experience[] = [
     },
   },
   {
-    role: "Technical Associate / Software Developer",
+    role: "Full Stack Engineer / Technical Associate",
     company: "Holy Angel University, TBI",
     location: "Philippines",
     dates: {
