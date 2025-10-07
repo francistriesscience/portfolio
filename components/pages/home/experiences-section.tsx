@@ -1,5 +1,4 @@
 import * as React from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { SearchIcon } from "lucide-react"
 
@@ -74,18 +73,7 @@ export function ExperiencesSection() {
                 <CardContent className="flex w-full items-start justify-between gap-4 p-3">
                   <div className="flex w-full flex-col items-start gap-1">
                     <div className="flex w-full flex-row items-center justify-between">
-                      <div className="flex flex-row items-center gap-1">
-                        {e.imageURL && (
-                          <Image
-                            src={e.imageURL}
-                            alt={`${e.company} logo`}
-                            className="h-4 w-4 rounded-full object-contain"
-                            width={24}
-                            height={24}
-                          />
-                        )}
-                        <p className="text-muted-foreground text-xs">{e.company}</p>
-                      </div>
+                      <p className="text-muted-foreground text-xs">{e.company}</p>
                       <p className="text-muted-foreground text-xs">{e.location}</p>
                     </div>
                     <div className="relative w-full">
