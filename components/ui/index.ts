@@ -33,6 +33,7 @@ export { BlueskySocialLineIcon } from "./icon/bluesky-social-line-icon"
 export { GoIcon } from "./icon/go-icon"
 export { PythonIcon } from "./icon/python-icon"
 export { TypeScriptIcon } from "./icon/typescript-icon"
+export { JavaScriptIcon } from "./icon/javascript-icon"
 export { TensorFlowIcon } from "./icon/tensorflow-icon"
 export { PyTorchIcon } from "./icon/pytorch-icon"
 export { DjangoIcon } from "./icon/django-icon"
@@ -42,6 +43,9 @@ export { HonoIcon } from "./icon/hono-icon"
 export { PostgreSQLIcon } from "./icon/postgresql-icon"
 export { DockerIcon } from "./icon/docker-icon"
 export { AWSIcon } from "./icon/aws-icon"
+export { CloudflareIcon } from "./icon/cloudflare-icon"
+export { DigitalOceanIcon } from "./icon/digital-ocean-icon"
+export { GitLabIcon } from "./icon/gitlab-icon"
 /**
  * Tooltip
  */

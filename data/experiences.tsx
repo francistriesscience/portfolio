@@ -3,11 +3,19 @@ export type ExperienceDates = {
   end: string
 }
 
-export type Experience = {
+export type RoleEntry = {
   role: string
+  dates: ExperienceDates
+  description?: string
+}
+
+export type Experience = {
   company: string
   location: string
-  dates: ExperienceDates
+  imageURL?: string
+  role?: string
+  roles?: RoleEntry[]
+  dates?: ExperienceDates
 }
 
 export type JobSeekingStatus = {
@@ -21,7 +29,7 @@ export type JobSeekingStatus = {
 
 export const jobSeekingStatus: JobSeekingStatus = {
   isActivelyLooking: true,
-  targetPosition: "Data Scientist / Software Engineer  / Tech Lead",
+  targetPosition: "Tech Lead / Software Engineer / Data Scientist",
   contactInfo: "hello@francistries.science",
   description:
     "Passionate about building scalable web applications, machine learning models, and leading development teams.",
@@ -31,39 +39,76 @@ export const jobSeekingStatus: JobSeekingStatus = {
 
 export const experiences: Experience[] = [
   {
-    role: "Senior Software Engineer",
     company: "SimpleProjeX",
     location: "USA",
-    dates: {
-      start: "Mar 2025",
-      end: "Present",
-    },
+    imageURL: "/logo/simpleprojex.webp",
+    roles: [
+      {
+        role: "Senior Software Engineer",
+        dates: {
+          start: "Mar 2025",
+          end: "Present",
+        },
+        description:
+          "Designed and built a proposal generation platform enabling construction agencies to secure more project bids.",
+      },
+    ],
   },
   {
-    role: "Professor",
     company: "Holy Angel University",
     location: "Philippines",
-    dates: {
-      start: "Aug 2023",
-      end: "Present",
-    },
+    imageURL: "/logo/hau.webp",
+    roles: [
+      {
+        role: "Professor",
+        dates: {
+          start: "Aug 2023",
+          end: "Oct 2025",
+        },
+        description:
+          "Designed and taught undergraduate courses in backend development with Python, covering web frameworks, database systems, and introductory concepts in data science and machine learning.",
+      },
+    ],
   },
   {
-    role: "Backend Engineer",
     company: "Presscart",
     location: "USA",
-    dates: {
-      start: "Jan 2024",
-      end: "Jul 2024",
-    },
+    imageURL: "/logo/presscart.webp",
+    roles: [
+      {
+        role: "Backend Engineer",
+        dates: {
+          start: "Jan 2024",
+          end: "Jul 2024",
+        },
+        description:
+          "Led the migration of backend infrastructure to enhance system performance, scalability, and API efficiency using Node.js.",
+      },
+    ],
   },
   {
-    role: "Technical Associate / Software Developer",
     company: "Holy Angel University, TBI",
     location: "Philippines",
-    dates: {
-      start: "Sep 2021",
-      end: "Dec 2022",
-    },
+    imageURL: "/logo/hau.webp",
+    roles: [
+      {
+        role: "Full Stack Engineer",
+        dates: {
+          start: "Feb 2022",
+          end: "Dec 2022",
+        },
+        description:
+          "Developed a robust database management system that optimized data processing and backend operations for web applications.",
+      },
+      {
+        role: "Technical Associate",
+        dates: {
+          start: "Sep 2021",
+          end: "Feb 2022",
+        },
+        description:
+          "Contributed to securing ₱17.9 million in R&D funding for projects focused on emerging and web-based software technologies.",
+      },
+    ],
   },
 ]
