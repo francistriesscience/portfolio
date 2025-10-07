@@ -12,7 +12,6 @@ export type RoleEntry = {
 export type Experience = {
   company: string
   location: string
-  imageURL?: string
   role?: string
   roles?: RoleEntry[]
   dates?: ExperienceDates
@@ -41,7 +40,6 @@ export const experiences: Experience[] = [
   {
     company: "SimpleProjeX",
     location: "USA",
-    imageURL: "/logo/simpleprojex.webp",
     roles: [
       {
         role: "Senior Software Engineer",
@@ -57,7 +55,6 @@ export const experiences: Experience[] = [
   {
     company: "Holy Angel University",
     location: "Philippines",
-    imageURL: "/logo/hau.webp",
     roles: [
       {
         role: "Professor",
@@ -73,7 +70,6 @@ export const experiences: Experience[] = [
   {
     company: "Presscart",
     location: "USA",
-    imageURL: "/logo/presscart.webp",
     roles: [
       {
         role: "Backend Engineer",
@@ -89,7 +85,6 @@ export const experiences: Experience[] = [
   {
     company: "Holy Angel University, TBI",
     location: "Philippines",
-    imageURL: "/logo/hau.webp",
     roles: [
       {
         role: "Full Stack Engineer",
