@@ -70,7 +70,7 @@ export function ExperiencesSection() {
                         {jobSeekingStatus.targetPosition}
                       </p>
                       {jobSeekingStatus.description && (
-                        <p className="text-muted-foreground text-xs leading-relaxed">
+                        <p className="text-muted-foreground text-xs leading-tight">
                           {jobSeekingStatus.description}
                         </p>
                       )}
