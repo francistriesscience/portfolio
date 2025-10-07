@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react"
 import Image from "next/image"
+import Link from "next/link"
+import { MDXRemote } from "next-mdx-remote/rsc"
 import { cn } from "@/lib/utils"
 
 interface MDXContentProps {
@@ -107,6 +109,26 @@ export const mdxComponents: MDXComponents = {
 
   a: ({ className, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isExternal = href?.startsWith("http")
+
+    if (href?.startsWith("/")) {
+      return (
+        <Link
+          href={href}
+          className={cn(
+            "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors",
+            className,
+          )}
+          {...props}
+        />
+      )
+    }
+
+    if (href?.startsWith("#")) {
+      return (
+        <a className={cn("text-primary hover:text-primary/80", className)} href={href} {...props} />
+      )
+    }
+
     return (
       <a
         className={cn(
@@ -200,6 +222,11 @@ export const mdxComponents: MDXComponents = {
       />
     )
   },
+}
+
+// Custom MDX wrapper component for rendering
+export function CustomMDX(props: any) {
+  return <MDXRemote {...props} components={{ ...mdxComponents, ...(props.components || {}) }} />
 }
 
 export function useMDXComponents(customComponents?: MDXComponents): MDXComponents {

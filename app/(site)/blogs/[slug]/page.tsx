@@ -1,12 +1,11 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { MDXRemote } from "next-mdx-remote/rsc"
+import Link from "next/link"
 
 import { getPostBySlug, getAllPosts } from "@/lib/mdx"
 
 import { Badge, Avatar, AvatarImage, AvatarFallback, Button } from "@/components/ui"
-import { mdxComponents } from "@/components/ui/mdx/mdx"
-import Link from "next/link"
+import { CustomMDX } from "@/components/ui/mdx/mdx"
 
 interface PageProps {
   params: Promise<{
@@ -83,7 +82,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </header>
 
           <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <MDXRemote source={post.content} components={mdxComponents} />
+            <CustomMDX source={post.content} />
           </div>
         </article>
       </div>
@@ -122,5 +121,3 @@ export async function generateStaticParams() {
     slug: post.slug,
   }))
 }
-
-export const dynamic = "force-static"
