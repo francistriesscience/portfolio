@@ -122,3 +122,5 @@ export async function generateStaticParams() {
     slug: post.slug,
   }))
 }
+
+export const dynamic = "force-static"
