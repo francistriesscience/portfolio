@@ -1,9 +1,10 @@
 import { ComponentType } from "react"
-import { AtomIcon, BrainIcon } from "lucide-react"
+import { ChartNoAxesColumnIcon, BrainIcon, CodeXmlIcon } from "lucide-react"
 
 import {
   PythonIcon,
   TypeScriptIcon,
+  JavaScriptIcon,
   GoIcon,
   TensorFlowIcon,
   PyTorchIcon,
@@ -14,6 +15,9 @@ import {
   PostgreSQLIcon,
   DockerIcon,
   AWSIcon,
+  CloudflareIcon,
+  DigitalOceanIcon,
+  GitLabIcon,
 } from "@/components/ui"
 
 export type SkillItem = {
@@ -35,8 +39,12 @@ export const header: Header = {
   intro:
     "Loves teaching and sharing what I have learned—practical tips, stories, and workflows that help others grow. By training I am a software engineer and I am deeply curious about data science and enjoy applying data-driven thinking to real problems.",
   skills: [
+    { name: "Software Engineering", icon: CodeXmlIcon },
+    { name: "Data Science", icon: ChartNoAxesColumnIcon },
+    { name: "Machine Learning", icon: BrainIcon },
     { name: "Python", icon: PythonIcon },
     { name: "TypeScript", icon: TypeScriptIcon },
+    { name: "JavaScript", icon: JavaScriptIcon },
     { name: "Go", icon: GoIcon },
     { name: "TensorFlow", icon: TensorFlowIcon },
     { name: "PyTorch", icon: PyTorchIcon },
@@ -45,11 +53,11 @@ export const header: Header = {
     { name: "Node.js", icon: NodeJsIcon },
     { name: "Hono", icon: HonoIcon },
     { name: "PostgreSQL", icon: PostgreSQLIcon },
-    { name: "Data Science", icon: AtomIcon },
-    { name: "Machine Learning", icon: BrainIcon },
     { name: "Docker", icon: DockerIcon },
     { name: "AWS", icon: AWSIcon },
-    { name: "CloudFlare" },
+    { name: "CloudFlare", icon: CloudflareIcon },
+    { name: "DigitalOcean", icon: DigitalOceanIcon },
+    { name: "GitLab", icon: GitLabIcon },
     { name: "NorthFlank" },
     { name: "Prisma" },
     { name: "Zod" },
@@ -57,7 +65,7 @@ export const header: Header = {
     { name: "TailwindCSS" },
     { name: "TanStack" },
     { name: "Git" },
-    { name: "GitLab" },
+
     { name: "Fiber" },
   ] as SkillItem[],
   avatar: "https://avatars.githubusercontent.com/u/132775768?s=96&v=4",
