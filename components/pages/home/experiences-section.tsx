@@ -1,7 +1,6 @@
 import * as React from "react"
-import Image from "next/image"
 import Link from "next/link"
-import { SearchIcon } from "lucide-react"
+import { SearchIcon, DotIcon } from "lucide-react"
 
 import { experiences, jobSeekingStatus, type Experience, type RoleEntry } from "@/data/experiences"
 
@@ -13,20 +12,39 @@ export function ExperiencesSection() {
       <div className="flex w-full items-end justify-between">
         <h2 className="text-xl font-medium">Experiences</h2>
         <div className="flex w-full justify-end">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
-                href={"https://www.linkedin.com/in/francistriesscience"}
-                target="_blank"
-              >
-                View more on LinkedIn
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <span>Check out my complete professional journey!</span>
-            </TooltipContent>
-          </Tooltip>
+          <div className="flex flex-row items-center gap-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
+                  href={
+                    "https://drive.google.com/file/d/1r8zQQP59ZWYI1lE0wHOxI1GdICSTPXRd/view?usp=drive_link"
+                  }
+                  target="_blank"
+                >
+                  View my resume
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <span>Preview my latest resume (PDF)</span>
+              </TooltipContent>
+            </Tooltip>
+            <DotIcon className="" />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
+                  href={"https://www.linkedin.com/in/francistriesscience"}
+                  target="_blank"
+                >
+                  View more on LinkedIn
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <span>Check out my complete professional journey!</span>
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </div>
 
@@ -74,18 +92,7 @@ export function ExperiencesSection() {
                 <CardContent className="flex w-full items-start justify-between gap-4 p-3">
                   <div className="flex w-full flex-col items-start gap-1">
                     <div className="flex w-full flex-row items-center justify-between">
-                      <div className="flex flex-row items-center gap-1">
-                        {e.imageURL && (
-                          <Image
-                            src={e.imageURL}
-                            alt={`${e.company} logo`}
-                            className="h-4 w-4 rounded-full object-contain"
-                            width={24}
-                            height={24}
-                          />
-                        )}
-                        <p className="text-muted-foreground text-xs">{e.company}</p>
-                      </div>
+                      <p className="text-muted-foreground text-xs">{e.company}</p>
                       <p className="text-muted-foreground text-xs">{e.location}</p>
                     </div>
                     <div className="relative w-full">
