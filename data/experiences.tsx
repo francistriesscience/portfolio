@@ -5,6 +5,7 @@ export type ExperienceDates = {
 
 export type RoleEntry = {
   role: string
+  isCareerBreak?: boolean
   dates: ExperienceDates
   description?: string
 }
@@ -12,7 +13,6 @@ export type RoleEntry = {
 export type Experience = {
   company: string
   location: string
-  role?: string
   roles?: RoleEntry[]
   dates?: ExperienceDates
 }
@@ -39,7 +39,7 @@ export const jobSeekingStatus: JobSeekingStatus = {
 export const experiences: Experience[] = [
   {
     company: "SimpleProjeX",
-    location: "USA",
+    location: "California, USA",
     roles: [
       {
         role: "Senior Software Engineer",
@@ -54,8 +54,18 @@ export const experiences: Experience[] = [
   },
   {
     company: "Holy Angel University",
-    location: "Philippines",
+    location: "Angeles City, Pampanga, PH",
     roles: [
+      {
+        role: "Career Break",
+        isCareerBreak: true,
+        dates: {
+          start: "Oct 2025",
+          end: "Present",
+        },
+        description:
+          "Professional development and upskilling in advanced software engineering and machine learning.",
+      },
       {
         role: "Professor",
         dates: {
@@ -69,7 +79,7 @@ export const experiences: Experience[] = [
   },
   {
     company: "Presscart",
-    location: "USA",
+    location: "New York, USA",
     roles: [
       {
         role: "Backend Engineer",
@@ -84,7 +94,7 @@ export const experiences: Experience[] = [
   },
   {
     company: "Holy Angel University, TBI",
-    location: "Philippines",
+    location: "Angeles City, Pampanga, PH",
     roles: [
       {
         role: "Full Stack Engineer",

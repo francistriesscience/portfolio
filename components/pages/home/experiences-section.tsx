@@ -1,6 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
-import { SearchIcon, DotIcon } from "lucide-react"
+import { SearchIcon, DotIcon, SoupIcon } from "lucide-react"
 
 import { experiences, jobSeekingStatus, type Experience, type RoleEntry } from "@/data/experiences"
 
@@ -22,7 +22,7 @@ export function ExperiencesSection() {
                   }
                   target="_blank"
                 >
-                  View my resume
+                  Resume
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
@@ -37,7 +37,7 @@ export function ExperiencesSection() {
                   href={"https://www.linkedin.com/in/francistriesscience"}
                   target="_blank"
                 >
-                  View more on LinkedIn
+                  More on LinkedIn
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
@@ -85,62 +85,44 @@ export function ExperiencesSection() {
           </Tooltip>
         )}
 
-        {experiences.map((e: Experience, i: number) => {
-          if (e.roles && e.roles.length > 0) {
-            return (
-              <Card key={i} className="rounded-xl bg-transparent p-0">
-                <CardContent className="flex w-full items-start justify-between gap-4 p-3">
-                  <div className="flex w-full flex-col items-start gap-1">
-                    <div className="flex w-full flex-row items-center justify-between">
-                      <p className="text-muted-foreground text-xs">{e.company}</p>
-                      <p className="text-muted-foreground text-xs">{e.location}</p>
-                    </div>
-                    <div className="relative w-full">
-                      <div className="flex w-full flex-col gap-3">
-                        {e.roles.map((r: RoleEntry, idx: number) => (
-                          <div key={idx} className="relative flex w-full items-start">
-                            <div className="flex w-full flex-row items-start justify-between">
-                              <div className="flex flex-col items-start">
+        {experiences
+          .filter((e) => e.roles && e.roles.length > 0)
+          .map((e: Experience, i: number) => (
+            <Card key={`${e.company}-${i}`} className="rounded-xl bg-transparent p-0">
+              <CardContent className="flex w-full items-start justify-between gap-4 p-3">
+                <div className="flex w-full flex-col items-start gap-1">
+                  <div className="flex w-full flex-row items-center justify-between">
+                    <p className="text-muted-foreground text-xs">{e.company}</p>
+                    <p className="text-muted-foreground text-xs">{e.location}</p>
+                  </div>
+                  <div className="relative w-full">
+                    <div className="flex w-full flex-col gap-3">
+                      {e.roles!.map((r: RoleEntry, idx: number) => (
+                        <div key={idx} className="relative flex w-full items-start">
+                          <div className="flex w-full flex-row items-start justify-between">
+                            <div className="flex flex-col items-start">
+                              <div className="flex flex-row items-center gap-1">
+                                {r.isCareerBreak && <SoupIcon className="size-4" />}
                                 <h3 className="text-sm font-medium">{r.role}</h3>
-                                {r.description && (
-                                  <p className="text-muted-foreground w-full max-w-sm text-xs leading-tight">
-                                    {r.description}
-                                  </p>
-                                )}
                               </div>
-                              <p className="text-muted-foreground text-[11px]">
-                                {r.dates.start} - {r.dates.end}
-                              </p>
+                              {r.description && (
+                                <p className="text-muted-foreground w-full max-w-sm text-xs leading-tight">
+                                  {r.description}
+                                </p>
+                              )}
                             </div>
+                            <p className="text-muted-foreground text-end text-[11px] whitespace-nowrap">
+                              {r.dates.start} - {r.dates.end}
+                            </p>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            )
-          }
-
-          const start = e.dates?.start ?? ""
-          const end = e.dates?.end ?? ""
-          const range = start && end ? `${start} - ${end}` : start || end || ""
-
-          return (
-            <Card key={i} className="rounded-xl bg-transparent p-0">
-              <CardContent className="flex w-full items-center justify-between p-3">
-                <div className="flex flex-col items-start">
-                  <p className="text-muted-foreground text-xs">{e.company}</p>
-                  <h3 className="text-sm font-medium">{e.role}</h3>
-                </div>
-                <div className="flex flex-col items-end">
-                  <p className="text-muted-foreground text-xs">{range}</p>
-                  <p className="text-muted-foreground text-xs">{e.location}</p>
                 </div>
               </CardContent>
             </Card>
-          )
-        })}
+          ))}
       </div>
     </div>
   )
