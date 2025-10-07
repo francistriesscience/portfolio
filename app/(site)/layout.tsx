@@ -37,7 +37,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                     {header.name}
                   </h1>
                 </div>
-                <h2 className="text-muted-foreground text-sm">{header.subtitle}</h2>
+                <h2 className="text-muted-foreground text-sm">— {header.subtitle}</h2>
               </div>
             </div>
             <p className="text-muted-foreground text-sm italic">{header.intro}</p>

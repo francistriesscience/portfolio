@@ -35,13 +35,13 @@ export type Header = {
 
 export const header: Header = {
   name: "Francis Ignacio.",
-  subtitle: "Software Engineer, Data Scientist",
+  subtitle: "Software Engineer, AI Engineer",
   intro:
-    "Loves teaching and sharing what I have learned—practical tips, stories, and workflows that help others grow. By training I am a software engineer and I am deeply curious about data science and enjoy applying data-driven thinking to real problems.",
+    "Passionate about the science behind AI and ML, I teach and share workflows that make complex ideas practical. With a software engineering background and AI engineering focus, I ship production-ready models, connect robust data pipelines, and translate research into dependable product features.",
   skills: [
     { name: "Software Engineering", icon: CodeXmlIcon },
     { name: "Data Science", icon: ChartNoAxesColumnIcon },
-    { name: "Machine Learning", icon: BrainIcon },
+    { name: "Artificial Intelligence", icon: BrainIcon },
     { name: "Python", icon: PythonIcon },
     { name: "TypeScript", icon: TypeScriptIcon },
     { name: "JavaScript", icon: JavaScriptIcon },
