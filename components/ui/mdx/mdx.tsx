@@ -224,7 +224,6 @@ export const mdxComponents: MDXComponents = {
   },
 }
 
-// Custom MDX wrapper component for rendering
 export function CustomMDX(props: any) {
   return <MDXRemote {...props} components={{ ...mdxComponents, ...(props.components || {}) }} />
 }
