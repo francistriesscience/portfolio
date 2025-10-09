@@ -46,6 +46,8 @@ export { AWSIcon } from "./icon/aws-icon"
 export { CloudflareIcon } from "./icon/cloudflare-icon"
 export { DigitalOceanIcon } from "./icon/digital-ocean-icon"
 export { GitLabIcon } from "./icon/gitlab-icon"
+export { GraphQLIcon } from "./icon/graphql-icon"
+export { JupyterIcon } from "./icon/jupyter-icon"
 /**
  * Tooltip
  */
