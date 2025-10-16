@@ -37,7 +37,7 @@ export async function BlogsSection() {
         <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
           {posts.slice(0, 3).map((post) => (
             <Link key={post.slug} href={`/blogs/${post.slug}`}>
-              <Card className="group hover:border-primary cursor-pointer p-3 transition-all">
+              <Card className="group hover:border-primary/50 cursor-pointer p-3 transition-all">
                 <CardHeader className="flex flex-col items-start">
                   <CardTitle className="group-hover:text-primary line-clamp-2 text-sm leading-tight font-medium transition-colors">
                     {post.title}

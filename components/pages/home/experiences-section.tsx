@@ -57,7 +57,7 @@ export function ExperiencesSection() {
                 target="_blank"
                 className="block"
               >
-                <Card className="border-primary from-primary/5 via-background to-primary/10 relative w-full cursor-pointer overflow-hidden rounded-xl border border-dashed bg-gradient-to-br transition-all hover:shadow-md">
+                <Card className="border-primary from-primary/5 via-background to-primary/10 relative w-full cursor-pointer overflow-hidden border border-dashed bg-gradient-to-br transition-all hover:shadow-md">
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <Badge>
@@ -88,7 +88,7 @@ export function ExperiencesSection() {
         {experiences
           .filter((e) => e.roles && e.roles.length > 0)
           .map((e: Experience, i: number) => (
-            <Card key={`${e.company}-${i}`} className="rounded-xl bg-transparent p-0">
+            <Card key={`${e.company}-${i}`} className="bg-transparent p-0">
               <CardContent className="flex w-full items-start justify-between gap-4 p-3">
                 <div className="flex w-full flex-col items-start gap-1">
                   <div className="flex w-full flex-row items-center justify-between">
