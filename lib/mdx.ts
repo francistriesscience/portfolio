@@ -17,7 +17,29 @@ export interface BlogPost {
   readingTime: number
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "content/blog")
+const resolveContentDir = () => {
+  const possiblePaths = [
+    path.join(process.cwd(), "content/blog"),
+    path.join(process.cwd(), "..", "content/blog"),
+    path.join(__dirname, "..", "content/blog"),
+    path.join(__dirname, "..", "..", "content/blog"),
+    path.join(__dirname, "../../../content/blog"),
+    "./content/blog",
+    "../content/blog",
+  ]
+
+  for (const dir of possiblePaths) {
+    if (fs.existsSync(dir)) {
+      console.log(`[MDX] Found content directory at: ${dir}`)
+      return dir
+    }
+  }
+
+  console.error(`[MDX] Could not find content directory. Tried:`, possiblePaths)
+  return path.join(process.cwd(), "content/blog")
+}
+
+const CONTENT_DIR = resolveContentDir()
 
 function getMDXFiles(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -31,7 +53,7 @@ function readMDXFile(filePath: string) {
   return matter(rawContent)
 }
 
-function getMDXData(dir: string) {
+function getMDXData(dir: string): BlogPost[] {
   const mdxFiles = getMDXFiles(dir)
   return mdxFiles.map((file) => {
     const { data, content } = readMDXFile(path.join(dir, file))
@@ -54,21 +76,19 @@ function getMDXData(dir: string) {
   })
 }
 
-export async function getAllPosts(limit?: number): Promise<BlogPost[]> {
+export function getAllPosts(limit?: number): BlogPost[] {
   const posts = getMDXData(CONTENT_DIR)
-
   const sortedPosts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
   return limit ? sortedPosts.slice(0, limit) : sortedPosts
 }
 
-export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+export function getPostBySlug(slug: string): BlogPost | null {
   const posts = getMDXData(CONTENT_DIR)
   return posts.find((post) => post.slug === slug) || null
 }
 
-export async function getAllTags(): Promise<string[]> {
-  const posts = await getAllPosts()
+export function getAllTags(): string[] {
+  const posts = getAllPosts()
   const tags = new Set<string>()
 
   posts.forEach((post) => {

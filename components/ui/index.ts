@@ -66,6 +66,8 @@ export { AccordionContent } from "./accordion/accordion-content"
  */
 export { Separator } from "./separator/separator"
 /**
- * MDX
+ * Markdown
  */
-export { MDXContent } from "./mdx/mdx"
+export { MarkdownCallout } from "./markdown/markdown-callout"
+export { MarkdownContent } from "./markdown/markdown-content"
+export { MarkdownCodeBlock } from "./markdown/markdown-code-block"
