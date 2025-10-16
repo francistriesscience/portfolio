@@ -1,23 +1,13 @@
 import * as React from "react"
 import Link from "next/link"
 
-import { getAllPosts, type BlogPost } from "@/lib/mdx"
-import { formatDate } from "@/helper/format-date"
+import { getAllPosts } from "@/lib/blog/get-all-post"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-  RippleBackground,
-} from "@/components/ui"
+import { Card, CardContent, RippleBackground } from "@/components/ui"
+import { BlogCard } from "@/components/card/blog-card"
 
 export async function BlogsSection() {
-  let posts: BlogPost[] = []
-
-  posts = await getAllPosts()
+  const posts = getAllPosts()
 
   return (
     <div className="flex w-full flex-col items-start gap-4">
@@ -36,22 +26,7 @@ export async function BlogsSection() {
       {posts.length > 0 ? (
         <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
           {posts.slice(0, 3).map((post) => (
-            <Link key={post.slug} href={`/blogs/${post.slug}`}>
-              <Card className="group hover:border-primary/50 cursor-pointer p-3 transition-all">
-                <CardHeader className="flex flex-col items-start">
-                  <CardTitle className="group-hover:text-primary line-clamp-2 text-sm leading-tight font-medium transition-colors">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription className="line-clamp-2 text-xs leading-relaxed">
-                    {post.description}
-                  </CardDescription>
-                  <CardFooter className="line-clamp-2 flex w-full flex-row justify-between text-xs leading-relaxed">
-                    <span className="text-muted-foreground text-xs">{post.tags.join(", ")}</span>
-                    {formatDate(post.date)}
-                  </CardFooter>
-                </CardHeader>
-              </Card>
-            </Link>
+            <BlogCard key={post.slug} post={post} />
           ))}
         </div>
       ) : (
