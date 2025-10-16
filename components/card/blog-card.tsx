@@ -8,7 +8,7 @@ import { Card, CardTitle, CardHeader, CardDescription, CardFooter } from "@/comp
 export function BlogCard({ post }: { post: BlogPost }) {
   return (
     <Link key={post.slug} href={`/blogs/${post.slug}`} className="w-full">
-      <Card className="group hover:border-primary cursor-pointer p-3 transition-all">
+      <Card className="group hover:border-primary/50 cursor-pointer p-3 transition-all">
         <CardHeader className="flex flex-col items-start">
           <CardTitle className="group-hover:text-primary line-clamp-2 text-sm leading-tight font-medium transition-colors">
             {post.title}

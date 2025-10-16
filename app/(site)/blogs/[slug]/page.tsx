@@ -47,7 +47,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <h1 className="font-georgia text-foreground mb-4 w-full text-4xl font-medium tracking-tight">
               {post.title}
             </h1>
-            <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-4 text-sm">
+            <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-2 text-sm">
               <div className="flex items-center gap-2">
                 {post.authors.map((author, index) => (
                   <div key={author.name} className="flex items-center gap-2">
@@ -61,7 +61,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     <Link
                       href={author.url}
                       target="_blank "
-                      className="decoration-dashed underline-offset-2 hover:underline"
+                      className="underline decoration-dashed underline-offset-2"
                     >
                       {author.name}
                     </Link>
