@@ -3,6 +3,7 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { MDXRemote } from "next-mdx-remote/rsc"
+
 import { cn } from "@/lib/utils"
 
 interface MDXContentProps {

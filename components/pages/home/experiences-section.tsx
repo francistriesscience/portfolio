@@ -1,6 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
-import { SearchIcon, DotIcon, SoupIcon } from "lucide-react"
+import { SearchIcon, SoupIcon } from "lucide-react"
 
 import { experiences, jobSeekingStatus, type Experience, type RoleEntry } from "@/data/experiences"
 
@@ -25,11 +25,11 @@ export function ExperiencesSection() {
                   Resume
                 </Link>
               </TooltipTrigger>
+              <span className="text-muted-foreground">/</span>
               <TooltipContent>
                 <span>Preview my latest resume (PDF)</span>
               </TooltipContent>
             </Tooltip>
-            <DotIcon className="" />
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
@@ -37,7 +37,7 @@ export function ExperiencesSection() {
                   href={"https://www.linkedin.com/in/francistriesscience"}
                   target="_blank"
                 >
-                  More on LinkedIn
+                  LinkedIn
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
