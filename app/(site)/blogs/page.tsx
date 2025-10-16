@@ -1,13 +1,15 @@
 import * as React from "react"
 import Link from "next/link"
 
-import { getAllPosts } from "@/lib/mdx"
+import { getAllPosts } from "@/lib/blog/get-all-post"
 import { BlogCard } from "@/components/card/blog-card"
 
 import { Card, CardContent, Button, RippleBackground } from "@/components/ui"
 
+export const dynamic = "force-static"
+
 export default async function BlogPage() {
-  const posts = await getAllPosts()
+  const posts = getAllPosts()
 
   return (
     <div className="flex w-full flex-col items-start gap-4">

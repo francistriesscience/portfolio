@@ -1,11 +1,21 @@
+import Link from "next/link"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-import Link from "next/link"
 
-import { getPostBySlug, getAllPosts } from "@/lib/mdx"
+import { getPostBySlug } from "@/lib/blog/get-post-by-slug"
+import { getAllPosts } from "@/lib/blog/get-all-post"
 
-import { Badge, Avatar, AvatarImage, AvatarFallback, Button } from "@/components/ui"
-import { CustomMDX } from "@/components/ui/mdx/mdx"
+import {
+  Badge,
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  Button,
+  MarkdownContent,
+  Separator,
+} from "@/components/ui"
+
+export const dynamic = "force-static"
 
 interface PageProps {
   params: Promise<{
@@ -15,7 +25,7 @@ interface PageProps {
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const post = getPostBySlug(slug)
 
   if (!post) {
     notFound()
@@ -80,10 +90,9 @@ export default async function BlogPostPage({ params }: PageProps) {
               </time>
             </div>
           </header>
+          <Separator className="my-8" />
 
-          <div className="prose prose-neutral dark:prose-invert max-w-none">
-            <CustomMDX source={post.content} />
-          </div>
+          <MarkdownContent>{post.content}</MarkdownContent>
         </article>
       </div>
     </div>
@@ -92,7 +101,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const post = getPostBySlug(slug)
 
   if (!post) {
     return {
@@ -115,7 +124,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts()
+  const posts = getAllPosts()
 
   return posts.map((post) => ({
     slug: post.slug,
