@@ -33,11 +33,13 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^15.6.6",
     "reading-time": "^1.5.0",
     "rehype-highlight": "^7.0.2",
     "rehype-pretty-code": "^0.14.1",
     "remark-gfm": "^4.0.1",
     "shiki": "^3.13.0",
+    "sugar-high": "^0.9.4",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
@@ -47,6 +49,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "prettier-plugin-tailwindcss": "^0.6.14",
