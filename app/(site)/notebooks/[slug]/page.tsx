@@ -2,8 +2,8 @@ import Link from "next/link"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { getPostBySlug } from "@/lib/blog/get-post-by-slug"
-import { getAllPosts } from "@/lib/blog/get-all-post"
+import { getPostBySlug } from "@/lib/notebooks/get-post-by-slug"
+import { getAllPosts } from "@/lib/notebooks/get-all-post"
 
 import {
   Badge,
@@ -23,7 +23,7 @@ interface PageProps {
   }>
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
+export default async function NotebookPostPage({ params }: PageProps) {
   const { slug } = await params
   const post = getPostBySlug(slug)
 
@@ -36,9 +36,9 @@ export default async function BlogPostPage({ params }: PageProps) {
       <div className="mx-auto w-full max-w-3xl">
         <article>
           <header>
-            <div className="flex flex-row items-center justify-between gap-2">
+            <div className="mb-4 flex flex-row items-center justify-between gap-2">
               {post.tags.length > 0 && (
-                <div className="mb-6 flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
                     <Badge key={tag} variant="secondary" className="text-xs uppercase">
                       {tag}
@@ -51,7 +51,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 size="sm"
                 className="text-muted-foreground hover:text-primary h-auto p-0 text-xs underline decoration-dashed"
               >
-                <Link href={"/blogs"}>View more blogs</Link>
+                <Link href={"/notebooks"}>View more notebooks</Link>
               </Button>
             </div>
             <h1 className="font-georgia text-foreground mb-4 w-full text-4xl font-medium tracking-tight">
@@ -89,6 +89,9 @@ export default async function BlogPostPage({ params }: PageProps) {
                 })}
               </time>
             </div>
+            <span className="text-muted-foreground text-sm leading-tight italic">
+              {post.description}
+            </span>
           </header>
           <Separator className="my-8" />
 
