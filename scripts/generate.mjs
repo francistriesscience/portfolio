@@ -2,6 +2,7 @@
 import fs from "fs"
 import path from "path"
 import matter from "gray-matter"
+import { execSync } from "child_process"
 import { fileURLToPath } from "url"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -32,6 +33,9 @@ function getAllPosts() {
     const wordCount = content.split(/\s+/).length
     const readingTime = Math.ceil(wordCount / wordsPerMinute)
 
+    // compute activeDate: prefer git commit date, fall back to file mtime
+    const activeDate = getLastGitCommitDate(filePath) || getFileMtimeIso(filePath)
+
     return {
       slug,
       title: data.title || "Untitled",
@@ -39,10 +43,35 @@ function getAllPosts() {
       description: data.description || "",
       tags: data.tags || [],
       authors: data.authors || [],
+      active: typeof data.active === "boolean" ? data.active : false,
+      activeDate,
       content,
       readingTime,
     }
   })
+}
+
+function getLastGitCommitDate(filePath) {
+  try {
+    const cmd = `git log -1 --format=%cI -- ${escapeShellArg(filePath)}`
+    const out = execSync(cmd, { encoding: "utf8" }).trim()
+    return out || null
+  } catch {
+    return null
+  }
+}
+
+function getFileMtimeIso(filePath) {
+  try {
+    const stat = fs.statSync(filePath)
+    return stat.mtime.toISOString()
+  } catch {
+    return new Date().toISOString()
+  }
+}
+
+function escapeShellArg(s) {
+  return `'${s.replace(/'/g, `\\'`)}'`
 }
 
 const posts = getAllPosts()
