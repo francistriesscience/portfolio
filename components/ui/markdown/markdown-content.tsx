@@ -185,7 +185,10 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
                 alt={alt || ""}
                 width={800}
                 height={600}
-                className={cn("h-auto max-w-full rounded-lg", className)}
+                className={cn(
+                  "border-border h-auto max-w-full rounded-sm border contrast-75",
+                  className,
+                )}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             )
