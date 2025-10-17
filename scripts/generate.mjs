@@ -33,12 +33,12 @@ function getAllPosts() {
     const wordCount = content.split(/\s+/).length
     const readingTime = Math.ceil(wordCount / wordsPerMinute)
 
-    // compute activeDate: prefer git commit date, fall back to file mtime
     const activeDate = getLastGitCommitDate(filePath) || getFileMtimeIso(filePath)
 
     return {
       slug,
       title: data.title || "Untitled",
+      banner: data.banner || "",
       date: data.date || new Date().toISOString(),
       description: data.description || "",
       tags: data.tags || [],

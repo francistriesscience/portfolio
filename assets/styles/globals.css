@@ -1,4 +1,5 @@
 @import url("../fonts/georgia/georgia.css");
+@import url("../fonts/writer/writer.css");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -48,6 +49,7 @@
 
   /** Fonts */
   --font-georgia: Georgia, ui-serif, serif;
+  --font-writer: Writer, ui-sans-serif, sans-serif;
 }
 
 :root {

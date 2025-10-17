@@ -9,7 +9,7 @@ import remarkGfm from "remark-gfm"
 
 import { cn } from "@/lib/utils"
 
-import { MarkdownCodeBlock } from "@/components/ui"
+import { MarkdownCodeBlock, MarkdownCallout } from "@/components/ui"
 
 interface MarkdownContentProps {
   children: string
@@ -58,27 +58,49 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
               {...props}
             />
           ),
-          p: ({ className, ...props }: any) => (
-            <p
-              className={cn("text-muted-foreground mb-4 leading-relaxed font-light", className)}
-              {...props}
-            />
-          ),
+          p: ({ className, children, ...props }: any) => {
+            // Check if this paragraph is a callout
+            const childrenArray = React.Children.toArray(children)
+            const firstChild = childrenArray[0]
+
+            if (typeof firstChild === "string") {
+              const calloutMatch = firstChild.match(/^::\s*(info|warning|error|success)\s*/)
+              const lastChild = childrenArray[childrenArray.length - 1]
+              const endsWithCallout =
+                typeof lastChild === "string" && lastChild.trim().endsWith("::")
+
+              if (calloutMatch && endsWithCallout) {
+                const type = calloutMatch[1] as "info" | "warning" | "error" | "success"
+                // Remove the :: markers from content
+                const content = childrenArray
+                  .map((child) => (typeof child === "string" ? child : ""))
+                  .join("")
+                  .replace(/^::\s*(info|warning|error|success)\s*/, "")
+                  .replace(/\s*::$/, "")
+                  .trim()
+
+                return <MarkdownCallout type={type}>{content}</MarkdownCallout>
+              }
+            }
+
+            return (
+              <p
+                className={cn("text-muted-foreground mb-4 leading-relaxed font-light", className)}
+                {...props}
+              >
+                {children}
+              </p>
+            )
+          },
           ul: ({ className, ...props }: any) => (
             <ul
-              className={cn(
-                "text-muted-foreground mb-4 list-inside list-disc space-y-1",
-                className,
-              )}
+              className={cn("text-muted-foreground mb-4 ml-6 list-disc space-y-1", className)}
               {...props}
             />
           ),
           ol: ({ className, ...props }: any) => (
             <ol
-              className={cn(
-                "text-muted-foreground mb-4 list-inside list-decimal space-y-1",
-                className,
-              )}
+              className={cn("text-muted-foreground mb-4 ml-6 list-decimal space-y-1", className)}
               {...props}
             />
           ),
@@ -180,17 +202,20 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
             if (!src || typeof src !== "string") return null
 
             return (
-              <Image
-                src={src}
-                alt={alt || ""}
-                width={800}
-                height={600}
-                className={cn(
-                  "border-border h-auto max-w-full rounded-sm border contrast-75",
-                  className,
-                )}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+              <span className="flex flex-col items-center gap-1">
+                <Image
+                  src={src}
+                  alt={alt || ""}
+                  width={800}
+                  height={600}
+                  className={cn(
+                    "border-border h-auto max-w-full rounded-sm border contrast-75",
+                    className,
+                  )}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                {alt ? <span className="text-muted-foreground text-xs italic">{alt}</span> : null}
+              </span>
             )
           },
         }}

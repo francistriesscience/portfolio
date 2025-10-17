@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react"
 import { CheckIcon, CopyIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { highlight } from "sugar-high"
 
 import { Button, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui"
@@ -19,10 +20,29 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
     child?.props?.className?.includes("language-"),
   ) as any
 
-  const match = /language-(\w+)/.exec(codeElement?.props?.className || "")
+  const match = /language-([\w+-]+)(?:\{([0-9,\-]+)\})?/.exec(codeElement?.props?.className || "")
   const language = match ? match[1] : "code"
+  const rangesStr = match && match[2] ? match[2] : undefined
 
-  // Extract code content
+  const highlightedLines = React.useMemo(() => {
+    const set = new Set<number>()
+    if (!rangesStr) return set
+    for (const part of rangesStr.split(",")) {
+      if (part.includes("-")) {
+        const [startStr, endStr] = part.split("-")
+        const start = parseInt(startStr, 10)
+        const end = parseInt(endStr, 10)
+        if (!isNaN(start) && !isNaN(end)) {
+          for (let i = start; i <= end; i++) set.add(i)
+        }
+      } else {
+        const n = parseInt(part, 10)
+        if (!isNaN(n)) set.add(n)
+      }
+    }
+    return set
+  }, [rangesStr])
+
   let codeContent = ""
   if (codeElement?.props?.children) {
     const content = codeElement.props.children
@@ -33,11 +53,34 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
     }
   }
 
-  // Trim trailing newline if present
   codeContent = codeContent.replace(/\n$/, "")
 
-  // Highlight the code using sugar-high
   const highlightedCode = React.useMemo(() => highlight(codeContent), [codeContent])
+
+  // Split raw lines and ensure highlighted output aligns with raw lines.
+  const highlightedLinesArr = React.useMemo(() => {
+    const raw = codeContent.split("\n")
+    const highlighted = highlightedCode.split("\n")
+
+    // If the highlighter returned a different number of lines (some highlighters
+    // can collapse or wrap blank lines), fall back to per-line highlighting so
+    // we preserve empty lines and line count.
+    if (highlighted.length !== raw.length) {
+      return raw.map((ln) => {
+        // Treat lines that are empty or only whitespace as empty
+        const trimmed = ln.trim()
+        return trimmed === "" ? "" : highlight(ln)
+      })
+    }
+
+    // Also handle blank/whitespace-only lines in the already-highlighted output
+    return highlighted.map((ln, i) => {
+      const rawLine = raw[i] || ""
+      const trimmed = rawLine.trim()
+      // If the raw line is empty or whitespace-only, return empty string so it renders as blank line
+      return trimmed === "" ? "" : ln
+    })
+  }, [codeContent, highlightedCode])
 
   const handleCopy = async () => {
     try {
@@ -55,25 +98,47 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
         <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           {language}
         </span>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hover:bg-muted size-7"
-              onClick={handleCopy}
-            >
-              {copied ? <CheckIcon className="size-3.5" /> : <CopyIcon className="size-3.5" />}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="top">{copied ? "Copied!" : "Copy to Clipboard"}</TooltipContent>
-        </Tooltip>
+        <div className="flex flex-row items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-muted size-7"
+                onClick={handleCopy}
+              >
+                {copied ? <CheckIcon className="size-3.5" /> : <CopyIcon className="size-3.5" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">{copied ? "Copied!" : "Copy to Clipboard"}</TooltipContent>
+          </Tooltip>
+        </div>
       </div>
       <pre
-        className="bg-muted !m-0 overflow-x-auto rounded-b-lg border p-4 font-mono text-sm"
+        className="bg-muted !m-0 overflow-x-auto rounded-b-lg border p-2 font-mono text-sm"
         {...props}
       >
-        <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+        <code className="block">
+          {highlightedLinesArr.map((lineHtml, i) => {
+            const lineNumber = i + 1
+            const isHighlighted = highlightedLines.has(lineNumber)
+            const html = lineHtml || " "
+            return (
+              <div
+                key={i}
+                className={cn(
+                  "flex min-w-full",
+                  isHighlighted ? "bg-primary/5 dark:bg-primary-950/20" : "",
+                )}
+              >
+                <span
+                  className="flex-1 whitespace-pre"
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
+              </div>
+            )
+          })}
+        </code>
       </pre>
     </div>
   )

@@ -20,13 +20,13 @@ export function ExperiencesSection() {
       <div className="flex w-full items-end justify-between">
         <h2 className="text-xl font-medium">Experiences</h2>
         <div className="flex w-full justify-end">
-          <div className="flex flex-row items-center gap-2">
+          <div className="flex flex-row items-center gap-1">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="link"
                   size="sm"
-                  className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
+                  className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
                 >
                   <FileTextIcon className="size-3" />
                   <Link
@@ -49,7 +49,7 @@ export function ExperiencesSection() {
                 <Button
                   variant="link"
                   size="sm"
-                  className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
+                  className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
                 >
                   <LinkedinIcon className="size-3" />
                   <Link href={"https://www.linkedin.com/in/francistriesscience"} target="_blank">

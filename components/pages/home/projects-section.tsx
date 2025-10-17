@@ -37,7 +37,7 @@ export function ProjectsSection() {
               <Button
                 variant="link"
                 size="sm"
-                className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
+                className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
               >
                 <GitBranchPlusIcon className="size-3" />
                 <Link href="mailto:hello@francistries.science" target="_blank">
