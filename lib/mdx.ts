@@ -30,12 +30,10 @@ const resolveContentDir = () => {
 
   for (const dir of possiblePaths) {
     if (fs.existsSync(dir)) {
-      console.log(`[MDX] Found content directory at: ${dir}`)
       return dir
     }
   }
 
-  console.error(`[MDX] Could not find content directory. Tried:`, possiblePaths)
   return path.join(process.cwd(), "content/blog")
 }
 

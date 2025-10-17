@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react"
 import { CheckIcon, CopyIcon } from "lucide-react"
+import { highlight } from "sugar-high"
 
 import { Button, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui"
 
@@ -13,7 +14,6 @@ interface CodeBlockProps {
 
 export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
   const [copied, setCopied] = React.useState(false)
-  const preRef = React.useRef<HTMLPreElement>(null)
 
   const codeElement = React.Children.toArray(children).find((child: any) =>
     child?.props?.className?.includes("language-"),
@@ -22,28 +22,28 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
   const match = /language-(\w+)/.exec(codeElement?.props?.className || "")
   const language = match ? match[1] : "code"
 
+  // Extract code content
+  let codeContent = ""
+  if (codeElement?.props?.children) {
+    const content = codeElement.props.children
+    if (Array.isArray(content)) {
+      codeContent = content.join("")
+    } else if (typeof content === "string") {
+      codeContent = content
+    }
+  }
+
+  // Trim trailing newline if present
+  codeContent = codeContent.replace(/\n$/, "")
+
+  // Highlight the code using sugar-high
+  const highlightedCode = React.useMemo(() => highlight(codeContent), [codeContent])
+
   const handleCopy = async () => {
     try {
-      if (preRef.current) {
-        const codeElement = preRef.current.querySelector("code")
-        const text = codeElement?.textContent || preRef.current.textContent || ""
-        await navigator.clipboard.writeText(text.trim())
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-        return
-      }
-
-      let code = codeElement?.props?.children
-
-      if (Array.isArray(code)) {
-        code = code.join("")
-      }
-
-      if (typeof code === "string") {
-        await navigator.clipboard.writeText(code.trim())
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-      }
+      await navigator.clipboard.writeText(codeContent)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     } catch (err) {
       console.error("Failed to copy code:", err)
     }
@@ -70,11 +70,10 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
         </Tooltip>
       </div>
       <pre
-        ref={preRef}
-        className="!m-0 overflow-x-auto rounded-b-lg border font-mono text-sm"
+        className="bg-muted !m-0 overflow-x-auto rounded-b-lg border p-4 font-mono text-sm"
         {...props}
       >
-        {children}
+        <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
       </pre>
     </div>
   )
