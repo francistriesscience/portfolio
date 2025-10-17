@@ -59,7 +59,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
                 <Button
                   variant="link"
                   size="sm"
-                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-xs"
+                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
                 >
                   <HouseIcon className="size-3" />
                   <Link href={"/"}>Home</Link>
@@ -68,7 +68,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
                 <Button
                   variant="link"
                   size="sm"
-                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-xs"
+                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
                 >
                   <LibraryIcon className="size-3" />
                   <Link href={"/notebooks"}>View notebooks</Link>

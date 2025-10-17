@@ -19,7 +19,7 @@ export default async function NotebookPage() {
         <Button
           variant="link"
           size="sm"
-          className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
+          className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
         >
           <HouseIcon className="size-3" />
           <Link href={"/"}>Home</Link>
