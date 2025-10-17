@@ -6,9 +6,6 @@ import Image from "next/image"
 import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import rehypeHighlight from "rehype-highlight"
-
-import "highlight.js/styles/github-dark.css"
 
 import { cn } from "@/lib/utils"
 
@@ -24,7 +21,6 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
     <div className={cn("prose prose-neutral dark:prose-invert max-w-none", className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight]}
         components={{
           h1: ({ className, ...props }: any) => (
             <h1

@@ -80,6 +80,17 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Sugar-high syntax highlighting - Light theme */
+  --sh-class: #2d5e9d;
+  --sh-identifier: #354150;
+  --sh-sign: #8996a3;
+  --sh-property: #0550ae;
+  --sh-entity: #249a97;
+  --sh-jsxliterals: #6266d1;
+  --sh-string: #00a99a;
+  --sh-keyword: #f47067;
+  --sh-comment: #a19595;
 }
 
 .dark {
@@ -114,6 +125,17 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Sugar-high syntax highlighting - Dark theme */
+  --sh-class: #4c97f8;
+  --sh-identifier: #e6edf3;
+  --sh-sign: #8b949e;
+  --sh-property: #79c0ff;
+  --sh-entity: #d2a8ff;
+  --sh-jsxliterals: #a5d6ff;
+  --sh-string: #a5d6ff;
+  --sh-keyword: #ff7b72;
+  --sh-comment: #8b949e;
 }
 
 @layer base {
