@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import "@/assets/styles/globals.css"
-import { dmMono, dmSans } from "@/lib/fonts"
 
 export const metadata: Metadata = {
   title: "Francis Ignacio | Who Tries Science",
@@ -18,10 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${dmMono.variable} ${dmSans.variable} overflow-x-hidden antialiased`}>
+      <body className="font-writer overflow-x-hidden tracking-tight antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
           themes={["dark", "light"]}
         >

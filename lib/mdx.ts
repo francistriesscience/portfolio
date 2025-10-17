@@ -8,6 +8,7 @@ export interface NotebookPost {
   title: string
   date: string
   description: string
+  banner?: string
   tags: string[]
   authors: Array<{
     name: string
@@ -71,6 +72,7 @@ function getMDXData(dir: string): NotebookPost[] {
     return {
       slug,
       title: data.title || "Untitled",
+      banner: data.banner || "",
       date: data.date || new Date().toISOString(),
       description: data.description || "",
       tags: data.tags || [],
