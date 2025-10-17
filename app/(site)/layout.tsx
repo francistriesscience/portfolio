@@ -22,7 +22,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   const isNotebookPost = pathname.match(/^\/notebooks\/.+$/)
 
   return (
-    <div className="mx-auto h-full w-full max-w-2xl p-4 py-16 tracking-tight">
+    <div className="mx-auto h-full w-full max-w-3xl p-4 py-16 tracking-tight">
       <div className="flex h-full w-full flex-col items-start gap-8">
         {!isNotebookPost && (
           <div className="flex flex-col items-start gap-4">
@@ -33,7 +33,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                     <AvatarImage src={header.avatar} />
                     <AvatarFallback>FI</AvatarFallback>
                   </Avatar>
-                  <h1 className="font-georgia text-4xl font-medium tracking-tighter">
+                  <h1 className="font-georgia text-2xl font-medium tracking-tighter">
                     {header.name}
                   </h1>
                 </Link>
