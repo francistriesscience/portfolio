@@ -28,7 +28,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
           <div className="flex flex-col items-start gap-4">
             <div className="flex w-full flex-row items-center justify-between">
               <div className="flex flex-col items-start">
-                <div className="flex flex-row items-center gap-2">
+                <Link href={"/"} className="flex flex-row items-center gap-2">
                   <Avatar className="border-border border">
                     <AvatarImage src={header.avatar} />
                     <AvatarFallback>FI</AvatarFallback>
@@ -36,7 +36,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                   <h1 className="font-georgia text-4xl font-medium tracking-tighter">
                     {header.name}
                   </h1>
-                </div>
+                </Link>
                 <h2 className="text-muted-foreground text-sm">— {header.subtitle}</h2>
               </div>
             </div>
