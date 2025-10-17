@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import { execSync } from "child_process"
 import matter from "gray-matter"
 
 export interface NotebookPost {
@@ -15,6 +16,8 @@ export interface NotebookPost {
   }>
   content: string
   readingTime: number
+  active?: boolean
+  activeDate?: string
 }
 
 const resolveContentDir = () => {
@@ -61,6 +64,10 @@ function getMDXData(dir: string): NotebookPost[] {
     const wordCount = content.split(/\s+/).length
     const readingTime = Math.ceil(wordCount / wordsPerMinute)
 
+    const fullPath = path.join(dir, file)
+    const activeDateFromGit = getLastGitCommitDate(fullPath)
+    const activeDate = activeDateFromGit ?? getFileMtimeIso(fullPath)
+
     return {
       slug,
       title: data.title || "Untitled",
@@ -68,10 +75,36 @@ function getMDXData(dir: string): NotebookPost[] {
       description: data.description || "",
       tags: data.tags || [],
       authors: data.authors || [],
+      active: typeof data.active === "boolean" ? data.active : false,
+      activeDate,
       content,
       readingTime,
     }
   })
+}
+
+function getLastGitCommitDate(filePath: string): string | null {
+  try {
+    const cmd = `git log -1 --format=%cI -- ${escapeShellArg(filePath)}`
+    const out = execSync(cmd, { encoding: "utf8" }).trim()
+    if (out) return out
+    return null
+  } catch {
+    return null
+  }
+}
+
+function getFileMtimeIso(filePath: string): string {
+  try {
+    const stat = fs.statSync(filePath)
+    return stat.mtime.toISOString()
+  } catch {
+    return new Date().toISOString()
+  }
+}
+
+function escapeShellArg(s: string) {
+  return `'${s.replace(/'/g, `'\\''`)}'`
 }
 
 export function getAllPosts(limit?: number): NotebookPost[] {

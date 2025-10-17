@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import { GitBranchPlusIcon } from "lucide-react"
 
 import projectsData from "@/data/projects.json"
 
@@ -13,6 +14,7 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  Button,
 } from "@/components/ui"
 
 type Project = {
@@ -32,12 +34,16 @@ export function ProjectsSection() {
         <div className="flex w-full justify-end">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
-                href={"mailto:hello@francistries.science"}
+              <Button
+                variant="link"
+                size="sm"
+                className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
               >
-                Let&apos;s collaborate!
-              </Link>
+                <GitBranchPlusIcon className="size-3" />
+                <Link href="mailto:hello@francistries.science" target="_blank">
+                  Let&apos;s collaborate!
+                </Link>
+              </Button>
             </TooltipTrigger>
             <TooltipContent>
               <span>I&apos;d love to hear from you!</span>

@@ -1,9 +1,10 @@
 import * as React from "react"
 import Link from "next/link"
+import { LibraryIcon } from "lucide-react"
 
 import { getAllPosts } from "@/lib/notebooks/get-all-post"
 
-import { Card, CardContent, RippleBackground } from "@/components/ui"
+import { Card, CardContent, RippleBackground, Button } from "@/components/ui"
 import { NotebookCard } from "@/components/card/notebook-card"
 
 export async function NotebooksSection() {
@@ -14,12 +15,14 @@ export async function NotebooksSection() {
       <div className="flex w-full items-end justify-between">
         <h2 className="text-xl font-medium">Notebooks</h2>
         <div className="flex w-full justify-end">
-          <Link
-            className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2 transition-colors"
-            href="/notebooks"
+          <Button
+            variant="link"
+            size="sm"
+            className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
           >
-            View notebooks
-          </Link>
+            <LibraryIcon className="size-3" />
+            <Link href="/notebooks">View notebooks</Link>
+          </Button>
         </div>
       </div>
 
