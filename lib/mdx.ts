@@ -42,6 +42,7 @@ const resolveContentDir = () => {
 }
 
 const CONTENT_DIR = resolveContentDir()
+const GENERATED_DIR = path.join(__dirname, "notebooks", "generated")
 
 function getMDXFiles(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -109,13 +110,44 @@ function escapeShellArg(s: string) {
   return `'${s.replace(/'/g, `'\\''`)}'`
 }
 
+function readGeneratedPosts(): NotebookPost[] | null {
+  try {
+    if (!fs.existsSync(GENERATED_DIR)) return null
+    const files = fs
+      .readdirSync(GENERATED_DIR)
+      .filter((f) => f.endsWith(".ts") && f !== "_index.ts")
+    const posts = []
+    for (const file of files) {
+      const full = path.join(GENERATED_DIR, file)
+      const txt = fs.readFileSync(full, "utf-8")
+      const m =
+        txt.match(/export const post: [^=]+ = (\{[\s\S]*\})\n\nexport default post/) ||
+        txt.match(/export const post = (\{[\s\S]*\})\n\nexport default post/)
+      if (m && m[1]) {
+        try {
+          const obj = JSON.parse(m[1])
+          posts.push(obj)
+        } catch {}
+      }
+    }
+    return posts.length ? (posts as NotebookPost[]) : null
+  } catch {
+    return null
+  }
+}
+
 export function getAllPosts(limit?: number): NotebookPost[] {
-  const posts = getMDXData(CONTENT_DIR)
+  const generated = readGeneratedPosts()
+  const posts = generated ?? getMDXData(CONTENT_DIR)
   const sortedPosts = posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   return limit ? sortedPosts.slice(0, limit) : sortedPosts
 }
 
 export function getPostBySlug(slug: string): NotebookPost | null {
+  const generated = readGeneratedPosts()
+  if (generated) {
+    return generated.find((p) => p.slug === slug) || null
+  }
   const posts = getMDXData(CONTENT_DIR)
   return posts.find((post) => post.slug === slug) || null
 }
