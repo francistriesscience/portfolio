@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import { HouseIcon } from "lucide-react"
 
 import { getAllPosts } from "@/lib/notebooks/get-all-post"
 import { NotebookCard } from "@/components/card/notebook-card"
@@ -18,9 +19,10 @@ export default async function NotebookPage() {
         <Button
           variant="link"
           size="sm"
-          className="text-muted-foreground hover:text-primary h-auto p-0 text-xs underline decoration-dashed"
+          className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
         >
-          <Link href={"/"}>Back to homepage</Link>
+          <HouseIcon className="size-3" />
+          <Link href={"/"}>Home</Link>
         </Button>
       </div>
       {posts.length > 0 ? (
