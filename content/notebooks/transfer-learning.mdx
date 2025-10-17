@@ -1,8 +1,8 @@
 ---
 title: "Transfer Learning"
-date: "2025-10-17"
 description: "Guide to transfer learning—how pre-trained models boost performance on related tasks, reduce training costs, and improve generalization across domains."
 tags: ["deep learning"]
+active: true
 authors:
   - name: "Francis Ignacio"
     url: "https://francistries.science"
@@ -14,8 +14,6 @@ authors:
 Transfer learning refers to the paradigm in deep learning where a model pre-trained on one task (Task A) is leveraged to improve performance on a related but distinct task (Task B). This approach capitalizes on the hierarchical feature representations learned during the initial training phase, enabling knowledge generalization across domains or tasks. By initializing a neural architecture with weights obtained from a source task, rather than random initialization, transfer learning significantly reduces the computational cost and data requirements for achieving high performance on the target task.
 
 For example, a convolutional neural network (CNN) trained to classify images of cats can serve as a foundational model for classifying images of dogs, assuming both tasks share underlying visual features. The core principle of transfer learning lies in exploiting shared representational knowledge between tasks to enhance generalization capabilities, particularly when labeled data for the new task is scarce or expensive to obtain.
-
-![Transfer Learning Illustration](https://i.imgur.com/COswDgT.png)
 
 # Why use transfer learning?
 
@@ -83,6 +81,8 @@ When applying a pre-trained model, the decision of how many layers to retain or 
 
 Keras, for instance, provides nine canonical pre-trained models specifically designed for transfer learning, prediction, and fine-tuning. These include architectures such as VGG16, ResNet, EfficientNet, and others, each offering different balances of depth, accuracy, and efficiency.
 
-> Transfer learning has become a cornerstone of modern deep learning, enabling rapid development of high-performing models with limited data and resources. Whether through feature extraction, domain adaptation, or fine-tuning, it offers a principled way to leverage existing knowledge for new challenges. Its effectiveness hinges on the alignment between source and target tasks, the quality of pre-trained models, and the strategies employed to adapt them.
->
-> As the field continues to evolve, frameworks like Keras further democratize access to these powerful techniques, allowing researchers and practitioners to build sophisticated models efficiently and effectively.
+---
+
+Transfer learning has become a cornerstone of modern deep learning, enabling rapid development of high-performing models with limited data and resources. Whether through feature extraction, domain adaptation, or fine-tuning, it offers a principled way to leverage existing knowledge for new challenges. Its effectiveness hinges on the alignment between source and target tasks, the quality of pre-trained models, and the strategies employed to adapt them.
+
+As the field continues to evolve, frameworks like Keras further democratize access to these powerful techniques, allowing researchers and practitioners to build sophisticated models efficiently and effectively.
