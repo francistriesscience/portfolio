@@ -149,6 +149,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
+  const url = `https://francistries.science/notebooks/${slug}`
+
   return {
     title: `${post.title} - Francis Ignacio`,
     description: post.description,
@@ -159,6 +161,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "article",
       publishedTime: post.date,
       authors: post.authors.map((author) => author.name),
+      url: url,
+      images: [
+        {
+          url: `https://francistries.science/api/notebooks/${slug}/og`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
   }
 }
