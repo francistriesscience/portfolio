@@ -18,7 +18,7 @@ export async function NotebooksSection() {
           <Button
             variant="link"
             size="sm"
-            className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
+            className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
           >
             <LibraryIcon className="size-3" />
             <Link href="/notebooks">View notebooks</Link>
