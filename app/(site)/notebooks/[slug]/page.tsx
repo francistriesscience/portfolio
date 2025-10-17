@@ -50,7 +50,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
-                      <Badge key={tag} className="text-xs uppercase">
+                      <Badge key={tag} className="text-[10px] uppercase">
                         {tag}
                       </Badge>
                     ))}

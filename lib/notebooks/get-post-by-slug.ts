@@ -1,6 +1,6 @@
 import type { NotebookPost } from "../mdx"
 import * as mdxModule from "../mdx"
-import { NOTEBOOK_POSTS } from "./generated"
+import { posts as NOTEBOOK_POSTS } from "./generated/_index"
 
 const isDev = process.env.NODE_ENV === "development"
 
