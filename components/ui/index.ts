@@ -71,3 +71,16 @@ export { Separator } from "./separator/separator"
 export { MarkdownCallout } from "./markdown/markdown-callout"
 export { MarkdownContent } from "./markdown/markdown-content"
 export { MarkdownCodeBlock } from "./markdown/markdown-code-block"
+/**
+ * Dialog
+ */
+export { Dialog } from "./dialog/dialog"
+export { DialogTrigger } from "./dialog/dialog-trigger"
+export { DialogPortal } from "./dialog/dialog-portal"
+export { DialogClose } from "./dialog/dialog-close"
+export { DialogOverlay } from "./dialog/dialog-overlay"
+export { DialogContent } from "./dialog/dialog-content"
+export { DialogHeader } from "./dialog/dialog-header"
+export { DialogFooter } from "./dialog/dialog-footer"
+export { DialogTitle } from "./dialog/dialog-title"
+export { DialogDescription } from "./dialog/dialog-description"

@@ -6,7 +6,7 @@ import { dmMono, dmSans } from "@/lib/fonts"
 export const metadata: Metadata = {
   title: "Francis Ignacio | Who Tries Science",
   description:
-    "Francis Ignacio is a software engineer and data scientist who loves to share his knowledge and experiences through his personal blog.",
+    "Passionate about the science behind AI and ML, I teach and share workflows that make complex ideas practical. With a software engineering background and AI engineering focus, I ship production-ready models, connect robust data pipelines, and translate research into dependable product features.",
 }
 
 import { ThemeProvider } from "@/providers/theme-provider"

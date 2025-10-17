@@ -19,12 +19,12 @@ import { AnimatedThemeToggler } from "@/components/ui/toggler/animated-theme-tog
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isBlogPost = pathname.match(/^\/blogs\/.+$/)
+  const isNotebookPost = pathname.match(/^\/notebooks\/.+$/)
 
   return (
-    <div className="mx-auto h-full w-full max-w-2xl p-4 py-32 tracking-tight">
+    <div className="mx-auto h-full w-full max-w-2xl p-4 py-16 tracking-tight">
       <div className="flex h-full w-full flex-col items-start gap-8">
-        {!isBlogPost && (
+        {!isNotebookPost && (
           <div className="flex flex-col items-start gap-4">
             <div className="flex w-full flex-row items-center justify-between">
               <div className="flex flex-col items-start">
