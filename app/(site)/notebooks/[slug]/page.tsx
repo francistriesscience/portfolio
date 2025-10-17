@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { HouseIcon, LibraryIcon } from "lucide-react"
 
 import { getPostBySlug } from "@/lib/notebooks/get-post-by-slug"
 import { getAllPosts } from "@/lib/notebooks/get-all-post"
@@ -37,24 +38,44 @@ export default async function NotebookPostPage({ params }: PageProps) {
         <article>
           <header>
             <div className="mb-4 flex flex-row items-center justify-between gap-2">
-              {post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs uppercase">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-              <Button
-                variant="link"
-                size="sm"
-                className="text-muted-foreground hover:text-primary h-auto p-0 text-xs underline decoration-dashed"
-              >
-                <Link href={"/notebooks"}>View more notebooks</Link>
-              </Button>
+              <div className="flex flex-row items-center gap-1">
+                {post.active && (
+                  <span className="relative flex size-3">
+                    <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+                    <span className="bg-success relative inline-flex size-3 rounded-full"></span>
+                  </span>
+                )}
+                {post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-xs uppercase">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-row items-center">
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-xs"
+                >
+                  <HouseIcon className="size-3" />
+                  <Link href={"/"}>Home</Link>
+                </Button>
+                <span className="text-muted-foreground">/</span>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-xs"
+                >
+                  <LibraryIcon className="size-3" />
+                  <Link href={"/notebooks"}>View notebooks</Link>
+                </Button>
+              </div>
             </div>
-            <h1 className="font-georgia text-foreground mb-4 w-full text-4xl font-medium tracking-tight">
+            <h1 className="font-georgia text-foreground mb-4 w-full text-5xl font-medium tracking-tight">
               {post.title}
             </h1>
             <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-2 text-sm">
@@ -81,13 +102,16 @@ export default async function NotebookPostPage({ params }: PageProps) {
               <span className="text-muted-foreground">·</span>
               <span>{post.readingTime} min read</span>
               <span className="text-muted-foreground">·</span>
-              <time dateTime={post.date}>
-                {new Date(post.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
+              <div className="flex flex-row items-center gap-1">
+                <span className="text-muted-foreground text-xs">Updated at</span>
+                <time dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              </div>
             </div>
             <span className="text-muted-foreground text-sm leading-tight italic">
               {post.description}

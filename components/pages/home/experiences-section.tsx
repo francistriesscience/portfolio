@@ -1,10 +1,18 @@
 import * as React from "react"
 import Link from "next/link"
-import { SearchIcon, SoupIcon } from "lucide-react"
+import { SearchIcon, SoupIcon, FileTextIcon, LinkedinIcon } from "lucide-react"
 
 import { experiences, jobSeekingStatus, type Experience, type RoleEntry } from "@/data/experiences"
 
-import { Card, CardContent, Tooltip, TooltipTrigger, TooltipContent, Badge } from "@/components/ui"
+import {
+  Card,
+  CardContent,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  Badge,
+  Button,
+} from "@/components/ui"
 
 export function ExperiencesSection() {
   return (
@@ -12,18 +20,24 @@ export function ExperiencesSection() {
       <div className="flex w-full items-end justify-between">
         <h2 className="text-xl font-medium">Experiences</h2>
         <div className="flex w-full justify-end">
-          <div className="flex flex-row items-center gap-1">
+          <div className="flex flex-row items-center gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
-                  href={
-                    "https://drive.google.com/file/d/1r8zQQP59ZWYI1lE0wHOxI1GdICSTPXRd/view?usp=drive_link"
-                  }
-                  target="_blank"
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
                 >
-                  Resume
-                </Link>
+                  <FileTextIcon className="size-3" />
+                  <Link
+                    href={
+                      "https://drive.google.com/file/d/1r8zQQP59ZWYI1lE0wHOxI1GdICSTPXRd/view?usp=drive_link"
+                    }
+                    target="_blank"
+                  >
+                    Resume
+                  </Link>
+                </Button>
               </TooltipTrigger>
               <span className="text-muted-foreground">/</span>
               <TooltipContent>
@@ -32,13 +46,16 @@ export function ExperiencesSection() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  className="text-muted-foreground hover:text-primary flex flex-row items-center gap-1 text-xs underline decoration-dashed underline-offset-2"
-                  href={"https://www.linkedin.com/in/francistriesscience"}
-                  target="_blank"
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-muted-foreground hover:text-primary h-auto p-0 text-xs"
                 >
-                  LinkedIn
-                </Link>
+                  <LinkedinIcon className="size-3" />
+                  <Link href={"https://www.linkedin.com/in/francistriesscience"} target="_blank">
+                    LinkedIn
+                  </Link>
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
                 <span>Check out my complete professional journey!</span>
