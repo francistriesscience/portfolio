@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HouseIcon, LibraryIcon } from "lucide-react"
@@ -15,6 +16,7 @@ import {
   MarkdownContent,
   Separator,
 } from "@/components/ui"
+import BackToTop from "@/components/features/back-to-top-button"
 
 export const dynamic = "force-static"
 
@@ -38,7 +40,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
         <article>
           <header>
             <div className="mb-4 flex flex-row items-center justify-between gap-2">
-              <div className="flex flex-row items-center gap-1">
+              <div className="flex flex-row items-center gap-2">
                 {post.active && (
                   <span className="relative flex size-3">
                     <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
@@ -48,7 +50,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs uppercase">
+                      <Badge key={tag} className="text-xs uppercase">
                         {tag}
                       </Badge>
                     ))}
@@ -75,6 +77,17 @@ export default async function NotebookPostPage({ params }: PageProps) {
                 </Button>
               </div>
             </div>
+            {post.banner && (
+              <div className="mb-6">
+                <Image
+                  src={post.banner}
+                  alt={`${post.title} banner`}
+                  width={1200}
+                  height={420}
+                  className="h-fit w-full rounded-sm object-cover"
+                />
+              </div>
+            )}
             <h1 className="font-georgia text-foreground mb-4 w-full text-5xl font-medium tracking-tight">
               {post.title}
             </h1>
@@ -118,8 +131,8 @@ export default async function NotebookPostPage({ params }: PageProps) {
             </span>
           </header>
           <Separator className="my-8" />
-
           <MarkdownContent>{post.content}</MarkdownContent>
+          <BackToTop />
         </article>
       </div>
     </div>

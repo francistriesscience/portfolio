@@ -22,7 +22,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   const isNotebookPost = pathname.match(/^\/notebooks\/.+$/)
 
   return (
-    <div className="mx-auto h-full w-full max-w-3xl p-4 py-16 tracking-tight">
+    <div className="mx-auto h-full w-full max-w-3xl p-4 py-16">
       <div className="flex h-full w-full flex-col items-start gap-8">
         {!isNotebookPost && (
           <div className="flex flex-col items-start gap-4">
@@ -40,7 +40,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                 <h2 className="text-muted-foreground text-sm">— {header.subtitle}</h2>
               </div>
             </div>
-            <p className="text-muted-foreground text-sm italic">{header.intro}</p>
+            <p className="text-muted-foreground text-sm">{header.intro}</p>
             <div className="-mt-2 flex w-full flex-wrap items-start gap-2">
               {header.skills.slice(0, 18).map((skill: SkillItem, index: number) => {
                 const IconComponent = skill.icon
