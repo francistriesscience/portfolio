@@ -1,5 +1,3 @@
-import fs from "fs"
-import path from "path"
 import Link from "next/link"
 import Image from "next/image"
 import { Metadata } from "next"
@@ -153,18 +151,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const url = `https://francistries.science/notebooks/${slug}`
 
-  const generatedOgPath = path.join(process.cwd(), "public", "og", `${slug}.png`)
+  let ogImageUrl = post.ogImage || ""
 
-  let ogImageUrl = post.ogImage ?? null
-  if (!ogImageUrl) {
-    try {
-      if (fs.existsSync(generatedOgPath)) {
-        ogImageUrl = `/og/${slug}.png`
-      }
-    } catch {}
+  const SITE_ORIGIN = "https://francistries.science"
+  if (ogImageUrl && ogImageUrl.startsWith("/")) {
+    ogImageUrl = SITE_ORIGIN + ogImageUrl
   }
 
-  ogImageUrl = ogImageUrl ?? ``
   return {
     title: `${post.title} - @francistriesscience`,
     description: post.description,
