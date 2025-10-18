@@ -1,7 +1,7 @@
-import Link from "next/link"
-import Image from "next/image"
 import fs from "fs"
 import path from "path"
+import Link from "next/link"
+import Image from "next/image"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HouseIcon, LibraryIcon } from "lucide-react"
@@ -152,37 +152,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const url = `https://francistries.science/notebooks/${slug}`
-  const baseSite = "https://francistries.science"
-  const resolveAbsolute = (img?: string) => {
-    if (!img) return null
+
+  const generatedOgPath = path.join(process.cwd(), "public", "og", `${slug}.png`)
+
+  let ogImageUrl = post.ogImage ?? null
+  if (!ogImageUrl) {
     try {
-      const u = new URL(img)
-      return u.toString()
-    } catch {
-      if (img.startsWith("/")) return `${baseSite}${img}`
-      return `${baseSite}/${img}`
-    }
+      if (fs.existsSync(generatedOgPath)) {
+        ogImageUrl = `/og/${slug}.png`
+      }
+    } catch {}
   }
 
-  let ogUrl = null
-  if (post.ogImage) {
-    const candidate = resolveAbsolute(post.ogImage)
-    if (post.ogImage.startsWith("/")) {
-      const localPath = path.join(process.cwd(), "public", post.ogImage.replace(/^\//, ""))
-      if (fs.existsSync(localPath)) ogUrl = candidate
-    } else {
-      ogUrl = candidate
-    }
-  }
-
-  if (!ogUrl) {
-    const publicWebp = path.join(process.cwd(), "public", "og", `${slug}.webp`)
-    if (fs.existsSync(publicWebp)) {
-      ogUrl = `${baseSite}/og/${slug}.webp`
-    } else {
-      ogUrl = `${baseSite}/api/notebooks/${slug}/og`
-    }
-  }
+  ogImageUrl = ogImageUrl ?? ``
   return {
     title: `${post.title} - @francistriesscience`,
     description: post.description,
@@ -196,7 +178,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: url,
       images: [
         {
-          url: ogUrl,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -207,7 +189,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [ogUrl || `${baseSite}/api/notebooks/${slug}/og`],
+      images: [ogImageUrl],
     },
   }
 }

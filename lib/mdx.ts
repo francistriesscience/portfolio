@@ -75,7 +75,7 @@ function getMDXData(dir: string): NotebookPost[] {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
-      ogImage: data.ogImage || undefined,
+      ogImage: data.ogImage || `/og/${slug}.png`,
       date: data.date || new Date().toISOString(),
       description: data.description || "",
       tags: data.tags || [],
