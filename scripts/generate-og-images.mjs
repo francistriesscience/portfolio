@@ -28,12 +28,26 @@ function getPostData(file, dir) {
   const { data: frontmatter, content } = matter(raw)
   const slug = path.basename(file, ".mdx")
 
+  // Apply the same placeholder date logic as mdx.ts
+  const frontmatterDate = frontmatter.date ? new Date(String(frontmatter.date)) : null
+  const isPlaceholderFrontmatter =
+    frontmatterDate &&
+    frontmatterDate.getUTCFullYear() === 2024 &&
+    frontmatterDate.getUTCMonth() === 0 &&
+    frontmatterDate.getUTCDate() === 1
+
+  const date = frontmatterDate
+    ? isPlaceholderFrontmatter
+      ? new Date().toISOString()
+      : frontmatterDate.toISOString()
+    : new Date().toISOString()
+
   return {
     slug,
     title: frontmatter.title || "Untitled",
     description: frontmatter.description || "",
     tags: frontmatter.tags || [],
-    date: frontmatter.date || new Date().toISOString(),
+    date,
     authors: frontmatter.authors || [],
     content,
   }

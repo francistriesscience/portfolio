@@ -116,12 +116,27 @@ function getMDXData(dir: string): NotebookPost[] {
     const activeDateFromGit = getLastGitCommitDate(fullPath)
     const activeDate = activeDateFromGit ?? getFileMtimeIso(fullPath)
 
+    const frontmatterDate = data.date ? new Date(String(data.date)) : null
+    const isPlaceholderFrontmatter =
+      frontmatterDate &&
+      frontmatterDate.getUTCFullYear() === 2024 &&
+      frontmatterDate.getUTCMonth() === 0 &&
+      frontmatterDate.getUTCDate() === 1
+
+    const date = activeDateFromGit
+      ? activeDateFromGit
+      : frontmatterDate
+        ? isPlaceholderFrontmatter
+          ? new Date().toISOString()
+          : frontmatterDate.toISOString()
+        : new Date().toISOString()
+
     return {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
       ogImage: data.ogImage || "",
-      date: data.date || new Date().toISOString(),
+      date,
       description: data.description || "",
       tags: data.tags || [],
       authors: data.authors || [],
@@ -147,12 +162,27 @@ function getMDXDataForProjects(dir: string): ProjectPost[] {
     const activeDateFromGit = getLastGitCommitDate(fullPath)
     const activeDate = activeDateFromGit ?? getFileMtimeIso(fullPath)
 
+    const frontmatterDateP = data.date ? new Date(String(data.date)) : null
+    const isPlaceholderFrontmatterP =
+      frontmatterDateP &&
+      frontmatterDateP.getUTCFullYear() === 2024 &&
+      frontmatterDateP.getUTCMonth() === 0 &&
+      frontmatterDateP.getUTCDate() === 1
+
+    const dateP = activeDateFromGit
+      ? activeDateFromGit
+      : frontmatterDateP
+        ? isPlaceholderFrontmatterP
+          ? new Date().toISOString()
+          : frontmatterDateP.toISOString()
+        : new Date().toISOString()
+
     return {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
       ogImage: data.ogImage || "",
-      date: data.date || new Date().toISOString(),
+      date: dateP,
       description: data.description || "",
       tags: data.tags || [],
       authors: data.authors || [],
