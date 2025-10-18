@@ -8,7 +8,7 @@
   },
   "r2_buckets": [
     {
-      "binding": "OG_IMAGES",
+      "binding": "og_images",
       "bucket_name": "francistriesscience-og-images",
     },
   ],
