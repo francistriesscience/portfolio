@@ -9,7 +9,13 @@ import remarkGfm from "remark-gfm"
 
 import { cn } from "@/lib/utils"
 
-import { MarkdownCodeBlock, MarkdownCallout } from "@/components/ui"
+import {
+  MarkdownCodeBlock,
+  MarkdownCallout,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui"
 
 interface MarkdownContentProps {
   children: string
@@ -134,16 +140,21 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
             }
 
             return (
-              <a
-                className={cn(
-                  "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors",
-                  isExternal && "after:ml-1 after:text-xs after:content-['_↗']",
-                  className,
-                )}
-                href={href}
-                {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
-                {...props}
-              />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    className={cn(
+                      "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors",
+                      isExternal,
+                      className,
+                    )}
+                    href={href}
+                    {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
+                    {...props}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>{href.replace(/^https?:\/\//, "")}</TooltipContent>
+              </Tooltip>
             )
           },
           code: ({ className, inline, children, ...props }: any) => {
@@ -183,7 +194,7 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
           ),
           table: ({ className, ...props }: any) => (
             <div className="my-4 overflow-x-auto">
-              <table className={cn("w-full border-collapse", className)} {...props} />
+              <table className={cn("w-full border-collapse text-sm", className)} {...props} />
             </div>
           ),
           th: ({ className, ...props }: any) => (
@@ -208,10 +219,7 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
                   alt={alt || ""}
                   width={800}
                   height={600}
-                  className={cn(
-                    "border-border h-auto max-w-full rounded-sm border contrast-75",
-                    className,
-                  )}
+                  className={cn("border-border h-auto max-w-full rounded-sm border", className)}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 {alt ? <span className="text-muted-foreground text-xs italic">{alt}</span> : null}
