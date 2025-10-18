@@ -75,7 +75,10 @@ function getMDXData(dir: string): NotebookPost[] {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
-      ogImage: data.ogImage || `/og/${slug}.png`,
+      // Do not default to a generated `/og/<slug>.png` here — prefer the
+      // explicit frontmatter `ogImage` when present. Leave empty string
+      // when not provided so callers can decide fallback behavior.
+      ogImage: data.ogImage || "",
       date: data.date || new Date().toISOString(),
       description: data.description || "",
       tags: data.tags || [],
