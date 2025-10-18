@@ -19,6 +19,7 @@ export interface NotebookPost {
   readingTime: number
   active?: boolean
   activeDate?: string
+  ogImage?: string
 }
 
 const resolveContentDir = () => {
@@ -74,6 +75,7 @@ function getMDXData(dir: string): NotebookPost[] {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
+      ogImage: data.ogImage || undefined,
       date: data.date || new Date().toISOString(),
       description: data.description || "",
       tags: data.tags || [],
