@@ -50,6 +50,7 @@
   /** Logos */
   --color-reddit: var(--reddit);
   --color-twitter: var(--twitter);
+  --color-verified-blue: var(--verified-blue);
 
   /** Fonts */
   --font-georgia: Georgia, ui-serif, serif;
@@ -96,6 +97,7 @@
   /** Logos */
   --reddit: oklch(0.6781 0.2159 39.29);
   --twitter: oklch(0 0 0);
+  --verified-blue: oklch(0.5406 0.2093 269);
 
   /** Sugar-high syntax highlighting - Light theme */
   --sh-class: #2d5e9d;
@@ -148,6 +150,7 @@
   /** Logos */
   --reddit: oklch(0.6781 0.2159 39.29);
   --twitter: oklch(1 0 0);
+  --verified-blue: oklch(0.5406 0.2093 269);
 
   /** Sugar-high syntax highlighting - Dark theme */
   --sh-class: #4c97f8;
