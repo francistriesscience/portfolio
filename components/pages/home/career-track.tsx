@@ -26,7 +26,7 @@ export function CareerTrack() {
             <span className="text-xs text-white uppercase">Career Track</span>
           </div>
           <div className="flex w-full flex-row items-center justify-end gap-1">
-            <RiLightbulbFlashLine className="size-3" />
+            <RiLightbulbFlashLine className="size-3 text-white" />
             <span className="text-xs text-white">{careerTrack.coursesLeft} courses left</span>
           </div>
         </div>
