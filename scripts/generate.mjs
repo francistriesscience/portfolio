@@ -39,6 +39,7 @@ function getAllPosts() {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
+      ogImage: `/og/${slug}.png`,
       date: data.date || new Date().toISOString(),
       description: data.description || "",
       tags: data.tags || [],

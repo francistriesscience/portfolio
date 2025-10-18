@@ -7,10 +7,4 @@
     "directory": ".open-next/assets",
     "binding": "assets",
   },
-  "r2_buckets": [
-    {
-      "binding": "og_images",
-      "bucket_name": "francistriesscience-og-images",
-    },
-  ],
 }
