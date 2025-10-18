@@ -23,8 +23,10 @@ export async function ProjectsSection() {
                 size="sm"
                 className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
               >
-                <SproutIcon className="size-3" />
-                <Link href="/projects">View projects</Link>
+                <Link href="/projects" className="flex flex-row items-center gap-1">
+                  <SproutIcon className="size-3" />
+                  View projects
+                </Link>
               </Button>
             </div>
           </div>

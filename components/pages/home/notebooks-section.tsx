@@ -21,8 +21,10 @@ export async function NotebooksSection() {
             size="sm"
             className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
           >
-            <LibraryIcon className="size-3" />
-            <Link href="/notebooks">View notebooks</Link>
+            <Link href="/notebooks" className="flex flex-row items-center gap-1">
+              <LibraryIcon className="size-3" />
+              View notebooks
+            </Link>
           </Button>
         </div>
       </div>
