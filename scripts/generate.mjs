@@ -24,7 +24,7 @@ function readMDXFile(filePath) {
   return matter(rawContent)
 }
 
-function getAllPosts(contentDir) {
+function getAllNotebooks(contentDir) {
   const files = getMDXFiles(contentDir)
   return files.map((file) => {
     const filePath = path.join(contentDir, file)
@@ -57,7 +57,7 @@ function getAllPosts(contentDir) {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
-      ogImage: `/og/${slug}.png`,
+      ogImage: data.ogImage,
       date,
       description: data.description || "",
       tags: data.tags || [],
@@ -103,7 +103,7 @@ function getAllProjects(contentDir) {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
-      ogImage: `/og/${slug}.png`,
+      ogImage: data.ogImage,
       date,
       description: data.description || "",
       tags: data.tags || [],
@@ -193,7 +193,7 @@ export default ${typeName === "NotebookPost" ? "posts" : "projects"}
 
 // Generate Notebooks
 console.log("Generating notebooks...")
-const posts = getAllPosts(NOTEBOOKS_CONTENT_DIR)
+const posts = getAllNotebooks(NOTEBOOKS_CONTENT_DIR)
 generateFiles(posts, NOTEBOOKS_GENERATED_DIR, "NotebookPost")
 console.log(`✓ Generated ${posts.length} notebook(s)`)
 
