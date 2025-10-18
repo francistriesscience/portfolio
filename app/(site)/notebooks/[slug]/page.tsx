@@ -3,9 +3,10 @@ import Image from "next/image"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HouseIcon, LibraryIcon } from "lucide-react"
+import { RiTwitterXLine, RiRedditLine } from "react-icons/ri"
 
-import { getPostBySlug } from "@/lib/notebooks/get-post-by-slug"
-import { getAllPosts } from "@/lib/notebooks/get-all-post"
+import { getNotebookBySlug } from "@/lib/notebooks/get-notebook-by-slug"
+import { getAllNotebooks } from "@/lib/notebooks/get-all-notebooks"
 
 import {
   Badge,
@@ -28,19 +29,21 @@ interface PageProps {
 
 export default async function NotebookPostPage({ params }: PageProps) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = getNotebookBySlug(slug)
 
   if (!post) {
     notFound()
   }
+
+  const shareUrl = `https://francistries.science/notebooks/${slug}`
 
   return (
     <div className="mx-auto w-full">
       <div className="mx-auto w-full max-w-3xl">
         <article>
           <header>
-            <div className="mb-4 flex flex-row items-center justify-between gap-2">
-              <div className="flex flex-row items-center gap-2">
+            <div className="mb-4 flex flex-col items-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+              <div className="order-2 flex flex-row items-center gap-2 lg:order-1">
                 {post.active && (
                   <span className="relative flex size-3">
                     <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
@@ -57,7 +60,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
                   </div>
                 )}
               </div>
-              <div className="flex flex-row items-center">
+              <div className="order-1 flex flex-row items-center lg:order-2">
                 <Button
                   variant="link"
                   size="sm"
@@ -84,11 +87,11 @@ export default async function NotebookPostPage({ params }: PageProps) {
                   alt={`${post.title} banner`}
                   width={1200}
                   height={420}
-                  className="h-fit w-full rounded-sm object-cover"
+                  className="h-42 w-full rounded-sm object-cover object-center"
                 />
               </div>
             )}
-            <h1 className="font-georgia text-foreground mb-4 w-full text-5xl font-medium tracking-tight">
+            <h1 className="font-georgia text-foreground mb-4 w-full text-3xl font-medium tracking-tight lg:text-5xl">
               {post.title}
             </h1>
             <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-2 text-sm">
@@ -130,7 +133,24 @@ export default async function NotebookPostPage({ params }: PageProps) {
               {post.description}
             </span>
           </header>
-          <Separator className="my-8" />
+          <div className="text-muted-foreground mt-2 flex w-full flex-row items-center justify-end gap-2 text-xs">
+            <span>Share it on</span>
+            <Link
+              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <RiTwitterXLine className="hover:text-twitter h-4 w-4" />
+            </Link>
+            <Link
+              href={`https://www.reddit.com/submit?url=${encodeURIComponent(shareUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <RiRedditLine className="hover:text-reddit h-4 w-4" />
+            </Link>
+          </div>
+          <Separator className="mt-4 mb-8" />
           <MarkdownContent>{post.content}</MarkdownContent>
           <BackToTop />
         </article>
@@ -141,7 +161,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = getNotebookBySlug(slug)
 
   if (!post) {
     return {
@@ -188,7 +208,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  const posts = getAllPosts()
+  const posts = getAllNotebooks()
 
   return posts.map((post) => ({
     slug: post.slug,

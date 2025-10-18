@@ -20,11 +20,12 @@ import { AnimatedThemeToggler } from "@/components/ui/toggler/animated-theme-tog
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isNotebookPost = pathname.match(/^\/notebooks\/.+$/)
+  const isProjectPost = pathname.match(/^\/projects\/.+$/)
 
   return (
     <div className="mx-auto h-full w-full max-w-3xl p-4 py-16">
       <div className="flex h-full w-full flex-col items-start gap-8">
-        {!isNotebookPost && (
+        {!isNotebookPost && !isProjectPost && (
           <div className="flex flex-col items-start gap-4">
             <div className="flex w-full flex-row items-center justify-between">
               <div className="flex flex-col items-start">

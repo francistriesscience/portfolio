@@ -2,7 +2,7 @@ import * as React from "react"
 import Link from "next/link"
 import { HouseIcon } from "lucide-react"
 
-import { getAllPosts } from "@/lib/notebooks/get-all-post"
+import { getAllNotebooks } from "@/lib/notebooks/get-all-notebooks"
 import { NotebookCard } from "@/components/card/notebook-card"
 
 import { Card, CardContent, Button, RippleBackground } from "@/components/ui"
@@ -10,7 +10,7 @@ import { Card, CardContent, Button, RippleBackground } from "@/components/ui"
 export const dynamic = "force-static"
 
 export default async function NotebookPage() {
-  const posts = getAllPosts()
+  const posts = getAllNotebooks()
 
   return (
     <div className="flex w-full flex-col items-start gap-4">
