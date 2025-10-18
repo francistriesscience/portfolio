@@ -1,5 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
+import fs from "fs"
+import path from "path"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HouseIcon, LibraryIcon } from "lucide-react"
@@ -50,7 +52,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
-                      <Badge key={tag} className="text-[10px] uppercase">
+                      <Badge key={tag} className="text-xs uppercase" variant="secondary">
                         {tag}
                       </Badge>
                     ))}
@@ -150,9 +152,39 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const url = `https://francistries.science/notebooks/${slug}`
+  const baseSite = "https://francistries.science"
+  const resolveAbsolute = (img?: string) => {
+    if (!img) return null
+    try {
+      const u = new URL(img)
+      return u.toString()
+    } catch {
+      if (img.startsWith("/")) return `${baseSite}${img}`
+      return `${baseSite}/${img}`
+    }
+  }
 
+  let ogUrl = null
+  if (post.ogImage) {
+    const candidate = resolveAbsolute(post.ogImage)
+    if (post.ogImage.startsWith("/")) {
+      const localPath = path.join(process.cwd(), "public", post.ogImage.replace(/^\//, ""))
+      if (fs.existsSync(localPath)) ogUrl = candidate
+    } else {
+      ogUrl = candidate
+    }
+  }
+
+  if (!ogUrl) {
+    const publicWebp = path.join(process.cwd(), "public", "og", `${slug}.webp`)
+    if (fs.existsSync(publicWebp)) {
+      ogUrl = `${baseSite}/og/${slug}.webp`
+    } else {
+      ogUrl = `${baseSite}/api/notebooks/${slug}/og`
+    }
+  }
   return {
-    title: `${post.title} - Francis Ignacio`,
+    title: `${post.title} - @francistriesscience`,
     description: post.description,
     authors: post.authors.map((author) => ({ name: author.name })),
     openGraph: {
@@ -164,12 +196,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: url,
       images: [
         {
-          url: `https://francistries.science/api/notebooks/${slug}/og`,
+          url: ogUrl,
           width: 1200,
           height: 630,
           alt: post.title,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [ogUrl || `${baseSite}/api/notebooks/${slug}/og`],
     },
   }
 }
