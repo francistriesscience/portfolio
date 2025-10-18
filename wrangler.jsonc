@@ -1,4 +1,5 @@
 {
+  "name": "prod-personal-portfolio-francistriesscience",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-09-05",
   "compatibility_flags": ["nodejs_compat"],
@@ -12,5 +13,4 @@
       "bucket_name": "francistriesscience-og-images",
     },
   ],
-  "name": "prod-personal-portfolio-francistriesscience",
 }
