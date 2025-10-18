@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -12,26 +13,41 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const CONTENT_DIR = path.join(__dirname, "..", "content", "notebooks")
+const PROJECTS_DIR = path.join(__dirname, "..", "content", "projects")
 const OUT_DIR = path.join(__dirname, "..", "public", "og")
 const FONTS_DIR = path.join(__dirname, "..", "public", "fonts")
 
-function getMDXFiles() {
-  if (!fs.existsSync(CONTENT_DIR)) return []
-  return fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"))
+function getMDXFiles(dir) {
+  if (!fs.existsSync(dir)) return []
+  return fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"))
 }
 
-function getPostData(file) {
-  const filePath = path.join(CONTENT_DIR, file)
+function getPostData(file, dir) {
+  const filePath = path.join(dir, file)
   const raw = fs.readFileSync(filePath, "utf-8")
   const { data: frontmatter, content } = matter(raw)
   const slug = path.basename(file, ".mdx")
+
+  // Apply the same placeholder date logic as mdx.ts
+  const frontmatterDate = frontmatter.date ? new Date(String(frontmatter.date)) : null
+  const isPlaceholderFrontmatter =
+    frontmatterDate &&
+    frontmatterDate.getUTCFullYear() === 2024 &&
+    frontmatterDate.getUTCMonth() === 0 &&
+    frontmatterDate.getUTCDate() === 1
+
+  const date = frontmatterDate
+    ? isPlaceholderFrontmatter
+      ? new Date().toISOString()
+      : frontmatterDate.toISOString()
+    : new Date().toISOString()
 
   return {
     slug,
     title: frontmatter.title || "Untitled",
     description: frontmatter.description || "",
     tags: frontmatter.tags || [],
-    date: frontmatter.date || new Date().toISOString(),
+    date,
     authors: frontmatter.authors || [],
     content,
   }
@@ -149,9 +165,9 @@ async function generateOgImage(post) {
         "h1",
         {
           style: {
-            fontSize: "48px",
+            fontSize: "75px",
             fontWeight: "400",
-            lineHeight: "1.2",
+            lineHeight: "1.0",
             margin: 0,
             color: "#111827",
             maxWidth: "100%",
@@ -317,26 +333,47 @@ async function main() {
     fs.mkdirSync(OUT_DIR, { recursive: true })
   }
 
-  const files = getMDXFiles()
-  if (files.length === 0) {
-    console.log("No MDX files found in content/notebooks — nothing to do.")
+  // Notebooks
+  const notebookFiles = getMDXFiles(CONTENT_DIR)
+  // Projects
+  const projectFiles = getMDXFiles(PROJECTS_DIR)
+
+  if (notebookFiles.length === 0 && projectFiles.length === 0) {
+    console.log("No MDX files found in content/notebooks or content/projects — nothing to do.")
     return
   }
 
-  console.log(`Found ${files.length} notebook(s). Generating OG images...\n`)
+  let results = []
 
-  const results = []
+  if (notebookFiles.length > 0) {
+    console.log(`Found ${notebookFiles.length} notebook(s). Generating OG images...\n`)
+    for (const file of notebookFiles) {
+      const post = getPostData(file, CONTENT_DIR)
+      process.stdout.write(`Generating OG for notebook: ${post.slug} ... `)
+      try {
+        const outPath = await generateOgImage(post)
+        console.log(`OK -> ${path.relative(process.cwd(), outPath)}`)
+        results.push({ slug: post.slug, ok: true, type: "notebook" })
+      } catch (err) {
+        console.log(`ERROR: ${err.message}`)
+        results.push({ slug: post.slug, ok: false, error: err.message, type: "notebook" })
+      }
+    }
+  }
 
-  for (const file of files) {
-    const post = getPostData(file)
-    process.stdout.write(`Generating OG for ${post.slug} ... `)
-    try {
-      const outPath = await generateOgImage(post)
-      console.log(`OK -> ${path.relative(process.cwd(), outPath)}`)
-      results.push({ slug: post.slug, ok: true })
-    } catch (err) {
-      console.log(`ERROR: ${err.message}`)
-      results.push({ slug: post.slug, ok: false, error: err.message })
+  if (projectFiles.length > 0) {
+    console.log(`\nFound ${projectFiles.length} project(s). Generating OG images...\n`)
+    for (const file of projectFiles) {
+      const post = getPostData(file, PROJECTS_DIR)
+      process.stdout.write(`Generating OG for project: ${post.slug} ... `)
+      try {
+        const outPath = await generateOgImage(post)
+        console.log(`OK -> ${path.relative(process.cwd(), outPath)}`)
+        results.push({ slug: post.slug, ok: true, type: "project" })
+      } catch (err) {
+        console.log(`ERROR: ${err.message}`)
+        results.push({ slug: post.slug, ok: false, error: err.message, type: "project" })
+      }
     }
   }
 

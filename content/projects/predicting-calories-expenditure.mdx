@@ -1,0 +1,674 @@
+---
+title: "Predicting Calories Expenditure"
+date: "2024-01-01"
+description: "This project focuses on developing a data-driven model to estimate calorie expenditure during physical activity."
+tags: ["machine learning"]
+active: true
+authors:
+  - name: "Francis Ignacio"
+    url: "https://francistries.science"
+    imageUrl: "https://avatars.githubusercontent.com/u/132775768?s=96&v=4"
+banner: "https://i.imgur.com/JFDf8ad.png"
+ogImage: "https://i.imgur.com/cqMr7PE.png"
+technologies:
+  - name: "Python"
+    icon: "PythonIcon"
+  - name: "Scikit-learn"
+    icon: "ScikitLearnIcon"
+---
+
+**Objective**: To develop a robust machine learning model that accurately predicts the number of calories burned during a physical activity based on user biometrics and exercise data. This model is intended for integration into a fitness tracking application to provide users with personalized insights.
+
+# 1 Project Scoping & Data Understanding
+
+The first order of business is to define the problem and deeply understand the data we're working with.
+
+## 1.1 Problem Definition
+
+- **Problem Type**: This is a supervised regression task. We are predicting a continuous numerical value (`calories`).
+- **Business Goal**: Enhance user experience in a fitness app by providing a more accurate and personalized calorie burn estimate than generic formulas.
+
+## 1.2 Initial Data Assessment
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+```
+
+You can find the dataset [Hugging Face — @mnemoraorg](https://huggingface.co/datasets/mnemoraorg/calorie-burnt-15k).
+
+```python
+df_calories = pd.read_csv(CALORIES)
+df_exercises = pd.read_csv(EXERCISES)
+```
+
+Rename columns, turn them into lowercase
+
+```python
+df_calories.columns = df_calories.columns.str.lower()
+df_exercises.columns = df_exercises.columns.str.lower()
+```
+
+Merge the two dataframes baed on the `user_id` column
+
+```python
+df = pd.merge(df_exercises, df_calories, on='user_id')
+```
+
+- **Identifier**: `user_id` - Unlikely to be a predictive feature but essential for any user-level analysis.
+- **Features (Predictors)**:
+  - `gender` (Categorical): Male/Female.
+  - `age` (Numerical): User's age in years.
+  - `height` (Numerical): Likely in centimeters. Needs confirmation.
+  - `weight` (Numerical): Likely in kilograms. Needs confirmation.
+  - `duration` (Numerical): Exercise duration, likely in minutes.
+  - `heart_rate` (Numerical): Average heart rate during the exercise (BPM).
+  - `body_temp` (Numerical): Body temperature, likely in Celsius.
+- **Target Variable**:
+  - `calories` (Numerical): The value we want to predict.
+
+## 1.3 Key Questions & Hypothesis
+
+- **Hypothesis**: `duration`, `heart_rate`, and `weight` will be the most significant predictors of `calories` burned.
+- **Data Quality Concern**: The `body_temp` values (e.g., 40.8°C) seem high. While possible during intense exercise, this requires investigation. Are these accurate measurements, or is there a data entry/sensor error? We must validate the unit and typical range.
+
+# 2 Exploratory Data Analysis (EDA)
+
+This is the most critical phase for uncovering insights and informing our modeling strategy. We'll use statistical analysis and visualizations to explore the data from every angle.
+
+## 2.1 Univariate Analysis
+
+### 2.1.1A Distribution of Numerical Features
+
+```python
+numerical_features = ['age', 'height', 'weight', 'duration', 'heart_rate', 'body_temp', 'calories']
+
+fig, axes = plt.subplots(3, 3, figsize=(15, 12))
+fig.suptitle('Distribution of Numerical Features', y=0.995)
+axes = axes.flatten()
+
+for idx, feature in enumerate(numerical_features):
+    sns.histplot(df[feature].dropna(), bins=30, color='steelblue', edgecolor='black', alpha=0.7, kde=True, ax=axes[idx])
+    axes[idx].set_xlabel(feature)
+    axes[idx].set_ylabel('Frequency (count)')
+    axes[idx].grid(alpha=0.3, linestyle='--')
+    axes[idx].spines['top'].set_visible(False)
+    axes[idx].spines['right'].set_visible(False)
+
+for idx in range(len(numerical_features), len(axes)):
+    fig.delaxes(axes[idx])
+
+plt.tight_layout()
+plt.show()
+```
+
+![Distribution of Numerical Features](https://i.imgur.com/rEjChcf.png)
+
+### 2.1.1B Report
+
+1. **Summary**
+
+   This report details the findings from the univariate analysis of the seven numerical features in our dataset. The goal of this analysis was to understand the underlying distribution of each variable to identify its characteristics, spot potential data quality issues, and inform our subsequent feature engineering and modeling strategies.
+
+   Overall, the predictor variables (e.g., `height`, `weight`, `heart_rate`) exhibit well-behaved, near-normal distributions, making them excellent candidates for modeling. However, a critical finding is the significant right-skew of our target variable, `calories`. This will require a transformation to ensure robust model performance. The distribution of `body_temp` also confirms our initial hypothesis that these values are consistently high, suggesting that the data primarily represents periods of strenuous activity.
+
+2. **Detailed Feature Analysis**
+   - `age` and `duration`:
+     - Both `age` and `duration` display a near-uniform distribution. This indicates that our dataset contains a balanced representation of individuals across different age groups (from 20 to 80) and a wide variety of workout durations (from 0 to 30 minutes).
+   - `height`, `weight`, & `heart_rate`:
+     - These three features all follow a clear **normal (Gaussian) distribution**. They are symmetric with a distinct central tendency, which is characteristic of biometric data in a large population.
+   - `body_temp`:
+     - The distribution is **left-skewed**, with the vast majority of data points concentrated between 39°C and 41°C.
+   - `calories` (the target variable):
+     - This is the most critical finding. The `calories` variable is **highly right-skewed**. The majority of workouts result in a low-to-moderate calorie burn (0-100), with a long tail of less frequent, high-calorie-burn activities.
+
+> This analysis has provided crucial insights that directly inform our data preprocessing and modeling strategy. The data appears to be of high quality and is well-suited for the project's objective.
+
+### 2.1.2A Box Plots for Outlier Detection
+
+```python
+numerical_features = ['age', 'height', 'weight', 'duration', 'heart_rate', 'body_temp', 'calories']
+
+fig, axes = plt.subplots(3, 3, figsize=(15, 12))
+fig.suptitle('Box Plots for Outlier Detection', y=0.995)
+axes = axes.flatten()
+
+for idx, feature in enumerate(numerical_features):
+    sns.boxplot(y=df[feature].dropna(), color='steelblue', ax=axes[idx])
+    axes[idx].set_ylabel(feature)
+    axes[idx].grid(alpha=0.3, linestyle='--', axis='y')
+    axes[idx].spines['top'].set_visible(False)
+    axes[idx].spines['right'].set_visible(False)
+
+for idx in range(len(numerical_features), len(axes)):
+    fig.delaxes(axes[idx])
+
+plt.tight_layout()
+plt.show()
+```
+
+![Box Plots for Outlier Detection](https://i.imgur.com/Mxsgahk.png)
+
+### 2.1.2B Report
+
+1. **Summary**
+
+   This report outlines the findings from our outlier analysis, which used box plots to identify data points that deviate significantly from the rest of the distribution for each numerical feature.
+
+   The key finding is that the dataset is remarkably clean. While some statistical outliers are present, the majority appear to represent plausible, real-world variations rather than data entry or measurement errors. The features `age` and `duration` show no outliers at all. Minor, explainable outliers were found in `height`, `weight`, `heart_rate`, and our target `calories`.
+
+   The only area requiring further investigation is `body_temp`, which contains several low-end outliers that are inconsistent with typical exercise physiology. Our strategy will be to use models that are naturally robust to outliers, avoiding aggressive data removal which could discard valuable information.
+
+2. **Detailed Feature Analysis**
+   - `age` & `duration`:
+     - Both features show no statistical outliers. The whiskers of the box plots extend to the minimum and maximum values in the dataset, indicating a clean and well-contained distribution.
+   - `height`, `weight`, & `heart_rate`:
+     - These biometric features show a small number of outliers at their extremes. For example, `height` has a few values that are exceptionally tall or short, and `weight` has a few on the higher end.
+   - `body_temp`:
+     - This plot is the most noteworthy. It displays a cluster of significant outliers on the **low end** (around 37°C - 38°C).
+   - `calories` (the target variable):
+     - A few outliers are present on the high end, with calorie burns exceeding 250.
+
+### 2.1.3A Gender Distribution
+
+```python
+fig, ax = plt.subplots(figsize=(8, 6))
+
+gender_counts = df['gender'].value_counts()
+sns.barplot(x=gender_counts.index, y=gender_counts.values, hue=gender_counts.index, palette=['steelblue', 'lightcoral'], legend=False, ax=ax)
+
+ax.set_title('Gender Distribution')
+ax.set_xlabel('Gender')
+ax.set_ylabel('Frequency (count)')
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.grid(alpha=0.3, linestyle='--', axis='y')
+
+for i, v in enumerate(gender_counts.values):
+    ax.text(i, v + 50, str(v), ha='center', va='bottom')
+
+plt.tight_layout()
+plt.show()
+```
+
+![Gender Distribution](https://i.imgur.com/vepzkh4.png)
+
+### 2.1.3B Report
+
+1. **Summary**
+
+   This report details the findings from our analysis of the gender categorical feature. The primary objective was to determine the composition of the dataset with respect to gender to identify any potential biases that could affect model training.
+
+   The key finding is that the dataset is **exceptionally well-balanced**, with a near-equal representation of male and female participants. This balance is highly advantageous, as it significantly reduces the risk of the model developing a gender-based bias and ensures that its predictive performance will be reliable for all users.
+
+2. **Detailed Distribution Analysis**
+
+   The dataset contains records for 7,553 females and 7,447 males. This corresponds to a split of approximately 50.3% female and 49.7% male.
+
+## 2.2 Bivariate Analysis
+
+### 2.2.1A Calorie Expenditure by Gender
+
+```python
+fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+
+fig.suptitle('Calorie Expenditure by Gender', y=1.02)
+
+sns.boxplot(data=df, x='gender', y='calories', hue='gender', palette='coolwarm', legend=False, ax=axes[0])
+axes[0].set_xlabel('Gender', fontsize=12)
+axes[0].set_ylabel('Calories Burned', fontsize=12)
+axes[0].grid(axis='y', alpha=0.3)
+axes[0].spines['top'].set_visible(False)
+axes[0].spines['right'].set_visible(False)
+
+sns.stripplot(data=df, x='gender', y='calories', hue='gender', palette='coolwarm', alpha=0.4, size=2, dodge=False, ax=axes[1], legend=False)
+axes[1].set_xlabel('Gender', fontsize=12)
+axes[1].set_ylabel('Calories Burned', fontsize=12)
+axes[1].grid(axis='y', alpha=0.3)
+axes[1].spines['top'].set_visible(False)
+axes[1].spines['right'].set_visible(False)
+
+plt.tight_layout()
+plt.show()
+```
+
+![Calorie Expenditure by Gender](https://i.imgur.com/poIKDhZ.png)
+
+### 2.2.1B Report
+
+1. **Summary**
+
+   This report details our investigation into the relationship between `gender` and our target variable, `calories`. By comparing the distributions of calories burned for male and female participants, we aimed to determine if gender is a significant factor in calorie expenditure within this dataset.
+
+   The analysis reveals a discernible difference between the two groups. On average, **males in this dataset exhibit a slightly higher median calorie burn than females**. While the interquartile ranges (the middle 50% of users) are very similar, the overall distribution for males is shifted slightly higher. This confirms that `gender` is a valuable predictive feature that will help improve the accuracy and personalization of our model.
+
+2. **Detailed Distribution Analysis**
+   - **Box Plot Analysis**
+     - The median calorie expenditure for males (the central line in the blue box) is visibly higher than the median for females (the central line in the red box). Both genders display a similar spread in their interquartile range (IQR), indicating that the variability in calorie burn for the central 50% of users is comparable. Both groups also have high-end outliers, representing intense workouts.
+
+   - **Strip Plot Analysis**
+     - This plot, which shows every individual data point, confirms the findings from the box plot. The density cloud for males is slightly shifted upwards compared to the cloud for females.
+
+### 2.2.2A Feature Relationships
+
+```python
+numeric_cols = ['age', 'height', 'weight', 'duration', 'heart_rate', 'body_temp', 'calories']
+correlation_matrix = df[numeric_cols].corr()
+
+fig, ax = plt.subplots(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, fmt='.2f', cmap='coolwarm', center=0,
+            square=True, linewidths=1, cbar_kws={"shrink": 0.8}, ax=ax)
+ax.set_title('Feature Relationships')
+
+plt.tight_layout()
+plt.show()
+```
+
+![Feature Relationships](https://i.imgur.com/CatSUNm.png)
+
+### 2.2.2B Report
+
+1. **Summary**
+
+   This report concludes our Exploratory Data Analysis (EDA) by examining the correlation matrix heatmap, which quantifies the linear relationships between all numerical features. a slightly hi our mode our primary hypothesis: `duration` (0.96), `heart_rate` (0.90), and `body_temp` (0.82) are the most powerful predictors of `calories`. This gives us high confidence that the observed difference is genuine.
+
+### 2.2.3A Feature vs Calories Relationships
+
+```python
+numerical_features = ['age', 'height', 'weight', 'duration', 'heart_rate', 'body_temp']
+
+fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+fig.suptitle('Feature vs Calories Relationships', y=0.995)
+axes = axes.flatten()
+
+
+for idx, feature in enumerate(numerical_features):
+    sns.regplot(x=df[feature], y=df['calories'], scatter_kws={'alpha': 0.5, 'color': 'steelblue'},
+                line_kws={'color': 'black', 'linewidth': 1, 'linestyle': '--', 'alpha': 0.5}, ax=axes[idx])
+    axes[idx].set_title(f'{feature} vs calories')
+    axes[idx].set_xlabel(feature)
+    axes[idx].set_ylabel('calories')
+    axes[idx].grid(alpha=0.3, linestyle='--')
+    axes[idx].spines['top'].set_visible(False)
+    axes[idx].spines['right'].set_visible(False)
+
+plt.tight_layout()
+plt.show()
+```
+
+![Feature vs Calories Relationships](https://i.imgur.com/GnvUotk.png)
+
+### 2.2.3B Report
+
+1. **Summary**
+
+   The relationship between each numerical predictor and the `calories` target. These scatter plots provide a deeper, qualitative understanding that complements the quantitative findings from our correlation matrix.
+
+   The analysis visually confirms that `duration` and `heart_rate` have strong, positive, and **distinctly linear relationships with calorie expenditure**. We also uncovered a key non-linear pattern: the effect of `body_temp` on `calories` accelerates as temperature increases. Finally, the plots validate that `age`, `height`, and `weight` have no meaningful linear relationship with the target on their own.
+
+2. **Detailed Relationship Analysis**
+   - `duration` & `heart_rate` vs. `calories`:
+     - Both plots show a clear and tight positive linear trend. The data points cluster closely around the regression line, especially for `duration`.
+   - `body_temp` vs. `calories`:
+     - This plot reveals a fascinating non-linear relationship. The trend is initially flat and then curves upwards, indicating that calorie burn increases exponentially as body temperature rises, particularly past the 40°C mark.
+   - `age`, `height`, & `weight` vs. `calories`:
+     - These plots appear as amorphous clouds of data with a nearly horizontal regression line. There is no discernible pattern or trend.
+
+# 3 Data Preprocessing & Feature Engineering
+
+## 3.1 Feature Engineering
+
+Look for missing values.
+
+```python
+missing_values = df.isnull().sum()
+```
+
+Look at BMI distribution
+
+```python
+df['height_m'] = df['height'] / 100
+df['bmi'] = df['weight'] / (df['height_m'] ** 2)
+
+df[['height', 'height_m', 'weight', 'bmi', 'calories']].head(10)
+```
+
+Age Groups
+
+```python
+bins = [0, 29, 39, 49, 59, 100]
+labels = ['18-29', '30-39', '40-49', '50-59', '60+']
+df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels, right=True)
+```
+
+Interaction Features
+
+```python
+df['duration_heart_rate'] = df['duration'] * df['heart_rate']
+df['bmi_heart_rate'] = df['bmi'] * df['heart_rate']
+df['duration_body_temp'] = df['duration'] * df['body_temp']
+df['weight_duration'] = df['weight'] * df['duration']
+df['bmi_duration'] = df['bmi'] * df['duration']
+df['heart_rate_body_temp'] = df['heart_rate'] * df['body_temp']
+```
+
+## 3.2 Preprocessing
+
+- One-Hot Encoding for Categorical Variables
+- Feature Scaling for Numerical Variables
+- Train-Test Split
+
+```python
+df = pd.get_dummies(df, columns=['gender', 'age_group'], drop_first=True)
+
+X = df.drop(['user_id', 'calories'], axis=1)
+y = df['calories']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+numerical_cols = X.select_dtypes(include=np.number).columns.tolist()
+
+scaler = StandardScaler()
+X_train[numerical_cols] = scaler.fit_transform(X_train[numerical_cols])
+X_test[numerical_cols] = scaler.transform(X_test[numerical_cols])
+```
+
+# 4 Model Development and Training
+
+We will experiment with several regression algorithms to identify the best-performing model for predicting calorie expenditure. The models we will evaluate include:
+
+- **Mean Squared Error (MSE)**: Measures the average of the squared differences between the predicted and actual values. Lower values are better.
+- **Mean Absolute Error (MAE)**: Measures the average of the absolute differences between the predicted and actual values. Lower values are better.
+- **R-squared (R2)**: Represents the proportion of the variance in the target variable that is predictable from the features. A value closer to 1 indicates a better fit.
+
+## 4.1 Linear Regression
+
+```python
+lr_model = LinearRegression()
+lr_model.fit(X_train, y_train)
+
+y_pred_lr = lr_model.predict(X_test)
+mse_lr = mean_squared_error(y_test, y_pred_lr)
+mae_lr = mean_absolute_error(y_test, y_pred_lr)
+r2_lr = r2_score(y_test, y_pred_lr)
+```
+
+- Mean Squared Error (MSE): **49.6290**
+- Mean Absolute Error (MAE): **5.1934**
+- R-squared (R2): **0.9877** or **98.77%**
+
+## 4.2 Ridge Regression
+
+```python
+rd_model = Ridge()
+rd_model.fit(X_train, y_train)
+
+y_pred_rd = rd_model.predict(X_test)
+mse_rd = mean_squared_error(y_test, y_pred_rd)
+mae_rd = mean_absolute_error(y_test, y_pred_rd)
+r2_rd = r2_score(y_test, y_pred_rd)
+```
+
+- Mean Squared Error (MSE): 49.8228
+- Mean Absolute Error (MAE): 5.1966
+- R-squared (R2): **0.9877** or **98.77%**
+
+## 4.3 Lasso Regression
+
+```python
+ls_model = Lasso()
+ls_model.fit(X_train, y_train)
+
+y_pred_ls = ls_model.predict(X_test)
+mse_ls = mean_squared_error(y_test, y_pred_ls)
+mae_ls = mean_absolute_error(y_test, y_pred_ls)
+r2_ls = r2_score(y_test, y_pred_ls)
+```
+
+- Mean Squared Error (MSE): **103.9032**
+- Mean Absolute Error (MAE): **7.1880**
+- R-squared (R2): **0.9743** or **97.43%**
+
+## 4.4 Random Forest Regressor
+
+```python
+rfr_model = RandomForestRegressor(random_state=42)
+rfr_model.fit(X_train, y_train)
+
+y_pred_rfr = rfr_model.predict(X_test)
+mse_rfr = mean_squared_error(y_test, y_pred_rfr)
+mae_rfr = mean_absolute_error(y_test, y_pred_rfr)
+r2_rfr = r2_score(y_test, y_pred_rfr)
+```
+
+- Mean Squared Error (MSE): **7.8513**
+- Mean Absolute Error (MAE): **1.8234**
+- R-squared (R2): **0.9981** or **99.81%**
+
+## 4.5 Gradient Boosting Regressor
+
+```python
+gbr_model = GradientBoostingRegressor(random_state=42)
+gbr_model.fit(X_train, y_train)
+
+y_pred_gbr = gbr_model.predict(X_test)
+mse_gbr = mean_squared_error(y_test, y_pred_gbr)
+mae_gbr = mean_absolute_error(y_test, y_pred_gbr)
+r2_gbr = r2_score(y_test, y_pred_gbr)
+```
+
+- Mean Squared Error (MSE): **11.2890**
+- Mean Absolute Error (MAE): **2.4149**
+- R-squared (R2): **0.9972** or **99.72%**
+
+## 4.6 Regression Model Evaluation Report
+
+**Objective:** To assess the performance of various regression models in predicting calorie expenditure based on the provided dataset and recommend the most suitable model for inference in a fitness tracking application.
+
+**Evaluation Metrics (on the Test Set):**
+
+| Model                       | MSE        | MAE        | R-squared  |
+| :-------------------------- | :--------- | :--------- | :--------- |
+| Linear Regression           | 49.6290    | 5.1934     | 0.9877     |
+| Ridge Regression            | 49.8228    | 5.1966     | 0.9877     |
+| Lasso Regression            | 103.9032   | 7.1880     | 0.9743     |
+| Random Forest Regressor     | **7.8513** | **1.8234** | **0.9981** |
+| Gradient Boosting Regressor | 11.2890    | 2.4149     | 0.9972     |
+
+**Analysis and Interpretation:**
+
+1. **Overall Strong Performance:** Across the board, most models demonstrate remarkably high R-squared values (all above 0.97), indicating that a significant portion of the variance in calorie expenditure is explained by our features. This confirms the strong predictive power of the chosen features and the viability of a regression approach for this problem.
+2. **Linear Models (Linear, Ridge, Lasso):** The standard Linear Regression and Ridge Regression models performed quite similarly, with very high R-squared values around 0.9877. Their MAE and MSE are also comparable. Lasso Regression, while still performing well, had a slightly higher MSE and MAE, and a marginally lower R-squared. This suggests that the L1 regularization in Lasso might be penalizing some features more aggressively than necessary for this dataset, although the performance difference is not drastic.
+3. **Tree-Based Ensemble Models (Random Forest, Gradient Boosting):** This is where we see a significant leap in performance. Both the Random Forest Regressor and Gradient Boosting Regressor substantially outperform the linear models across all metrics.
+   - **Random Forest Regressor:** Achieved the lowest MSE (7.8513) and MAE (1.8234), and the highest R-squared (0.9981). This indicates that, on average, its predictions are the closest to the actual calorie values, and it explains the highest proportion of the target variable's variance.
+   - **Gradient Boosting Regressor:** Also performed exceptionally well, with very low MSE and MAE, and a high R-squared (0.9972). Its performance is very close to that of the Random Forest, but slightly less accurate based on these metrics.
+
+**Recommendation for Inference:**
+
+Based on these evaluation results, the **Random Forest Regressor** is the clear front-runner and the model I would strongly recommend for use in inference.
+
+- Its exceptionally low Mean Absolute Error (MAE of 1.8234) means that, on average, our predictions for calorie burn will be off by less than 2 calories. This level of accuracy is excellent for a fitness tracking application, providing highly reliable estimates to users.
+- The R-squared of 0.9981 signifies that the model captures almost all of the underlying patterns in the data, leaving very little unexplained variance.
+
+While Gradient Boosting is a close second, the Random Forest's slightly better performance on the test set makes it the preferred choice at this stage.
+
+# 5 Feature Importance
+
+```python
+feature_importances = rfr_model.feature_importances_
+
+feature_names = X_train.columns
+
+importance_series = pd.Series(feature_importances, index=feature_names)
+
+sorted_importance_series = importance_series.sort_values(ascending=False)
+
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.barplot(x=sorted_importance_series.values, y=sorted_importance_series.index, palette="viridis", hue=sorted_importance_series.index, legend=False, ax=ax)
+plt.title('Feature Importance from Random Forest Regressor')
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+
+ax.grid(alpha=0.3, linestyle='--')
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+plt.tight_layout()
+plt.show()
+```
+
+![Feature Importance from Random Forest Regressor](https://i.imgur.com/wpElMZ2.png)
+
+# 6 Inference
+
+Create some sample data for inference.
+
+```python
+sample_data = pd.DataFrame({
+    'age': [30, 45, 25],
+    'height': [170.0, 185.0, 160.0],
+    'weight': [70.0, 90.0, 55.0],
+    'duration': [15.0, 30.0, 10.0],
+    'heart_rate': [90.0, 120.0, 85.0],
+    'body_temp': [39.5, 41.0, 38.8],
+    'gender': ['female', 'male', 'female']
+})
+```
+
+Apply the same feature engineering steps as training data.
+
+```python
+sample_data['height_m'] = sample_data['height'] / 100
+sample_data['bmi'] = sample_data['weight'] / (sample_data['height_m'] ** 2)
+
+bins = [0, 29, 39, 49, 59, 100]
+labels = ['18-29', '30-39', '40-49', '50-59', '60+']
+sample_data['age_group'] = pd.cut(sample_data['age'], bins=bins, labels=labels, right=True)
+
+sample_data['duration_heart_rate'] = sample_data['duration'] * sample_data['heart_rate']
+sample_data['bmi_heart_rate'] = sample_data['bmi'] * sample_data['heart_rate']
+sample_data['duration_body_temp'] = sample_data['duration'] * sample_data['body_temp']
+sample_data['weight_duration'] = sample_data['weight'] * sample_data['duration']
+sample_data['bmi_duration'] = sample_data['bmi'] * sample_data['duration']
+sample_data['heart_rate_body_temp'] = sample_data['heart_rate'] * sample_data['body_temp']
+```
+
+- One-hot encode categorical features - make sure columns match training data.
+- Align columns with the training data - crucial for consistent feature order.
+- Add missing columns (if any) with 0 and ensure the order is the same as `X_train`.
+
+```python
+sample_data_encoded = pd.get_dummies(sample_data, columns=['gender', 'age_group'], drop_first=True)
+
+missing_cols = set(X_train.columns) - set(sample_data_encoded.columns)
+for c in missing_cols:
+    sample_data_encoded[c] = 0
+sample_data_encoded = sample_data_encoded[X_train.columns]
+```
+
+Scale numerical features using the same scaler fitted on the training data.
+
+```python
+numerical_cols_sample = sample_data_encoded.select_dtypes(include=np.number).columns.tolist()
+sample_data_scaled = scaler.transform(sample_data_encoded[numerical_cols_sample])
+sample_data_scaled = pd.DataFrame(sample_data_scaled, columns=numerical_cols_sample, index=sample_data_encoded.index)
+```
+
+Recombine scaled numerical features with one-hot encoded categorical features (which are already in `X_train.columns` order).
+
+```python
+X_inference = pd.DataFrame(index=sample_data.index)
+```
+
+- Add scaled numerical columns back.
+- Add one-hot encoded columns back (these were handled by aligning columns with `X_train`).
+- Ensure the order is still correct.
+
+```python
+for col in numerical_cols_sample:
+X_inference[col] = sample_data_scaled[col]
+
+for col in X_train.columns:
+if col not in numerical_cols_sample:
+X_inference[col] = sample_data_encoded[col]
+
+X_inference = X_inference[X_train.columns]
+```
+
+Make predictions.
+
+```python
+predicted_calories = rfr_model.predict(X_inference)
+```
+
+- Combine sample data and predicted calories.
+- Highlight the `'predicted_calories'` column
+
+```python
+predictions_df = sample_data.copy()
+predictions_df['predicted_calories'] = predicted_calories
+
+def highlight_predicted_calories(s):
+    if s.name == 'predicted_calories':
+        return ['background-color: yellow'] * len(s)
+    return [''] * len(s)
+```
+
+Display the DataFrame with the **Predicted Calories**.
+
+```python
+numerical_cols = predictions_df.select_dtypes(include=np.number).columns
+display(predictions_df.style.apply(highlight_predicted_calories, axis=0).format({col: '{:.2f}' for col in numerical_cols}))
+```
+
+| age   | height | weight | duration | heart_rate | body_temp | gender | height_m | bmi   | age_group | duration_heart_rate | bmi_heart_rate | duration_body_temp | weight_duration | bmi_duration | heart_rate_body_temp | predicted_calories |
+| ----- | ------ | ------ | -------- | ---------- | --------- | ------ | -------- | ----- | --------- | ------------------- | -------------- | ------------------ | --------------- | ------------ | -------------------- | ------------------ |
+| 30.00 | 170.00 | 70.00  | 15.00    | 90.00      | 39.50     | female | 1.70     | 24.22 | 30-39     | 1350.00             | 1350.00        | 592.50             | 1050.00         | 363.32       | 3555.00              | 63.92              |
+| 45.00 | 180.00 | 90.00  | 30.00    | 120.00     | 41.00     | male   | 1.85     | 26.30 | 40-49     | 3600.00             | 3155.59        | 1230.00            | 2700.00         | 788.90       | 4920.00              | 258.36             |
+| 25.00 | 160.00 | 55.00  | 10.00    | 85.00      | 38.80     | female | 1.60     | 21.48 | 18-29     | 850.00              | 1826.17        | 388.00             | 550.00          | 214.84       | 3298.00              | 37.50              |
+
+# 7 Project Summary
+
+This project aimed to develop a data-driven model to accurately estimate calorie expenditure during physical activity, suitable for integration into a fitness tracking application.
+
+**Objective:** To predict the number of calories burned based on user biometrics and exercise data using a machine learning model. This was framed as a supervised regression task.
+
+**Methodology:**
+
+1.  **Data Understanding & EDA:**
+    - Loaded and merged two datasets containing exercise and calorie information.
+    - Assessed data quality, identified no missing values, and examined the distributions of features.
+    - Discovered that `duration`, `heart_rate`, and `body_temp` showed strong correlations with `calories`.
+    - Noted a slight difference in calorie expenditure between genders and a highly right-skewed distribution for the target variable, `calories`.
+2.  **Data Preprocessing & Feature Engineering:**
+    - Created new features such as BMI (`bmi`), age groups (`age_group`), and interaction terms (e.g., `duration_heart_rate`, `bmi_duration`) to potentially improve model performance.
+    - Applied one-hot encoding to categorical features (`gender`, `age_group`).
+    - Split the data into training and testing sets.
+    - Scaled numerical features using `StandardScaler` to prepare them for modeling.
+3.  **Model Development and Training:**
+    - Trained several regression models: Linear Regression, Ridge Regression, Lasso Regression, Random Forest Regressor, and Gradient Boosting Regressor.
+4.  **Model Evaluation:**
+    - Evaluated each model's performance on the test set using Mean Squared Error (MSE), Mean Absolute Error (MAE), and R-squared (R2).
+    - The ensemble models (Random Forest and Gradient Boosting) significantly outperformed the linear models.
+    - The **Random Forest Regressor** achieved the best results with the lowest MSE (7.8513), lowest MAE (1.8234), and highest R-squared (0.9981).
+5.  **Feature Importance:**
+    - Analyzed the feature importances from the Random Forest model, confirming that the interaction term `duration_heart_rate` was the most influential feature in predicting calorie burn, followed by `age` and `gender`.
+6.  **Inference:**
+    - Demonstrated how to use the trained Random Forest Regressor model to make predictions on new, unseen sample data, ensuring consistent preprocessing steps.
+
+**Key Findings:**
+
+- The dataset is well-suited for a regression task.
+- Features related to exercise intensity and duration (`duration`, `heart_rate`, `body_temp`) and their interactions are strong predictors of calorie expenditure.
+- The Random Forest Regressor model provides highly accurate predictions, with an average absolute error of less than 2 calories.
+
+**Conclusion:**
+
+Based on the comprehensive evaluation, the **Random Forest Regressor** is the recommended model for predicting calorie expenditure in the fitness tracking application. Its high R-squared value and low MAE indicate excellent predictive performance and reliability.

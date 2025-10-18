@@ -48,6 +48,7 @@ export { DigitalOceanIcon } from "./icon/digital-ocean-icon"
 export { GitLabIcon } from "./icon/gitlab-icon"
 export { GraphQLIcon } from "./icon/graphql-icon"
 export { JupyterIcon } from "./icon/jupyter-icon"
+export { ScikitLearnIcon } from "./icon/scikit-learn-icon"
 /**
  * Tooltip
  */

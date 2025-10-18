@@ -4,7 +4,7 @@ import { posts as NOTEBOOK_POSTS } from "./generated/_index"
 
 const isDev = process.env.NODE_ENV === "development"
 
-export function getAllPosts(limit?: number): NotebookPost[] {
+export function getAllNotebooks(limit?: number): NotebookPost[] {
   if (isDev) {
     return mdxModule.getAllPosts(limit)
   }
