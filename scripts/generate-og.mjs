@@ -58,14 +58,12 @@ async function main() {
       const ab = await res.arrayBuffer()
       const buf = Buffer.from(ab)
 
-      // Try to convert to WebP using sharp if available
       try {
         const sharp = await import("sharp")
         const webpBuf = await sharp.default(buf).webp({ quality: 80 }).toBuffer()
         fs.writeFileSync(outPathWebp, webpBuf)
         console.log(`OK -> ${path.relative(process.cwd(), outPathWebp)}`)
       } catch {
-        // sharp not installed or conversion failed; fall back to PNG
         fs.writeFileSync(outPathPng, buf)
         console.log(
           `OK (png saved) -> ${path.relative(process.cwd(), outPathPng)} (install 'sharp' to auto-convert to .webp)`,
@@ -80,10 +78,6 @@ async function main() {
 
   const okCount = results.filter((r) => r.ok).length
   console.log(`\nDone. ${okCount}/${results.length} images generated.`)
-  console.log(`If your dev server isn't running, start it with: npm run dev`)
-  console.log(
-    `You can change the host with OG_HOST environment variable, e.g. OG_HOST=https://example.com npm run generate:og`,
-  )
 }
 
 main().catch((err) => {
