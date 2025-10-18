@@ -1,14 +1,31 @@
 import { ImageResponse } from "@vercel/og"
 import { getPostBySlug } from "@/lib/notebooks/get-post-by-slug"
 import { NextRequest } from "next/server"
+import fs from "fs"
+import path from "path"
 
 export const runtime = "nodejs"
 
 /* eslint-disable @next/next/no-img-element */
-
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const post = getPostBySlug(slug)
+
+  const outDir = path.join(process.cwd(), "public", "og")
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true })
+
+  const cachedPath = path.join(outDir, `${slug}.png`)
+
+  if (fs.existsSync(cachedPath)) {
+    const buffer = fs.readFileSync(cachedPath)
+    return new Response(buffer, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/png",
+        "Cache-Control": "public, max-age=31536000, immutable",
+      },
+    })
+  }
 
   const georgiaRegular = await fetch(new URL("/fonts/georgia/georgia.ttf", request.url)).then(
     (res) => res.arrayBuffer(),
@@ -21,7 +38,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   )
 
   if (!post) {
-    return new ImageResponse(
+    const img = new ImageResponse(
       (
         <div
           style={{
@@ -44,9 +61,16 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         height: 630,
       },
     )
+
+    const buffer = Buffer.from(await img.arrayBuffer())
+    fs.writeFileSync(cachedPath, buffer)
+    return new Response(buffer, {
+      status: 200,
+      headers: { "Content-Type": "image/png" },
+    })
   }
 
-  return new ImageResponse(
+  const imageResponse = new ImageResponse(
     (
       <div
         style={{
@@ -248,4 +272,28 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       ],
     },
   )
+
+  const buf = Buffer.from(await imageResponse.arrayBuffer())
+  try {
+    fs.writeFileSync(cachedPath, buf)
+  } catch (err) {
+    console.warn("Failed to write OG cache:", err)
+  }
+
+  try {
+    // @ts-expect-error - global binding available in Cloudflare worker environment
+    if (typeof OG_IMAGES !== "undefined" && OG_IMAGES && OG_IMAGES.put) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      OG_IMAGES.put(`notebooks/${slug}.png`, buf, { httpMetadata: { contentType: "image/png" } })
+    }
+  } catch {}
+
+  return new Response(buf, {
+    status: 200,
+    headers: {
+      "Content-Type": "image/png",
+      "Cache-Control": "public, max-age=31536000, immutable",
+    },
+  })
 }
