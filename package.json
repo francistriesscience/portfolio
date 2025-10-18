@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "generate:notebooks": "node scripts/generate.mjs",
+    "generate:og": "node scripts/generate-og.mjs",
     "build:cloudflare": "bun run generate:notebooks && opennextjs-cloudflare build",
     "deploy": "wrangler deploy",
     "preview": "wrangler dev"
