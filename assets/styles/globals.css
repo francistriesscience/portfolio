@@ -47,6 +47,10 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  /** Logos */
+  --color-reddit: var(--reddit);
+  --color-twitter: var(--twitter);
+
   /** Fonts */
   --font-georgia: Georgia, ui-serif, serif;
   --font-writer: Writer, ui-sans-serif, sans-serif;
@@ -89,7 +93,11 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Sugar-high syntax highlighting - Light theme */
+  /** Logos */
+  --reddit: oklch(0.6781 0.2159 39.29);
+  --twitter: oklch(0 0 0);
+
+  /** Sugar-high syntax highlighting - Light theme */
   --sh-class: #2d5e9d;
   --sh-identifier: #354150;
   --sh-sign: #8996a3;
@@ -137,7 +145,11 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  /* Sugar-high syntax highlighting - Dark theme */
+  /** Logos */
+  --reddit: oklch(0.6781 0.2159 39.29);
+  --twitter: oklch(1 0 0);
+
+  /** Sugar-high syntax highlighting - Dark theme */
   --sh-class: #4c97f8;
   --sh-identifier: #e6edf3;
   --sh-sign: #8b949e;
@@ -155,6 +167,16 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  ::selection {
+    background-color: oklch(0.145 0 0);
+    color: oklch(0.985 0 0);
+  }
+
+  .dark ::selection {
+    background-color: oklch(0.985 0 0);
+    color: oklch(0.145 0 0);
   }
 }
 
