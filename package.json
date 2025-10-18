@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:notebooks": "node scripts/generate.mjs",
-    "generate:og": "tsx scripts/generate-og-images.mjs",
-    "build:cloudflare": "bun run generate:notebooks && opennextjs-cloudflare build",
+    "generate:posts": "node scripts/generate.mjs",
+    "generate:og": "node scripts/generate-og-images.mjs",
+    "build:cloudflare": "bun run generate:posts && opennextjs-cloudflare build",
     "deploy": "wrangler deploy",
     "preview": "wrangler dev"
   },
