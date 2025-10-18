@@ -5,5 +5,12 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "assets",
-  },"name": "prod-personal-portfolio-francistriesscience",
+  },
+  "r2_buckets": [
+    {
+      "binding": "OG_IMAGES",
+      "bucket_name": "francistriesscience-og-images",
+    },
+  ],
+  "name": "prod-personal-portfolio-francistriesscience",
 }
