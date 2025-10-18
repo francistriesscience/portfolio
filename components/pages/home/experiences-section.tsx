@@ -74,7 +74,7 @@ export function ExperiencesSection() {
                 target="_blank"
                 className="block"
               >
-                <Card className="border-primary from-primary/5 via-background to-primary/10 relative w-full cursor-pointer overflow-hidden border border-dashed bg-gradient-to-br transition-all hover:shadow-md">
+                <Card className="border-primary from-primary/5 via-background to-primary/10 relative w-full cursor-pointer overflow-hidden border bg-gradient-to-br shadow-md transition-all">
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <Badge>
