@@ -2,13 +2,13 @@ import * as React from "react"
 import Link from "next/link"
 import { LibraryIcon } from "lucide-react"
 
-import { getAllPosts } from "@/lib/notebooks/get-all-post"
+import { getAllNotebooks } from "@/lib/notebooks/get-all-notebooks"
 
 import { Card, CardContent, RippleBackground, Button } from "@/components/ui"
 import { NotebookCard } from "@/components/card/notebook-card"
 
 export async function NotebooksSection() {
-  const posts = getAllPosts()
+  const notebooks = getAllNotebooks()
 
   return (
     <div className="flex w-full flex-col items-start gap-4">
@@ -26,10 +26,10 @@ export async function NotebooksSection() {
         </div>
       </div>
 
-      {posts.length > 0 ? (
+      {notebooks.length > 0 ? (
         <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-          {posts.slice(0, 3).map((post) => (
-            <NotebookCard key={post.slug} post={post} />
+          {notebooks.slice(0, 3).map((notebook) => (
+            <NotebookCard key={notebook.slug} post={notebook} />
           ))}
         </div>
       ) : (

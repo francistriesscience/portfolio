@@ -1,25 +1,33 @@
 import Link from "next/link"
 
-import type { NotebookPost } from "@/lib/mdx"
+import type { ProjectPost } from "@/lib/mdx"
 import { formatDate } from "@/helper/format-date"
 
 import { Card, CardTitle, CardHeader, CardDescription, CardFooter } from "@/components/ui"
 
-export function NotebookCard({ post }: { post: NotebookPost }) {
+export function ProjectCard({ project }: { project: ProjectPost }) {
   return (
-    <Link key={post.slug} href={`/notebooks/${post.slug}`} className="w-full">
+    <Link key={project.slug} href={`/projects/${project.slug}`} className="w-full">
       <Card className="group hover:border-primary/50 hover:from-primary/5 hover:via-background hover:to-primary/10 cursor-pointer bg-gradient-to-br transition-all hover:shadow-md">
         <CardHeader className="flex flex-col items-start">
           <CardTitle className="group-hover:text-primary line-clamp-2 text-sm leading-tight font-medium transition-colors">
-            {post.title}
+            {project.title}
           </CardTitle>
           <CardDescription className="line-clamp-2 text-xs leading-relaxed">
-            {post.description}
+            {project.description}
           </CardDescription>
         </CardHeader>
         <CardFooter className="line-clamp-2 grid w-full grid-cols-2 justify-between text-xs leading-relaxed">
-          <span className="text-muted-foreground text-[8px] uppercase">{post.tags.join(", ")}</span>
-          <span className="text-end">{formatDate(post.date)}</span>
+          <div className="flex flex-row items-center gap-1">
+            <span className="text-muted-foreground text-[8px] uppercase">
+              {project.tags.join(", ")}
+            </span>
+            <span className="text-muted-foreground">·</span>
+            <span className="text-muted-foreground text-[8px] uppercase">
+              {project.technologies.map((tech) => tech.name).join(", ")}
+            </span>
+          </div>
+          <span className="text-end">{formatDate(project.date)}</span>
         </CardFooter>
       </Card>
     </Link>

@@ -22,6 +22,29 @@ export interface NotebookPost {
   ogImage?: string
 }
 
+export interface ProjectPost {
+  slug: string
+  title: string
+  date: string
+  description: string
+  banner?: string
+  tags: string[]
+  authors: Array<{
+    name: string
+    url: string
+    imageUrl: string
+  }>
+  content: string
+  readingTime: number
+  active?: boolean
+  activeDate?: string
+  ogImage?: string
+  technologies: Array<{
+    name: string
+    icon?: string
+  }>
+}
+
 const resolveContentDir = () => {
   const possiblePaths = [
     path.join(process.cwd(), "content/notebooks"),
@@ -42,8 +65,30 @@ const resolveContentDir = () => {
   return path.join(process.cwd(), "content/notebooks")
 }
 
+const resolveProjectsDir = () => {
+  const possiblePaths = [
+    path.join(process.cwd(), "content/projects"),
+    path.join(process.cwd(), "..", "content/projects"),
+    path.join(__dirname, "..", "content/projects"),
+    path.join(__dirname, "..", "..", "content/projects"),
+    path.join(__dirname, "../../../content/projects"),
+    "./content/projects",
+    "../content/projects",
+  ]
+
+  for (const dir of possiblePaths) {
+    if (fs.existsSync(dir)) {
+      return dir
+    }
+  }
+
+  return path.join(process.cwd(), "content/projects")
+}
+
 const CONTENT_DIR = resolveContentDir()
+const PROJECTS_DIR = resolveProjectsDir()
 const GENERATED_DIR = path.join(__dirname, "notebooks", "generated")
+const PROJECTS_GENERATED_DIR = path.join(__dirname, "projects", "generated")
 
 function getMDXFiles(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -71,15 +116,27 @@ function getMDXData(dir: string): NotebookPost[] {
     const activeDateFromGit = getLastGitCommitDate(fullPath)
     const activeDate = activeDateFromGit ?? getFileMtimeIso(fullPath)
 
+    const frontmatterDate = data.date ? new Date(String(data.date)) : null
+    const isPlaceholderFrontmatter =
+      frontmatterDate &&
+      frontmatterDate.getUTCFullYear() === 2024 &&
+      frontmatterDate.getUTCMonth() === 0 &&
+      frontmatterDate.getUTCDate() === 1
+
+    const date = activeDateFromGit
+      ? activeDateFromGit
+      : frontmatterDate
+        ? isPlaceholderFrontmatter
+          ? new Date().toISOString()
+          : frontmatterDate.toISOString()
+        : new Date().toISOString()
+
     return {
       slug,
       title: data.title || "Untitled",
       banner: data.banner || "",
-      // Do not default to a generated `/og/<slug>.png` here — prefer the
-      // explicit frontmatter `ogImage` when present. Leave empty string
-      // when not provided so callers can decide fallback behavior.
       ogImage: data.ogImage || "",
-      date: data.date || new Date().toISOString(),
+      date,
       description: data.description || "",
       tags: data.tags || [],
       authors: data.authors || [],
@@ -87,6 +144,53 @@ function getMDXData(dir: string): NotebookPost[] {
       activeDate,
       content,
       readingTime,
+    }
+  })
+}
+
+function getMDXDataForProjects(dir: string): ProjectPost[] {
+  const mdxFiles = getMDXFiles(dir)
+  return mdxFiles.map((file) => {
+    const { data, content } = readMDXFile(path.join(dir, file))
+    const slug = path.basename(file, path.extname(file))
+
+    const wordsPerMinute = 200
+    const wordCount = content.split(/\s+/).length
+    const readingTime = Math.ceil(wordCount / wordsPerMinute)
+
+    const fullPath = path.join(dir, file)
+    const activeDateFromGit = getLastGitCommitDate(fullPath)
+    const activeDate = activeDateFromGit ?? getFileMtimeIso(fullPath)
+
+    const frontmatterDateP = data.date ? new Date(String(data.date)) : null
+    const isPlaceholderFrontmatterP =
+      frontmatterDateP &&
+      frontmatterDateP.getUTCFullYear() === 2024 &&
+      frontmatterDateP.getUTCMonth() === 0 &&
+      frontmatterDateP.getUTCDate() === 1
+
+    const dateP = activeDateFromGit
+      ? activeDateFromGit
+      : frontmatterDateP
+        ? isPlaceholderFrontmatterP
+          ? new Date().toISOString()
+          : frontmatterDateP.toISOString()
+        : new Date().toISOString()
+
+    return {
+      slug,
+      title: data.title || "Untitled",
+      banner: data.banner || "",
+      ogImage: data.ogImage || "",
+      date: dateP,
+      description: data.description || "",
+      tags: data.tags || [],
+      authors: data.authors || [],
+      active: typeof data.active === "boolean" ? data.active : false,
+      activeDate,
+      content,
+      readingTime,
+      technologies: data.technologies || [],
     }
   })
 }
@@ -163,6 +267,65 @@ export function getAllTags(): string[] {
 
   posts.forEach((post) => {
     post.tags.forEach((tag) => tags.add(tag))
+  })
+
+  return Array.from(tags).sort()
+}
+
+// ============================================
+// Project Functions
+// ============================================
+
+function readGeneratedProjects(): ProjectPost[] | null {
+  try {
+    if (!fs.existsSync(PROJECTS_GENERATED_DIR)) return null
+    const files = fs
+      .readdirSync(PROJECTS_GENERATED_DIR)
+      .filter((f) => f.endsWith(".ts") && f !== "_index.ts")
+    const projects = []
+    for (const file of files) {
+      const full = path.join(PROJECTS_GENERATED_DIR, file)
+      const txt = fs.readFileSync(full, "utf-8")
+      const m =
+        txt.match(/export const project: [^=]+ = (\{[\s\S]*\})\n\nexport default project/) ||
+        txt.match(/export const project = (\{[\s\S]*\})\n\nexport default project/)
+      if (m && m[1]) {
+        try {
+          const obj = JSON.parse(m[1])
+          projects.push(obj)
+        } catch {}
+      }
+    }
+    return projects.length ? (projects as ProjectPost[]) : null
+  } catch {
+    return null
+  }
+}
+
+export function getAllProjects(limit?: number): ProjectPost[] {
+  const generated = readGeneratedProjects()
+  const projects = generated ?? getMDXDataForProjects(PROJECTS_DIR)
+  const sortedProjects = projects.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  )
+  return limit ? sortedProjects.slice(0, limit) : sortedProjects
+}
+
+export function getProjectBySlug(slug: string): ProjectPost | null {
+  const generated = readGeneratedProjects()
+  if (generated) {
+    return generated.find((p) => p.slug === slug) || null
+  }
+  const projects = getMDXDataForProjects(PROJECTS_DIR)
+  return projects.find((project) => project.slug === slug) || null
+}
+
+export function getAllProjectTags(): string[] {
+  const projects = getAllProjects()
+  const tags = new Set<string>()
+
+  projects.forEach((project) => {
+    project.tags.forEach((tag) => tags.add(tag))
   })
 
   return Array.from(tags).sort()

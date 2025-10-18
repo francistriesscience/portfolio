@@ -57,27 +57,21 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
 
   const highlightedCode = React.useMemo(() => highlight(codeContent), [codeContent])
 
-  // Split raw lines and ensure highlighted output aligns with raw lines.
   const highlightedLinesArr = React.useMemo(() => {
     const raw = codeContent.split("\n")
     const highlighted = highlightedCode.split("\n")
 
-    // If the highlighter returned a different number of lines (some highlighters
-    // can collapse or wrap blank lines), fall back to per-line highlighting so
-    // we preserve empty lines and line count.
     if (highlighted.length !== raw.length) {
       return raw.map((ln) => {
-        // Treat lines that are empty or only whitespace as empty
         const trimmed = ln.trim()
         return trimmed === "" ? "" : highlight(ln)
       })
     }
 
-    // Also handle blank/whitespace-only lines in the already-highlighted output
     return highlighted.map((ln, i) => {
       const rawLine = raw[i] || ""
       const trimmed = rawLine.trim()
-      // If the raw line is empty or whitespace-only, return empty string so it renders as blank line
+
       return trimmed === "" ? "" : ln
     })
   }, [codeContent, highlightedCode])

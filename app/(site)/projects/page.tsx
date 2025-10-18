@@ -1,37 +1,33 @@
 import * as React from "react"
 import Link from "next/link"
-import { SproutIcon } from "lucide-react"
+import { HouseIcon } from "lucide-react"
 
 import { getAllProjects } from "@/lib/projects/get-all-projects"
-
-import { Card, CardContent, RippleBackground, Button } from "@/components/ui"
 import { ProjectCard } from "@/components/card/project-card"
 
-export async function ProjectsSection() {
+import { Card, CardContent, Button, RippleBackground } from "@/components/ui"
+
+export const dynamic = "force-static"
+
+export default async function ProjectsPage() {
   const projects = getAllProjects()
 
   return (
-    <div className="relative flex w-full flex-col items-start gap-4">
+    <div className="flex w-full flex-col items-start gap-4">
       <div className="flex w-full items-end justify-between">
         <h2 className="text-xl font-medium">Projects</h2>
-        <div className="flex w-full justify-end">
-          <div className="flex flex-row items-center gap-1">
-            <div className="flex w-full justify-end">
-              <Button
-                variant="link"
-                size="sm"
-                className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
-              >
-                <SproutIcon className="size-3" />
-                <Link href="/projects">View projects</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
+        <Button
+          variant="link"
+          size="sm"
+          className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
+        >
+          <HouseIcon className="size-3" />
+          <Link href={"/"}>Home</Link>
+        </Button>
       </div>
       {projects.length > 0 ? (
-        <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-          {projects.slice(0, 3).map((project) => (
+        <div className="flex w-full flex-col items-start gap-2">
+          {projects.map((project) => (
             <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
