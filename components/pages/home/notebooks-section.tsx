@@ -6,6 +6,7 @@ import { getAllNotebooks } from "@/lib/notebooks/get-all-notebooks"
 
 import { Card, CardContent, RippleBackground, Button } from "@/components/ui"
 import { NotebookCard } from "@/components/card/notebook-card"
+import { WritingNotebookCard } from "@/components/card/writing-notebook-card"
 
 export async function NotebooksSection() {
   const notebooks = getAllNotebooks()
@@ -31,15 +32,17 @@ export async function NotebooksSection() {
           {notebooks.slice(0, 3).map((notebook) => (
             <NotebookCard key={notebook.slug} post={notebook} />
           ))}
+          <WritingNotebookCard />
         </div>
       ) : (
-        <div className="w-full">
+        <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
           <Card className="relative h-36 overflow-hidden border border-dashed bg-transparent p-4">
             <RippleBackground className="opacity-20" numCircles={5} />
             <CardContent className="text-muted-foreground relative z-10 flex h-full flex-col justify-center text-center text-sm">
               Stay tuned, notebooks are coming soon...
             </CardContent>
           </Card>
+          <WritingNotebookCard />
         </div>
       )}
     </div>
