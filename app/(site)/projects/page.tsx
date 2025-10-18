@@ -21,8 +21,10 @@ export default async function ProjectsPage() {
           size="sm"
           className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
         >
-          <HouseIcon className="size-3" />
-          <Link href={"/"}>Home</Link>
+          <Link href={"/"} className="flex flex-row items-center gap-1">
+            <HouseIcon className="size-3" />
+            Home
+          </Link>
         </Button>
       </div>
       {projects.length > 0 ? (

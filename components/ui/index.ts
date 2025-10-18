@@ -2,6 +2,7 @@
  * Background
  */
 export { RippleBackground } from "./background/ripple-background"
+export { LightRaysBackground } from "./background/light-rays-background"
 /**
  * Badge
  */
@@ -85,3 +86,7 @@ export { DialogHeader } from "./dialog/dialog-header"
 export { DialogFooter } from "./dialog/dialog-footer"
 export { DialogTitle } from "./dialog/dialog-title"
 export { DialogDescription } from "./dialog/dialog-description"
+/**
+ * Progress
+ */
+export { Progress } from "./progress/progress"

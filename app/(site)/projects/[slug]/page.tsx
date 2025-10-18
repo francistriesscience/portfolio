@@ -58,14 +58,17 @@ export default async function ProjectPostPage({ params }: PageProps) {
                   </div>
                 )}
               </div>
-              <div className="order-1 flex flex-row items-center lg:order-2">
+              <div className="order-1 flex flex-row items-center gap-2 lg:order-2">
                 <Button
                   variant="link"
                   size="sm"
                   className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
                 >
-                  <HouseIcon className="size-3" />
-                  <Link href={"/"}>Home</Link>
+                  <Link href={"/"} className="flex flex-row items-center gap-1">
+                    {" "}
+                    <HouseIcon className="size-3" />
+                    Home
+                  </Link>
                 </Button>
                 <span className="text-muted-foreground">/</span>
                 <Button
@@ -73,8 +76,9 @@ export default async function ProjectPostPage({ params }: PageProps) {
                   size="sm"
                   className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
                 >
-                  <SproutIcon className="size-3" />
-                  <Link href={"/projects"}>View projects</Link>
+                  <Link href={"/projects"} className="flex flex-row items-center gap-1">
+                    <SproutIcon className="size-3" /> View projects
+                  </Link>
                 </Button>
               </div>
             </div>
