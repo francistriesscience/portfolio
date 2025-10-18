@@ -1,70 +1,38 @@
 import * as React from "react"
 import Link from "next/link"
-import { GitBranchPlusIcon } from "lucide-react"
+import { SproutIcon } from "lucide-react"
 
-import projectsData from "@/data/projects.json"
+import { getAllProjects } from "@/lib/projects/get-all-projects"
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  RippleBackground,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  Button,
-} from "@/components/ui"
+import { Card, CardContent, RippleBackground, Button } from "@/components/ui"
+import { ProjectCard } from "@/components/card/project-card"
 
-type Project = {
-  title?: string
-  description?: string
-  image?: string
-  imageAlt?: string
-}
-
-export function ProjectsSection() {
-  const items = Array.isArray(projectsData) ? (projectsData as Project[]) : []
+export async function ProjectsSection() {
+  const projects = getAllProjects()
 
   return (
     <div className="relative flex w-full flex-col items-start gap-4">
       <div className="flex w-full items-end justify-between">
         <h2 className="text-xl font-medium">Projects</h2>
         <div className="flex w-full justify-end">
-          <Tooltip>
-            <TooltipTrigger asChild>
+          <div className="flex flex-row items-center gap-1">
+            <div className="flex w-full justify-end">
               <Button
                 variant="link"
                 size="sm"
                 className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
               >
-                <GitBranchPlusIcon className="size-3" />
-                <Link href="mailto:hello@francistries.science" target="_blank">
-                  Let&apos;s collaborate!
-                </Link>
+                <SproutIcon className="size-3" />
+                <Link href="/projects">View projects</Link>
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <span>I&apos;d love to hear from you!</span>
-            </TooltipContent>
-          </Tooltip>
+            </div>
+          </div>
         </div>
       </div>
-      {items.length > 0 ? (
+      {projects.length > 0 ? (
         <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-          {items.map((p: Project, i: number) => (
-            <Card key={p?.title ?? i} className="w-full border-none bg-transparent p-0">
-              <CardHeader className="p-0">
-                <div className="h-40 w-full rounded-xl border bg-transparent" aria-hidden />
-              </CardHeader>
-              <CardContent className="flex w-full flex-col gap-1 p-0">
-                <CardTitle>{p?.title ?? "Untitled"}</CardTitle>
-                <CardDescription className="line-clamp-2 text-xs">
-                  {p?.description ?? ""}
-                </CardDescription>
-              </CardContent>
-            </Card>
+          {projects.slice(0, 3).map((project) => (
+            <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
       ) : (
