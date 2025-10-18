@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "generate:notebooks": "node scripts/generate.mjs",
-    "generate:og": "node scripts/generate-og.mjs",
+    "generate:og": "tsx scripts/generate-og-images.mjs",
     "build:cloudflare": "bun run generate:notebooks && opennextjs-cloudflare build",
     "deploy": "wrangler deploy",
     "preview": "wrangler dev"
@@ -24,6 +24,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@vercel/og": "^0.8.5",
+    "canvas": "^3.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
@@ -41,6 +42,7 @@
     "rehype-highlight": "^7.0.2",
     "rehype-pretty-code": "^0.14.1",
     "remark-gfm": "^4.0.1",
+    "sharp": "^0.33.0",
     "shiki": "^3.13.0",
     "sugar-high": "^0.9.4",
     "tailwind-merge": "^3.3.1"
@@ -56,6 +58,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "prettier-plugin-tailwindcss": "^0.6.14",
+    "satori": "^0.18.3",
     "tailwindcss": "^4",
     "tsx": "^4.20.6",
     "tw-animate-css": "^1.3.8",
