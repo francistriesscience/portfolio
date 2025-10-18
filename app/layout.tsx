@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className="font-writer overflow-x-hidden tracking-tight antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem={false}
           themes={["dark", "light"]}
         >

@@ -1,5 +1,4 @@
-import { GitlabIcon, LinkedinIcon } from "lucide-react"
-import { BlueskySocialLineIcon } from "@/components/ui"
+import { RiGitlabLine, RiLinkedinBoxLine, RiBlueskyLine } from "react-icons/ri"
 
 export type Socials = {
   name: string
@@ -12,19 +11,19 @@ export const socials: Socials[] = [
   {
     name: "gitlab",
     url: "https://gitlab.com/francistriesscience",
-    icon: GitlabIcon,
+    icon: RiGitlabLine,
     tooltip: "gitlab.com/francistriesscience",
   },
   {
     name: "linkedin",
     url: "https://www.linkedin.com/in/francistriesscience",
-    icon: LinkedinIcon,
+    icon: RiLinkedinBoxLine,
     tooltip: "linkedin.com/in/francistriesscience",
   },
   {
     name: "bluesky",
     url: "https://bsky.app/profile/francistriessci.bsky.social",
-    icon: BlueskySocialLineIcon,
+    icon: RiBlueskyLine,
     tooltip: "bsky.app/profile/francistriessci.bsky.social",
   },
 ]

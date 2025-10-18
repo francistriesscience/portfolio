@@ -3,6 +3,7 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { HiCheckBadge } from "react-icons/hi2"
 
 import { header, type SkillItem } from "@/data/header"
 
@@ -34,14 +35,19 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                     <AvatarImage src={header.avatar} />
                     <AvatarFallback>FI</AvatarFallback>
                   </Avatar>
-                  <h1 className="font-georgia text-2xl font-medium tracking-tighter">
+                  <h1 className="font-georgia text-3xl font-medium tracking-tighter">
                     {header.name}
                   </h1>
                 </Link>
-                <h2 className="text-muted-foreground text-sm">— {header.subtitle}</h2>
+                <div className="flex flex-row items-center gap-2">
+                  <h2 className="text-muted-foreground text-sm">— {header.subtitle}</h2>
+                  <HiCheckBadge className="text-verified-blue h-4 w-4" />
+                </div>
               </div>
             </div>
+
             <p className="text-muted-foreground text-sm">{header.intro}</p>
+
             <div className="-mt-2 flex w-full flex-wrap items-start gap-2">
               {header.skills.slice(0, 18).map((skill: SkillItem, index: number) => {
                 const IconComponent = skill.icon

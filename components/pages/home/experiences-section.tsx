@@ -1,6 +1,7 @@
 import * as React from "react"
 import Link from "next/link"
-import { SearchIcon, SoupIcon, FileTextIcon, LinkedinIcon } from "lucide-react"
+import { SearchIcon, SoupIcon, FileTextIcon } from "lucide-react"
+import { RiLinkedinBoxLine } from "react-icons/ri"
 
 import { experiences, jobSeekingStatus, type Experience, type RoleEntry } from "@/data/experiences"
 
@@ -28,13 +29,14 @@ export function ExperiencesSection() {
                   size="sm"
                   className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
                 >
-                  <FileTextIcon className="size-3" />
                   <Link
                     href={
                       "https://drive.google.com/file/d/1r8zQQP59ZWYI1lE0wHOxI1GdICSTPXRd/view?usp=drive_link"
                     }
                     target="_blank"
+                    className="flex flex-row items-center gap-1"
                   >
+                    <FileTextIcon className="size-3" />
                     Resume
                   </Link>
                 </Button>
@@ -51,8 +53,12 @@ export function ExperiencesSection() {
                   size="sm"
                   className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
                 >
-                  <LinkedinIcon className="size-3" />
-                  <Link href={"https://www.linkedin.com/in/francistriesscience"} target="_blank">
+                  <Link
+                    href={"https://www.linkedin.com/in/francistriesscience"}
+                    target="_blank"
+                    className="flex flex-row items-center gap-1"
+                  >
+                    <RiLinkedinBoxLine className="size-3" />
                     LinkedIn
                   </Link>
                 </Button>
