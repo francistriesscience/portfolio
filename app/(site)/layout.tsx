@@ -6,6 +6,7 @@ import Link from "next/link"
 import { HiCheckBadge } from "react-icons/hi2"
 
 import { header, type SkillItem } from "@/data/header"
+import { getIconComponent } from "@/helper/get-icon-component"
 
 import {
   Avatar,
@@ -17,6 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui"
 import { AnimatedThemeToggler } from "@/components/ui/toggler/animated-theme-toggler"
+import SocialBanner from "@/components/features/social-banner"
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -24,7 +26,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   const isProjectPost = pathname.match(/^\/projects\/.+$/)
 
   return (
-    <div className="mx-auto h-full w-full max-w-3xl p-4 py-16">
+    <div className="mx-auto h-full w-full max-w-3xl p-4 py-20">
       <div className="flex h-full w-full flex-col items-start gap-8">
         {!isNotebookPost && !isProjectPost && (
           <div className="flex flex-col items-start gap-4">
@@ -49,8 +51,8 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             <p className="text-muted-foreground text-sm">{header.intro}</p>
 
             <div className="-mt-2 flex w-full flex-wrap items-start gap-2">
-              {header.skills.slice(0, 18).map((skill: SkillItem, index: number) => {
-                const IconComponent = skill.icon
+              {header.skills.slice(0, 19).map((skill: SkillItem, index: number) => {
+                const IconComponent = getIconComponent(skill.iconName)
                 return (
                   <Badge key={index} variant="outline" className="text-xs">
                     <div className="flex items-center gap-1">
@@ -60,9 +62,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                   </Badge>
                 )
               })}
-              {header.skills.length > 18 && (
+              {header.skills.length > 19 && (
                 <Badge variant="secondary" className="text-xs">
-                  +{header.skills.length - 18} more
+                  +{header.skills.length - 19} more
                 </Badge>
               )}
             </div>
@@ -91,6 +93,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       </div>
+      <SocialBanner />
     </div>
   )
 }
