@@ -38,20 +38,26 @@ function getAllNotebooks(contentDir) {
     const activeDateFromGit = getLastGitCommitDate(filePath)
     const activeDate = activeDateFromGit || getFileMtimeIso(filePath)
 
-    const frontmatterDate = data.date ? new Date(String(data.date)) : null
+    const frontmatterDate = data.publishedDate
+      ? new Date(String(data.publishedDate))
+      : data.date
+        ? new Date(String(data.date))
+        : null
     const isPlaceholderFrontmatter =
       frontmatterDate &&
       frontmatterDate.getUTCFullYear() === 2024 &&
       frontmatterDate.getUTCMonth() === 0 &&
       frontmatterDate.getUTCDate() === 1
 
-    const date = activeDateFromGit
-      ? activeDateFromGit
-      : frontmatterDate
-        ? isPlaceholderFrontmatter
-          ? new Date().toISOString()
-          : frontmatterDate.toISOString()
-        : new Date().toISOString()
+    const date = data.publishedDate
+      ? new Date(String(data.publishedDate)).toISOString()
+      : activeDateFromGit
+        ? activeDateFromGit
+        : frontmatterDate
+          ? isPlaceholderFrontmatter
+            ? new Date().toISOString()
+            : frontmatterDate.toISOString()
+          : new Date().toISOString()
 
     return {
       slug,
@@ -66,6 +72,7 @@ function getAllNotebooks(contentDir) {
       activeDate,
       content,
       readingTime,
+      publishedDate: data.publishedDate,
     }
   })
 }
@@ -84,20 +91,26 @@ function getAllProjects(contentDir) {
     const activeDateFromGit = getLastGitCommitDate(filePath)
     const activeDate = activeDateFromGit || getFileMtimeIso(filePath)
 
-    const frontmatterDate = data.date ? new Date(String(data.date)) : null
-    const isPlaceholderFrontmatter =
-      frontmatterDate &&
-      frontmatterDate.getUTCFullYear() === 2024 &&
-      frontmatterDate.getUTCMonth() === 0 &&
-      frontmatterDate.getUTCDate() === 1
+    const frontmatterDateP = data.publishedDate
+      ? new Date(String(data.publishedDate))
+      : data.date
+        ? new Date(String(data.date))
+        : null
+    const isPlaceholderFrontmatterP =
+      frontmatterDateP &&
+      frontmatterDateP.getUTCFullYear() === 2024 &&
+      frontmatterDateP.getUTCMonth() === 0 &&
+      frontmatterDateP.getUTCDate() === 1
 
-    const date = activeDateFromGit
-      ? activeDateFromGit
-      : frontmatterDate
-        ? isPlaceholderFrontmatter
-          ? new Date().toISOString()
-          : frontmatterDate.toISOString()
-        : new Date().toISOString()
+    const date = data.publishedDate
+      ? new Date(String(data.publishedDate)).toISOString()
+      : activeDateFromGit
+        ? activeDateFromGit
+        : frontmatterDateP
+          ? isPlaceholderFrontmatterP
+            ? new Date().toISOString()
+            : frontmatterDateP.toISOString()
+          : new Date().toISOString()
 
     return {
       slug,
@@ -113,6 +126,11 @@ function getAllProjects(contentDir) {
       content,
       readingTime,
       technologies: data.technologies || [],
+      isNotebook: data.isNotebook || false,
+      notebook: data.notebook || [],
+      isWebsite: data.isWebsite || false,
+      website: data.website || [],
+      publishedDate: data.publishedDate,
     }
   })
 }
@@ -195,12 +213,12 @@ export default ${typeName === "NotebookPost" ? "posts" : "projects"}
 console.log("Generating notebooks...")
 const posts = getAllNotebooks(NOTEBOOKS_CONTENT_DIR)
 generateFiles(posts, NOTEBOOKS_GENERATED_DIR, "NotebookPost")
-console.log(`✓ Generated ${posts.length} notebook(s)`)
+console.log(`Generated ${posts.length} notebook(s)`)
 
 // Generate Projects
 console.log("\nGenerating projects...")
 const projects = getAllProjects(PROJECTS_CONTENT_DIR)
 generateFiles(projects, PROJECTS_GENERATED_DIR, "ProjectPost")
-console.log(`✓ Generated ${projects.length} project(s)`)
+console.log(`Generated ${projects.length} project(s)`)
 
-console.log("\n✅ All generation complete!")
+console.log("\nAll generation complete!")

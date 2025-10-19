@@ -8,7 +8,7 @@ interface RippleProps extends React.ComponentPropsWithoutRef<"div"> {
   numCircles?: number
 }
 
-export function RippleBackground({
+export function BackgroundRipple({
   mainCircleSize = 210,
   mainCircleOpacity = 0.24,
   numCircles = 8,

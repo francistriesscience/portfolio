@@ -123,7 +123,6 @@ export default async function NotebookPostPage({ params }: PageProps) {
               <span>{post.readingTime} min read</span>
               <span className="text-muted-foreground">·</span>
               <div className="flex flex-row items-center gap-1">
-                <span className="text-muted-foreground text-xs">Updated at</span>
                 <time dateTime={post.date}>
                   {new Date(post.date).toLocaleDateString("en-US", {
                     year: "numeric",
