@@ -39,7 +39,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                     {header.name}
                   </h1>
                 </Link>
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-1">
                   <h2 className="text-muted-foreground text-sm">— {header.subtitle}</h2>
                   <HiCheckBadge className="text-verified-blue h-4 w-4" />
                 </div>
