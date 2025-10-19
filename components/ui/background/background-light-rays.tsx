@@ -77,7 +77,7 @@ const Ray = ({ left, rotate, width, swing, delay, duration, intensity }: LightRa
   )
 }
 
-export function LightRaysBackground({
+export function BackgroundLightRays({
   className,
   style,
   count = 7,

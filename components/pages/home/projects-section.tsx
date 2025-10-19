@@ -4,7 +4,7 @@ import { SproutIcon } from "lucide-react"
 
 import { getAllProjects } from "@/lib/projects/get-all-projects"
 
-import { Card, CardContent, RippleBackground, Button } from "@/components/ui"
+import { Card, CardContent, BackgroundRipple, Button } from "@/components/ui"
 import { ProjectCard } from "@/components/card/project-card"
 import { IncomingProjectCard } from "@/components/card/incoming-project-card"
 
@@ -42,7 +42,7 @@ export async function ProjectsSection() {
       ) : (
         <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
           <Card className="relative h-36 overflow-hidden border border-dashed bg-transparent p-4">
-            <RippleBackground className="opacity-20" numCircles={5} />
+            <BackgroundRipple className="opacity-20" numCircles={5} />
             <CardContent className="text-muted-foreground relative z-10 flex h-full flex-col justify-center text-center text-sm">
               Collecting projects...
             </CardContent>

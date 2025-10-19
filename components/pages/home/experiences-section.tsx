@@ -1,7 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
 import { SearchIcon, SoupIcon, FileTextIcon } from "lucide-react"
-import { RiLinkedinBoxLine } from "react-icons/ri"
 
 import { experiences, jobSeekingStatus, type Experience, type RoleEntry } from "@/data/experiences"
 
@@ -41,30 +40,8 @@ export function ExperiencesSection() {
                   </Link>
                 </Button>
               </TooltipTrigger>
-              <span className="text-muted-foreground">/</span>
               <TooltipContent>
                 <span>Preview my latest resume (PDF)</span>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
-                >
-                  <Link
-                    href={"https://www.linkedin.com/in/francistriesscience"}
-                    target="_blank"
-                    className="flex flex-row items-center gap-1"
-                  >
-                    <RiLinkedinBoxLine className="size-3" />
-                    LinkedIn
-                  </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <span>Check out my complete professional journey!</span>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -80,8 +57,8 @@ export function ExperiencesSection() {
                 target="_blank"
                 className="block"
               >
-                <Card className="border-primary from-primary/5 via-background to-primary/10 relative w-full cursor-pointer overflow-hidden border bg-gradient-to-br shadow-md transition-all">
-                  <div className="flex flex-col gap-2">
+                <Card className="from-primary/5 via-background to-primary/10 border-primary relative w-full cursor-pointer overflow-hidden border bg-gradient-to-br p-0 shadow-sm">
+                  <div className="flex flex-col gap-2 p-3">
                     <div className="flex items-center justify-between">
                       <Badge>
                         <SearchIcon className="size-4 rotate-90" />

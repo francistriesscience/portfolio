@@ -52,6 +52,8 @@
   --color-twitter: var(--twitter);
   --color-datacamp: var(--datacamp);
   --color-datacamp-bg: var(--datacamp-bg);
+  --color-linkedin: var(--linkedin);
+  --color-gitlab: var(--gitlab);
 
   /** Others */
   --color-verified-blue: var(--verified-blue);
@@ -103,6 +105,8 @@
   --twitter: oklch(0 0 0);
   --datacamp: oklch(0.8308 0.2404 147.72);
   --datacamp-bg: oklch(0.2069 0.0508 253.28);
+  --linkedin: oklch(0.5458 0.130182 242.2738);
+  --gitlab: oklch(0.6112 0.1997 31.74);
 
   /** Others */
   --verified-blue: oklch(0.5406 0.2093 269);
@@ -160,6 +164,8 @@
   --twitter: oklch(1 0 0);
   --datacamp: oklch(0.8308 0.2404 147.72);
   --datacamp-bg: oklch(0.2069 0.0508 253.28);
+  --linkedin: oklch(0.5458 0.130182 242.2738);
+  --gitlab: oklch(0.6112 0.1997 31.74);
 
   /** Others */
   --verified-blue: oklch(0.5406 0.2093 269);

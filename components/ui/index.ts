@@ -1,8 +1,13 @@
 /**
  * Background
  */
-export { RippleBackground } from "./background/ripple-background"
-export { LightRaysBackground } from "./background/light-rays-background"
+export { BackgroundRipple } from "./background/background-ripple"
+export { BackgroundLightRays } from "./background/background-light-rays"
+/**
+ * Special Effect
+ */
+export { SpecialEffectParticles } from "./special-effect/special-effect-particles"
+export { SpecialEffectShineBorder } from "./special-effect/special-effect-shine-border"
 /**
  * Badge
  */
@@ -50,6 +55,7 @@ export { GitLabIcon } from "./icon/gitlab-icon"
 export { GraphQLIcon } from "./icon/graphql-icon"
 export { JupyterIcon } from "./icon/jupyter-icon"
 export { ScikitLearnIcon } from "./icon/scikit-learn-icon"
+export { AWSSageMakerIcon } from "./icon/aws-sagemaker-icon"
 /**
  * Tooltip
  */
@@ -90,3 +96,9 @@ export { DialogDescription } from "./dialog/dialog-description"
  * Progress
  */
 export { Progress } from "./progress/progress"
+/**
+ * Button Group
+ */
+export { ButtonGroup } from "./button-group/button-group"
+export { ButtonGroupText } from "./button-group/button-group-text"
+export { ButtonGroupSeparator } from "./button-group/button-group-separator"

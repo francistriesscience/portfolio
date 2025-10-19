@@ -16,6 +16,9 @@ import {
   Button,
   MarkdownContent,
   Separator,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
 } from "@/components/ui"
 import BackToTop from "@/components/features/back-to-top-button"
 
@@ -65,7 +68,6 @@ export default async function ProjectPostPage({ params }: PageProps) {
                   className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
                 >
                   <Link href={"/"} className="flex flex-row items-center gap-1">
-                    {" "}
                     <HouseIcon className="size-3" />
                     Home
                   </Link>
@@ -121,7 +123,6 @@ export default async function ProjectPostPage({ params }: PageProps) {
               <span>{project.readingTime} min read</span>
               <span className="text-muted-foreground">·</span>
               <div className="flex flex-row items-center gap-1">
-                <span className="text-muted-foreground text-xs">Updated at</span>
                 <time dateTime={project.date}>
                   {new Date(project.date).toLocaleDateString("en-US", {
                     year: "numeric",
@@ -135,7 +136,7 @@ export default async function ProjectPostPage({ params }: PageProps) {
               {project.description}
             </span>
           </header>
-          <div className="mt-4">
+          <div className="mt-4 flex w-full flex-row items-center justify-between">
             {project.technologies && project.technologies.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => {
@@ -147,6 +148,57 @@ export default async function ProjectPostPage({ params }: PageProps) {
                         <span>{tech.name}</span>
                       </div>
                     </Badge>
+                  )
+                })}
+              </div>
+            )}
+            {project.isNotebook && project.notebook.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {project.notebook.map((notebookItem, index) => {
+                  const IconComponent = getIconComponent(notebookItem.icon)
+                  return (
+                    <Link
+                      key={index}
+                      href={notebookItem.url || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="link"
+                            size="sm"
+                            className="flex h-auto items-center gap-1 p-0 text-xs uppercase"
+                          >
+                            {IconComponent && <IconComponent className="h-4 w-4" />}
+                            <span>{notebookItem.name}</span>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {notebookItem.url?.replace("https://", "").slice(0, 40)}...
+                        </TooltipContent>
+                      </Tooltip>
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
+            {project.isWebsite && project.website.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {project.website.map((websiteItem, index) => {
+                  const IconComponent = getIconComponent(websiteItem.icon)
+                  return (
+                    <Link
+                      key={index}
+                      href={websiteItem.url || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline" className="flex items-center gap-2">
+                        {IconComponent && <IconComponent className="h-4 w-4" />}
+                        <span>{websiteItem.name}</span>
+                      </Button>
+                    </Link>
                   )
                 })}
               </div>

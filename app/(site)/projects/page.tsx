@@ -5,7 +5,7 @@ import { HouseIcon } from "lucide-react"
 import { getAllProjects } from "@/lib/projects/get-all-projects"
 import { ProjectCard } from "@/components/card/project-card"
 
-import { Card, CardContent, Button, RippleBackground } from "@/components/ui"
+import { Card, CardContent, Button, BackgroundRipple } from "@/components/ui"
 
 export const dynamic = "force-static"
 
@@ -36,7 +36,7 @@ export default async function ProjectsPage() {
       ) : (
         <div className="w-full">
           <Card className="relative h-36 overflow-hidden border border-dashed bg-transparent p-4">
-            <RippleBackground className="opacity-20" numCircles={5} />
+            <BackgroundRipple className="opacity-20" numCircles={5} />
             <CardContent className="text-muted-foreground relative z-10 flex h-full flex-col justify-center text-center text-sm">
               Collecting projects...
             </CardContent>
