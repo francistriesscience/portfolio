@@ -33,7 +33,7 @@ export const header: Header = {
     { name: "Docker", iconName: "DockerIcon" },
     { name: "AWS", iconName: "AWSIcon" },
     { name: "CloudFlare", iconName: "CloudflareIcon" },
-    { name: "Google Colab", iconName: "Colab.Color" },
+    { name: "Google Colab", iconName: "GoogleColabIcon" },
     { name: "AWS SageMaker", iconName: "AWSSageMakerIcon" },
     { name: "Jupyter", iconName: "JupyterIcon" },
     { name: "DigitalOcean", iconName: "DigitalOceanIcon" },
