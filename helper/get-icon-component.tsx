@@ -1,6 +1,5 @@
 import { ComponentType } from "react"
 import { ChartNoAxesColumnIcon, BrainIcon, CodeXmlIcon } from "lucide-react"
-import { Colab } from "@lobehub/icons"
 
 import {
   PythonIcon,
@@ -23,6 +22,7 @@ import {
   JupyterIcon,
   ScikitLearnIcon,
   AWSSageMakerIcon,
+  GoogleColabIcon,
 } from "@/components/ui"
 
 const iconMap: Record<string, ComponentType<{ className?: string }>> = {
@@ -49,7 +49,7 @@ const iconMap: Record<string, ComponentType<{ className?: string }>> = {
   ChartNoAxesColumnIcon,
   BrainIcon,
   CodeXmlIcon,
-  "Colab.Color": Colab.Color,
+  GoogleColabIcon,
 }
 
 export function getIconComponent(iconName?: string): ComponentType<{ className?: string }> | null {

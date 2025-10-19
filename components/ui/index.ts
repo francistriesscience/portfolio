@@ -56,6 +56,7 @@ export { GraphQLIcon } from "./icon/graphql-icon"
 export { JupyterIcon } from "./icon/jupyter-icon"
 export { ScikitLearnIcon } from "./icon/scikit-learn-icon"
 export { AWSSageMakerIcon } from "./icon/aws-sagemaker-icon"
+export { GoogleColabIcon } from "./icon/google-colab-icon"
 /**
  * Tooltip
  */
