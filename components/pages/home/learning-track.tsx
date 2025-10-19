@@ -7,19 +7,18 @@ import { RiLightbulbFlashLine } from "react-icons/ri"
 import { track } from "@/data/track"
 
 import { Card, Progress } from "@/components/ui"
-import { LightRaysBackground } from "@/components/ui/background/light-rays-background"
+import { SpecialEffectParticles } from "@/components/ui/special-effect/special-effect-particles"
 
 export function LearningTrack() {
   return (
     <Card className="bg-datacamp-bg group relative flex h-full w-full flex-col items-start !gap-1 overflow-hidden border-none p-3 shadow-lg">
-      <LightRaysBackground
-        className="z-0"
-        count={6}
-        color="rgba(120,180,255,0.18)"
-        blur={40}
-        opacity={0.6}
-        speed={12}
-        length="60vh"
+      <SpecialEffectParticles
+        className="absolute inset-0 z-0"
+        quantity={200}
+        color="rgba(8, 240, 97, 0.3)"
+        ease={80}
+        staticity={12}
+        refresh
       />
       <div className="relative z-10 w-full">
         <div className="flex w-full flex-row items-center justify-between">
