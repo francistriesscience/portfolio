@@ -1,4 +1,7 @@
 import { ComponentType } from "react"
+import { ChartNoAxesColumnIcon, BrainIcon, CodeXmlIcon } from "lucide-react"
+import { Colab } from "@lobehub/icons"
+
 import {
   PythonIcon,
   TypeScriptIcon,
@@ -19,6 +22,7 @@ import {
   GraphQLIcon,
   JupyterIcon,
   ScikitLearnIcon,
+  AWSSageMakerIcon,
 } from "@/components/ui"
 
 const iconMap: Record<string, ComponentType<{ className?: string }>> = {
@@ -41,6 +45,11 @@ const iconMap: Record<string, ComponentType<{ className?: string }>> = {
   GraphQLIcon,
   JupyterIcon,
   ScikitLearnIcon,
+  AWSSageMakerIcon,
+  ChartNoAxesColumnIcon,
+  BrainIcon,
+  CodeXmlIcon,
+  "Colab.Color": Colab.Color,
 }
 
 export function getIconComponent(iconName?: string): ComponentType<{ className?: string }> | null {
