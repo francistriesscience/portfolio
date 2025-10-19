@@ -20,6 +20,7 @@ export interface NotebookPost {
   active?: boolean
   activeDate?: string
   ogImage?: string
+  publishedDate?: string
 }
 
 export interface ProjectPost {
@@ -43,6 +44,20 @@ export interface ProjectPost {
     name: string
     icon?: string
   }>
+  isNotebook?: boolean
+  notebook: Array<{
+    icon?: string
+    name?: string
+    url?: string
+    thumbnailUrl?: string
+  }>
+  isWebsite?: boolean
+  website: Array<{
+    icon?: string
+    name?: string
+    url?: string
+  }>
+  publishedDate?: string
 }
 
 const resolveContentDir = () => {
@@ -116,20 +131,26 @@ function getMDXData(dir: string): NotebookPost[] {
     const activeDateFromGit = getLastGitCommitDate(fullPath)
     const activeDate = activeDateFromGit ?? getFileMtimeIso(fullPath)
 
-    const frontmatterDate = data.date ? new Date(String(data.date)) : null
+    const frontmatterDate = data.publishedDate
+      ? new Date(String(data.publishedDate))
+      : data.date
+        ? new Date(String(data.date))
+        : null
     const isPlaceholderFrontmatter =
       frontmatterDate &&
       frontmatterDate.getUTCFullYear() === 2024 &&
       frontmatterDate.getUTCMonth() === 0 &&
       frontmatterDate.getUTCDate() === 1
 
-    const date = activeDateFromGit
-      ? activeDateFromGit
-      : frontmatterDate
-        ? isPlaceholderFrontmatter
-          ? new Date().toISOString()
-          : frontmatterDate.toISOString()
-        : new Date().toISOString()
+    const date = data.publishedDate
+      ? new Date(String(data.publishedDate)).toISOString()
+      : activeDateFromGit
+        ? activeDateFromGit
+        : frontmatterDate
+          ? isPlaceholderFrontmatter
+            ? new Date().toISOString()
+            : frontmatterDate.toISOString()
+          : new Date().toISOString()
 
     return {
       slug,
@@ -144,6 +165,7 @@ function getMDXData(dir: string): NotebookPost[] {
       activeDate,
       content,
       readingTime,
+      publishedDate: data.publishedDate,
     }
   })
 }
@@ -162,20 +184,26 @@ function getMDXDataForProjects(dir: string): ProjectPost[] {
     const activeDateFromGit = getLastGitCommitDate(fullPath)
     const activeDate = activeDateFromGit ?? getFileMtimeIso(fullPath)
 
-    const frontmatterDateP = data.date ? new Date(String(data.date)) : null
+    const frontmatterDateP = data.publishedDate
+      ? new Date(String(data.publishedDate))
+      : data.date
+        ? new Date(String(data.date))
+        : null
     const isPlaceholderFrontmatterP =
       frontmatterDateP &&
       frontmatterDateP.getUTCFullYear() === 2024 &&
       frontmatterDateP.getUTCMonth() === 0 &&
       frontmatterDateP.getUTCDate() === 1
 
-    const dateP = activeDateFromGit
-      ? activeDateFromGit
-      : frontmatterDateP
-        ? isPlaceholderFrontmatterP
-          ? new Date().toISOString()
-          : frontmatterDateP.toISOString()
-        : new Date().toISOString()
+    const dateP = data.publishedDate
+      ? new Date(String(data.publishedDate)).toISOString()
+      : activeDateFromGit
+        ? activeDateFromGit
+        : frontmatterDateP
+          ? isPlaceholderFrontmatterP
+            ? new Date().toISOString()
+            : frontmatterDateP.toISOString()
+          : new Date().toISOString()
 
     return {
       slug,
@@ -191,6 +219,11 @@ function getMDXDataForProjects(dir: string): ProjectPost[] {
       content,
       readingTime,
       technologies: data.technologies || [],
+      isNotebook: data.isNotebook || false,
+      notebook: data.notebook || [],
+      isWebsite: data.isWebsite || false,
+      website: data.website || [],
+      publishedDate: data.publishedDate,
     }
   })
 }
