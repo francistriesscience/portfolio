@@ -65,7 +65,6 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
             />
           ),
           p: ({ className, children, ...props }: any) => {
-            // Check if this paragraph is a callout
             const childrenArray = React.Children.toArray(children)
             const firstChild = childrenArray[0]
 
@@ -77,7 +76,6 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
 
               if (calloutMatch && endsWithCallout) {
                 const type = calloutMatch[1] as "info" | "warning" | "error" | "success"
-                // Remove the :: markers from content
                 const content = childrenArray
                   .map((child) => (typeof child === "string" ? child : ""))
                   .join("")
@@ -192,11 +190,25 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
           hr: ({ className, ...props }: any) => (
             <hr className={cn("border-border my-8", className)} {...props} />
           ),
-          table: ({ className, ...props }: any) => (
-            <div className="my-4 overflow-x-auto">
-              <table className={cn("w-full border-collapse text-sm", className)} {...props} />
-            </div>
-          ),
+          tr: ({ className, children, ...props }: any) => {
+            const shouldHighlightRow = React.Children.toArray(children).some((child: any) => {
+              if (child?.props?.children) {
+                return React.Children.toArray(child.props.children).some((grandChild) => {
+                  if (typeof grandChild === "string") {
+                    return grandChild.trim().includes("{$row}")
+                  }
+                  return false
+                })
+              }
+              return false
+            })
+
+            return (
+              <tr className={cn(shouldHighlightRow && "bg-table-cell", className)} {...props}>
+                {children}
+              </tr>
+            )
+          },
           th: ({ className, ...props }: any) => (
             <th
               className={cn(
@@ -206,9 +218,34 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
               {...props}
             />
           ),
-          td: ({ className, ...props }: any) => (
-            <td className={cn("border-border border px-4 py-2", className)} {...props} />
-          ),
+          td: ({ className, children, ...props }: any) => {
+            const shouldHighlightCell = React.Children.toArray(children).some((child) => {
+              if (typeof child === "string") {
+                return child.trim().includes("{$cell}")
+              }
+              return false
+            })
+
+            const processedChildren = React.Children.map(children, (child) => {
+              if (typeof child === "string") {
+                return child.replace(/\{\$cell\}/g, "").replace(/\{\$row\}/g, "")
+              }
+              return child
+            })
+
+            return (
+              <td
+                className={cn(
+                  "border-border border px-4 py-2",
+                  shouldHighlightCell && "bg-table-cell text-primary font-medium",
+                  className,
+                )}
+                {...props}
+              >
+                {processedChildren}
+              </td>
+            )
+          },
           img: ({ className, alt, src }: any) => {
             if (!src || typeof src !== "string") return null
 
