@@ -97,6 +97,7 @@ export { DialogDescription } from "./dialog/dialog-description"
  * Progress
  */
 export { Progress } from "./progress/progress"
+export { ProgressScroll } from "./progress/progress-scroll"
 /**
  * Button Group
  */
