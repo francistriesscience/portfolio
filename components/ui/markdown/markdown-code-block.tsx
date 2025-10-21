@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { highlight } from "sugar-high"
 
 import { Button, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui"
+import { getLanguageIcon } from "@/helper/get-icon-component"
 
 interface CodeBlockProps {
   children: any
@@ -22,6 +23,7 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
 
   const match = /language-([\w+-]+)(?:\{([0-9,\-]+)\})?/.exec(codeElement?.props?.className || "")
   const language = match ? match[1] : "code"
+  const Icon = getLanguageIcon(language)
   const rangesStr = match && match[2] ? match[2] : undefined
 
   const highlightedLines = React.useMemo(() => {
@@ -89,9 +91,10 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
   return (
     <div className="not-prose group relative my-6">
       <div className="bg-muted/50 border-border/50 flex items-center justify-between rounded-t-lg border border-b-0 px-3 py-2">
-        <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-          {language}
-        </span>
+        <div className="flex flex-row items-center gap-2">
+          {Icon && <Icon className="size-4" />}
+          <span className="text-muted-foreground text-xs font-medium uppercase">{language}</span>
+        </div>
         <div className="flex flex-row items-center gap-1">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -109,7 +112,7 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
         </div>
       </div>
       <pre
-        className="bg-muted !m-0 overflow-x-auto rounded-b-lg border p-2 font-mono text-sm"
+        className="bg-muted !m-0 overflow-x-auto rounded-b-lg border p-2 font-mono text-xs tracking-normal"
         {...props}
       >
         <code className="block">
@@ -126,7 +129,7 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
                 )}
               >
                 <span
-                  className="flex-1 whitespace-pre"
+                  className="flex-1 whitespace-pre-line"
                   dangerouslySetInnerHTML={{ __html: html }}
                 />
               </div>

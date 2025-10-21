@@ -190,6 +190,11 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
           hr: ({ className, ...props }: any) => (
             <hr className={cn("border-border my-8", className)} {...props} />
           ),
+          table: ({ className, ...props }: any) => (
+            <div className="overflow-x-auto pb-4">
+              <table className={cn("min-w-full text-sm", className)} {...props} />
+            </div>
+          ),
           tr: ({ className, children, ...props }: any) => {
             const shouldHighlightRow = React.Children.toArray(children).some((child: any) => {
               if (child?.props?.children) {
@@ -254,10 +259,10 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
                 <Image
                   src={src}
                   alt={alt || ""}
-                  width={800}
-                  height={600}
+                  width={1000}
+                  height={1000}
                   className={cn("border-border h-auto max-w-full rounded-sm border", className)}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  loading="lazy"
                 />
                 {alt ? <span className="text-muted-foreground text-xs italic">{alt}</span> : null}
               </span>

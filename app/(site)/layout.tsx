@@ -8,17 +8,8 @@ import { HiCheckBadge } from "react-icons/hi2"
 import { header, type SkillItem } from "@/data/header"
 import { getIconComponent } from "@/helper/get-icon-component"
 
-import {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-  Badge,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui"
-import { AnimatedThemeToggler } from "@/components/ui/toggler/animated-theme-toggler"
-import SocialBanner from "@/components/features/social-banner"
+import { Avatar, AvatarImage, AvatarFallback, Badge } from "@/components/ui"
+import { SocialBanner } from "@/components/features/social-banner"
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -72,14 +63,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         )}
         {children}
         <div className="mx-auto flex w-full flex-row items-center justify-between gap-2 pt-10">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <AnimatedThemeToggler />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Toggle between light and dark theme</p>
-            </TooltipContent>
-          </Tooltip>
           <div className="text-muted-foreground text-xs">
             Build by{" "}
             <Link

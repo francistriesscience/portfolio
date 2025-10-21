@@ -7,7 +7,7 @@ import { RiLinkedinBoxFill, RiGitlabFill } from "react-icons/ri"
 
 import { ButtonGroup, Button, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui"
 
-export default function SocialBanner() {
+export function SocialBanner() {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(null)

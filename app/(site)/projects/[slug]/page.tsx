@@ -20,7 +20,6 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui"
-import BackToTop from "@/components/features/back-to-top-button"
 
 export const dynamic = "force-static"
 
@@ -206,7 +205,6 @@ export default async function ProjectPostPage({ params }: PageProps) {
           </div>
           <Separator className="mt-4 mb-8" />
           <MarkdownContent>{project.content}</MarkdownContent>
-          <BackToTop />
         </article>
       </div>
     </div>

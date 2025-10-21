@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Passionate about the science behind AI and ML, I teach and share workflows that make complex ideas practical. With a software engineering background and AI engineering focus, I ship production-ready models, connect robust data pipelines, and translate research into dependable product features.",
 }
 
-import { ThemeProvider } from "@/providers/theme-provider"
+import { BackToTopButton } from "@/components/features/back-to-top-button"
+import { ProgressScroll } from "@/components/ui/progress/progress-scroll"
 
 export default function RootLayout({
   children,
@@ -18,14 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-writer overflow-x-hidden tracking-tight antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          themes={["dark", "light"]}
-        >
-          {children}
-        </ThemeProvider>
+        {children}
+        <BackToTopButton />
+        <ProgressScroll />
       </body>
     </html>
   )
