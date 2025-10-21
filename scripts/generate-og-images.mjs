@@ -58,7 +58,7 @@ function getPostData(file, dir) {
   }
 }
 
-async function generateOgImage(post) {
+async function generateOgImage(post, type) {
   const outPath = path.join(OUT_DIR, `${post.slug}.png`)
   const width = 1200
   const height = 630
@@ -167,19 +167,35 @@ async function generateOgImage(post) {
         ),
       // Title
       React.createElement(
-        "h1",
+        "div",
         {
-          style: {
-            fontSize: "75px",
-            fontWeight: "400",
-            lineHeight: "1.0",
-            margin: 0,
-            color: "#111827",
-            maxWidth: "100%",
-            fontFamily: "Georgia, serif",
-          },
+          style: { display: "flex", flexDirection: "row", gap: "16px", alignItems: "center" },
         },
-        post.title,
+        React.createElement("div", {
+          style: {
+            height: "100%",
+            maxHeight: "100%",
+            width: "12px",
+            backgroundColor:
+              type === "project" ? "#F8AB04" : type === "notebook" ? "#BD99FE" : "#000000",
+            borderRadius: "10px",
+          },
+        }),
+        React.createElement(
+          "h1",
+          {
+            style: {
+              fontSize: "75px",
+              fontWeight: "400",
+              lineHeight: "1.0",
+              margin: 0,
+              color: "#111827",
+              maxWidth: "100%",
+              fontFamily: "Georgia, serif",
+            },
+          },
+          post.title,
+        ),
       ),
       // Description
       React.createElement(
@@ -356,7 +372,7 @@ async function main() {
       const post = getPostData(file, CONTENT_DIR)
       process.stdout.write(`Generating OG for notebook: ${post.slug} ... `)
       try {
-        const outPath = await generateOgImage(post)
+        const outPath = await generateOgImage(post, "notebook")
         console.log(`OK -> ${path.relative(process.cwd(), outPath)}`)
         results.push({ slug: post.slug, ok: true, type: "notebook" })
       } catch (err) {
@@ -372,7 +388,7 @@ async function main() {
       const post = getPostData(file, PROJECTS_DIR)
       process.stdout.write(`Generating OG for project: ${post.slug} ... `)
       try {
-        const outPath = await generateOgImage(post)
+        const outPath = await generateOgImage(post, "project")
         console.log(`OK -> ${path.relative(process.cwd(), outPath)}`)
         results.push({ slug: post.slug, ok: true, type: "project" })
       } catch (err) {

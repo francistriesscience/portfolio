@@ -49,7 +49,6 @@ export interface ProjectPost {
     icon?: string
     name?: string
     url?: string
-    thumbnailUrl?: string
   }>
   isWebsite?: boolean
   website: Array<{

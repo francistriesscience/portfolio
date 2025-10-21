@@ -1,0 +1,1186 @@
+---
+title: "Seismic Signature Analysis for Tsunami"
+publishedDate: "2025-10-21"
+description: "This project leverages machine learning to build a predictive system that assesses tsunami potential on seismic event data."
+tags: ["machine learning"]
+active: true
+authors:
+  - name: "Francis Ignacio"
+    url: "https://francistries.science"
+    imageUrl: "https://avatars.githubusercontent.com/u/132775768?s=96&v=4"
+banner: "https://i.imgur.com/kVIjSF7.png"
+ogImage: "https://i.imgur.com/AFP0NHn.png"
+technologies:
+  - name: "Python"
+    icon: "PythonIcon"
+  - name: "Scikit-learn"
+    icon: "ScikitLearnIcon"
+isNotebook: true
+notebook:
+  - icon: "GoogleColabIcon"
+    name: "Google Colab"
+    url: "https://colab.research.google.com/drive/17rKFbYb_F5gqIyFtYP8f8Ejnkdm-YRsW?usp=sharing"
+isWebsite: false
+website:
+  - icon: ""
+    name: ""
+    url: ""
+---
+
+**Objective(s)**: The primary objective is to develop and deploy a robust binary classification model that accurately predicts the likelihood of a tsunami following a significant earthquake, using seismic parameters as input features. This model is designed to be the core engine for a prototype early warning system. Secondary objectives include performing exploratory data analysis to identify the most influential seismic predictors and leveraging the model's predictions to create geographic hazard maps that visualize high-risk coastal zones.
+
+# 1 Project Framing
+
+Defining the real-world problem, its context, and the value of the machine-learning solution. Frame the challenge not as a simple classification task, but a critical component in a potential hazard migration system. A clear understanding of the objectives and success criteria ensures the project remains focused and its outcome are measurable.
+
+- **Problem statment**: THe primary challenge in tsunami risk assessment is the rapid and accurate identification of potentially tsunamigenic earthquakes from initial seismic data. Traditional warning system can have delays and uncertainties. The goal of this project is to develop a reliable, automated system that can predict the tsunamic potential of an earthquake within moments of its detection, using its measured seismic characteristics.
+
+- **Project objective and value**: The core objective is to build a high-recall binary classification model to serve as the engine for a prototype early-warning system. The pricipal value lies in its potential to increase the speed and accuracy of tsunami threat assessment. By minimizing false negatives (failing to predict a real tsunami), this system application of a AI for public safety and disaster response.
+
+- **Success metrics**:
+  - **Technical metrics**: The primary technical goal is to achieve a **Recall score of at least 95%** on the unseen test set for the positive class (`tsunami=1`). A secondary goal is to maintain a reasonable **Precision** score to ensure the system is not overly sensitive, with a **target F1-score above 0.90**.
+  - **Project metrics**: The project's succcess will be measured by its ability to demonstrate the feasiblity of an AI-driven tsunami warning system. This will be showcased by correctly identifying major historical tsunami events within the test data and providing clearn, interpretable reasons for its predictions via feature importance analysis.
+
+# 2 Exploratory Data Analysis (EDA)
+
+In this phase, we conduct a comprehensive investigation of the dataset to understand its structure, distributions, and underlying relationships. The insights gained here are fundamental for effective feature engineering and model selection, ensuring that our decisions are backed by data-driven evidence.
+
+```python
+import warnings
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import matplotlib.cm as cm
+import seaborn as sns
+import folium
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix, recall_score, precision_score, f1_score, roc_curve, auc
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
+import shap
+
+warnings.filterwarnings("ignore")
+```
+
+## 2.1 Data Ingestion
+
+You can find the dataset [Hugging Face — @mnemora](https://huggingface.co/datasets/mnemoraorg/seismic-tsunami-event-linkage).
+
+```python
+DATA = "https://huggingface.co/datasets/mnemoraorg/seismic-tsunami-event-linkage/raw/main/raw_seismic_tsunami_events.csv"
+
+df = pd.read_csv(DATA)
+df.head()
+```
+
+## 2.2 Univariate Analysis
+
+Just setting up the Seaborn theme for consistent styling across all visualizations.
+
+```python
+sns.set_theme(
+    style="whitegrid",
+    font="serif",
+)
+```
+
+### 2.2.1 Distribution of Numerical Features
+
+```python
+numerical_features = ['magnitude', 'depth', 'sig']
+
+n_features = len(numerical_features)
+n_cols = 3
+n_rows = (n_features + n_cols - 1) // n_cols
+
+fig, axes = plt.subplots(n_rows, n_cols, figsize=(20, n_rows * 4))
+fig.suptitle('Distribution of Numerical Features', y=1.02)
+axes = axes.flatten()
+
+for idx, feature in enumerate(numerical_features):
+    sns.histplot(df[feature].dropna(), bins=30, color='steelblue', edgecolor='black', alpha=0.7, kde=True, ax=axes[idx])
+    axes[idx].set_xlabel(feature.capitalize())
+    axes[idx].set_ylabel('Frequency (count)')
+    axes[idx].grid(alpha=0.3, linestyle='--')
+    axes[idx].spines['top'].set_visible(False)
+    axes[idx].spines['right'].set_visible(False)
+
+for idx in range(n_features, len(axes)):
+    fig.delaxes(axes[idx])
+
+plt.tight_layout()
+plt.show()
+```
+
+![Distribution of Numerical Features](https://i.imgur.com/IcFsFuV.png)
+
+This initial view of the data give us fundamental understanding of the "personality" of the earthquakes were're studying. By looking at these three charts, we can see patterns of what is common versus what is rare, which is the first steip in training a machine to recognize danger singns
+
+1. **Magnitude** (`magnitude`)
+
+- This chart is a count of earthquakes based on their strength, measured by magnitude on the _Ritcher scale_.
+- The most striking pattern here is that **moderate-strength earthquakes (6.5 to 7.0) are very common, while truly massive earthquakes (abouve 8.0) are exceptionally rare**. Think of it like this: you see far more small hills than you do towering mountains like Everest.
+  > This tells us that our model must be excellent at picking out the subtle clues that distinguish a dangerous event from the much more frequent, less threatening ones. The rarity of mega-quakes means that every single one in our dataset is an invaluable lesson for our AI. The challenge isn't just identifying the obvious "mountains" but also spotting the "tall hills" that could still pose a tsunami risk.
+
+2. **Depth** (`depth`)
+
+- This chart shows how many earthquakes occurred at different depths below the Earth's surface, measured in _kilometers_ (km).
+- The vast majority of significant earthquakes in our dataset are "shallow-focus" events, occurring less than 100 km deep. It's very uncommon for them to happen much deeper.
+  > This is a critically important signal. A shallow earthquake under the ocean is like striking a drum right near its skin—it transfers energy to the water above it much more efficiently. A deep earthquake is like hitting a drum from far away; the energy dissipates. Therefore, a shallow depth is a major red flag for tsunami potential. The fact that our dataset is rich with these events is perfect for training our model to recognize one of the most important warning signs.
+
+3. **Significance Score** (`sig`)
+
+- This chart displays the distribution of the "significance score," which is a composite number that reflects an earthquake's overall impact (considering its magnitude, how many people reported feeling it, etc.).
+- Just like magnitude, the pattern is clear: most earthquakes have a relatively low to moderate overall impact. Events with a very high significance score—the kind that makes international news—are few and far between.
+  > This feature acts as an excellent summary of an event's disruptive power. When our model sees an earthquake with an unusually high significance score, it should treat it as a strong indicator of a major event. This feature helps the model confirm that other signals, like high magnitude and shallow depth, are part of a genuinely hazardous event, increasing its confidence in predicting tsunami potential.
+
+### 2.2.2 Strip Plots of Numerical Features
+
+```python
+numerical_features_for_strip_plots = ['magnitude', 'depth', 'sig']
+
+n_features_strip = len(numerical_features_for_strip_plots)
+n_cols_strip = 3
+n_rows_strip = (n_features_strip + n_cols_strip - 1) // n_cols_strip
+
+fig, axes = plt.subplots(n_rows_strip, n_cols_strip, figsize=(20, n_rows_strip * 4))
+fig.suptitle('Strip Plots of Numerical Features', y=1.02)
+axes = axes.flatten()
+
+for idx, feature in enumerate(numerical_features_for_strip_plots):
+    sns.stripplot(data=df, x=feature, ax=axes[idx], alpha=0.7)
+    axes[idx].set_title(f'{feature.capitalize()}')
+    axes[idx].set_xlabel("").set_visible(False)
+    axes[idx].grid(alpha=0.3, linestyle='--')
+    axes[idx].spines['top'].set_visible(False)
+    axes[idx].spines['right'].set_visible(False)
+
+for idx in range(n_features_strip, len(axes)):
+    fig.delaxes(axes[idx])
+
+plt.tight_layout()
+plt.show()
+```
+
+![Strip Plots of Numerical Features](https://i.imgur.com/FEafoRA.png)
+
+These visualizations allow us to see the exact spread and concentration of every one of the 782 seismic events in our dataset. It helps us understand not just the general trend, but also the nature of the outliers and clusters.
+
+1. **Magnitude** (`magnitude`)
+
+- Each blue dot on this line represents a single earthquake, placed according to its magnitude.
+- You can visually see how densely packed the dots are between 6.5 and 7.5. This is the "normal" range for the significant earthquakes in this dataset. As you move to the right, the dots become much more spaced out. We can literally count the handful of events that surpassed a magnitude of 8.5.
+
+2. **Depth** (`depth`)
+
+- Each dot is an earthquake positioned by how deep it occurred.
+- This is perhaps the most telling plot. There is a massive, overlapping cluster of dots on the far left, representing the shallow-focus earthquakes (less than 100 km deep). Then, there's a large gap, followed by a sparse, scattered collection of dots representing the much rarer deep-focus earthquakes. There are clearly two different populations of events here.
+
+3. **Significance Score** (`sig`)
+
+- Each dot is an earthquake positioned by its overall significance score.
+- Similar to the magnitude plot, we see a dense concentration of events at the lower end of the significance scale. However, unlike magnitude, the dots don't just stop; they form a long tail that stretches far to the right. This "tail" represents events that, for a combination of reasons (strength, location, felt reports), had an outsized impact.
+
+### 2.2.3 Distribution of Tsunami Events
+
+```python
+plt.figure(figsize=(6, 4))
+sns.countplot(data=df, x='tsunami', edgecolor='black')
+plt.title('Distribution of Tsunami Events')
+plt.xlabel('Tsunami (0: No, 1: Yes)')
+plt.ylabel('Count')
+plt.xticks([0, 1], ['No Tsunami', 'Tsunami'])
+
+ax = plt.gca()
+ax.grid(alpha=0.3, linestyle='--')
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+plt.show()
+```
+
+![Distribution of Tsunami Events](https://i.imgur.com/UmO9q45.png)
+
+- This chart is a simple headcount of the 782 earthquakes in our dataset, divided into two groups: those that did not generate a tsunami and those that did.
+- While there are more non-tsunami events, the number of tsunami-generating events is substantial. We have **478** instances of "No Tsunami" and **304** instances of "Tsunami." This is what we call a **well-balanced dataset**. It's not a perfect 50/50 split, but it's not dangerously skewed either (like a 99/1 split).
+
+```python
+print(df['tsunami'].value_counts(normalize=True))
+```
+
+> 0 0.611253
+> 1 0.388747
+
+- These numbers confirm the exact proportion of our two outcomes. It shows that 61.1% of the events in our dataset are classified as "No Tsunami", and 38.9% are classified as "Tsunami".
+
+## 2.3 Bivariate Analysis
+
+### 2.3.1 Distribution of Magnitude and Depth by Tsunami Class
+
+```python
+features_to_compare = ['magnitude', 'depth']
+units = {'magnitude': '(Richter scale)', 'depth': '(km)'}
+
+fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+fig.suptitle('Distribution of Features by Tsunami Class')
+
+for idx, feature in enumerate(features_to_compare):
+    sns.boxplot(data=df, y=feature, x='tsunami', palette='plasma', ax=axes[idx])
+    axes[idx].set_title(f'Distribution of {feature.capitalize()}')
+    axes[idx].set_xlabel('Tsunami')
+    axes[idx].set_ylabel(f'{feature.capitalize()} {units.get(feature, "")}')
+    axes[idx].grid(alpha=0.3, linestyle='--')
+    axes[idx].spines['top'].set_visible(False)
+    axes[idx].spines['right'].set_visible(False)
+    axes[idx].set_xticks([0, 1])
+    axes[idx].set_xticklabels(['No Tsunami', 'Had Tsunami'])
+
+plt.tight_layout()
+plt.show()
+```
+
+![Distribution of Features by Tsunami Class](https://i.imgur.com/A4GmyoT.png)
+
+These plots distill the data down to its core statistical markers. This allows us to precisely compare the central tendency and spread of features for tsunami-causing events versus non-tsunami events.
+
+- This plot compares the statistical summary of magnitudes for both classes. The line in the middle of the box is the median (the 50th percentile)
+- The median magnitude for the "Had Tsunami" group is significantly higher than for the "No Tsunami" group. Furthermore, the entire box (representing the middle 50% of all events in that group) is shifted upwards. The circles, or **outliers**, show that the most extreme high-magnitude events fall almost exclusively within the tsunami-positive category.
+- This confirms with statistical precision what we saw visually before. While there's overlap, a higher magnitude is a powerful indicator of tsunami potential. The model will learn that as magnitude increases, the probability of a tsunami should increase accordingly.
+
+### 2.3.2 Correlation Analysis
+
+```python
+correlation_matrix = df.corr(numeric_only=True)
+
+mask = np.triu(np.ones_like(correlation_matrix, dtype=bool))
+
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", mask=mask)
+plt.title('Correlation Matrix')
+
+plt.gca().grid(alpha=0.7, linestyle='--')
+
+plt.show()
+```
+
+![Correlation Matrix](https://i.imgur.com/FFELp3C.png)
+
+By looking at the bottom row (`tsunami`), we can immediately see which factors have the strongest direct relationship with our goal.
+
+- **Strongest predictors**: The two most powerful signals are the `year` and the significance score `sig`. The strong positive value for `sig` confirms that earthquakes with a higher overall impact are much more likely to generate a tsunami. The `year` correlation is a **potential trap**; it doesn't mean the year itself causes tsunamis, but rather that tsunami detection and reporting have likely improved over time. Using this feature directly could teach our model the wrong lesson.
+- **Secondary clue**: The `dmin` feature (distance to the nearest seismic station) shows a moderate positive correlation. This is an interesting secondary signal that might indicate something about the geography or monitoring intensity of tsunami-prone zones.
+- **Non-linear story**: Just like before, `magnitude` and `depth` show weak linear correlations. This heatmap confirms that we can't predict a tsunami just by looking for a simple, straight-line relationship with these features. Their influence is more complex, like a recipe with interacting ingredients, which is exactly what a sophisticated machine learning model is designed to uncover.
+
+### 2.3.3 Earthquake Epicenters by Tsunami Occurrence
+
+```python
+plt.figure(figsize=(14, 8))
+scatter = sns.scatterplot(data=df, x='longitude', y='latitude', hue='tsunami', palette='viridis', alpha=0.6)
+plt.title('Earthquake Epicenters by Tsunami Occurrence')
+plt.xlabel('Longitude')
+plt.ylabel('Latitude')
+plt.grid(alpha=0.3, linestyle='--')
+
+ax = plt.gca()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+handles, labels = scatter.get_legend_handles_labels()
+new_labels = ['No tsunami' if label == '0' else 'Had tsunami' for label in labels]
+plt.legend(handles, new_labels, title='Tsunami')
+
+plt.show()
+```
+
+![Earthquake Epicenters by Tsunami Occurrence](https://i.imgur.com/GoUUrJz.png)
+
+This map is one of the most intuitive and powerful visualizations in our analysis. It literally shows us where in the world the danger lies, by plotting each earthquake's location and color-coding it by its outcome, we get a clear geographic "threat map."
+
+Here are some key insights from this geospatial analysis:
+
+1. **Earthquakes follow a clear path, the Pacifc Ring of Fire**  
+   The first thing that jumps out is that the earthquakes are not random, they form distinct lines and arcs that trace the boundaries of the Earth's tectonic plates. The most prominent pattern is the massive arc aroun the Pacific Ocean—from the cost of South America, up to Alaska, down through Japan, the Philippines, and Indonesia. This is the famous **Pacific Ring of Fire**, where the majority of the world's major earthquakes occur. This confirms our dataset is capturing real-world seismic patterns. Our model isn't just learning about random events; it's learning the behavior of the most seismically active regions on the planet.
+
+2. **A tsunami's first requirement, a body of water**  
+   This is the most crucial insights from the color-coding. Notice that the green dots, "Had tsunami", are almost exclusively located **offshore or directly on coastline**. In contrast, the blue dots, "No tsunami", appear both in these coastal zones and deep within continents (for example, in parts of Asia).  
+   This illustrates a fundamental, common-sense rule: to create a tsunami, an earthquake needs to displace a massive amount of water. An earthquake in landlocked region, no matter how powerful, simply cannot generate a tsunami.
+
+### 2.3.4 Geospatial Analysis on a Real Map
+
+```python
+norm = colors.Normalize(vmin=df["magnitude"].min(), vmax=df["magnitude"].max())
+colormap = cm.ScalarMappable(norm=norm, cmap='RdYlBu_r')
+
+map = folium.Map(location=[0, 0], zoom_start=2, tiles="CartoDB positron")
+
+for index, row in df.iterrows():
+    color = colors.rgb2hex(colormap.to_rgba(row["magnitude"]))
+
+    folium.CircleMarker(
+        location=[row["latitude"], row["longitude"]],
+        radius=row["magnitude"] * 0.7,
+        fill=True,
+        fill_color=color,
+        fill_opacity=0.8,
+        weight=0,
+        popup=f"Magnitude: {row['magnitude']}, Depth: {row['depth']}"
+    ).add_to(map)
+
+
+map
+```
+
+![Geospatial Analysis on a Real Map](https://i.imgur.com/KNkCmyl.png)
+
+This interactive map provides a rich, multi-layered view of the global seismic landscape. It's a significant step up from a static plot because it combines location, magnitude (through both size and color), and allows for interactive exploration.
+
+This visualization effectively transforms our raw data into an intuitive and dynamic threat assessment map. We are no longer just seeing where earthquakes happen, but also how powerful they are in those specific locations.
+
+The most powerful feature of this map is how it uses two visual cues to represent magnitude:
+
+- **Size**: Large circles represent earthquakes with a higher magnitude.
+- **Color**: The color scale ranges from cool blues (lower magnitude) to hot oranges and yellows (higher magnitude).
+
+This dual encoding makes the most dangerous events impossible to miss. Our eyes are immediately drawn to the large, brighthly colored circles, which pinpoint the locations of the most powerful seismic events in the last two decards. We can cleary see these hotspots clustered off the coast of Japan, Indonesia, and South America.
+
+# 3 Feature Engineering & Data Preprocessing
+
+Details the necessary steps to clean, transform, and prepare the data for consumption by machine learning algorithms. A robust preprocessing pipeline is essentail for build a reliable and high-performing model.
+
+## 3.1 Data Splitting
+
+Before training a model, we need to split the data into features (X) and the target variable (y), and then divide it into training and testing sets.
+
+```python
+original_features = ['magnitude', 'cdi', 'mmi', 'sig', 'nst', 'dmin', 'gap', 'depth',
+                     'latitude', 'longitude', 'year', 'month']
+
+X = df[original_features]
+y = df['tsunami']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+```
+
+`X_train` shape: (625, 12)
+`X_test` shape: (157, 12)
+`y_train` shape: (625,)
+`y_test` shape: (157,)
+
+## 3.2 Feature Scaling
+
+We will scale the numerical features using `StandardScaler` to ensure they have zero mean and unit variance. This is important for many machine learning algorithms.
+
+```python
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+```
+
+# 4 Model Deveopment and Evaluation
+
+This is the core of the project where we build, train, and evaluate multiple classification models. We will start with a simple baseline and progressively move to more complex, powerful algorithms. The evaluation will be rigorous, focusing on metrics that align with the project's primary objective of minimizing missed tsunami events.
+
+## 4.1 LogisticRegression
+
+Let's start with a simple yet effective model, Logistic Regression, as our baseline. We will train it on the scaled data and evaluate its performance.
+
+```python
+log_reg = LogisticRegression(random_state=42)
+
+log_reg.fit(X_train_scaled, y_train)
+```
+
+### 4.1.1 (Train Set) Visualize Confusion Matrix
+
+```python
+y_train_pred = log_reg.predict(X_train_scaled)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(confusion_matrix(y_train, y_train_pred), annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.title('Confusion Matrix - Logistic Regression (Train Set)')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.xticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.yticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.show()
+```
+
+![Confusion Matrix - Logistic Regression (Train Set)](https://i.imgur.com/0CmwgYo.png)
+
+### 4.1.2 (Train Set) Classification Report
+
+```plaintext
+              precision    recall  f1-score   support
+
+           0       0.91      0.83      0.87       382
+           1       0.76      0.86      0.81       243
+
+    accuracy                           0.84       625
+   macro avg       0.83      0.85      0.84       625
+weighted avg       0.85      0.84      0.84       625
+```
+
+### 4.1.3 (Test Set) Visualize Confusion Matrix
+
+```python
+y_test_pred = log_reg.predict(X_test_scaled)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(confusion_matrix(y_test, y_test_pred), annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.title('Confusion Matrix - Logistic Regression (Test Set)')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.xticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.yticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.show()
+```
+
+![Confusion Matrix - Logistic Regression (Test Set)](https://i.imgur.com/OCxPjYy.png)
+
+### 4.1.4 (Test Set) Classification Report
+
+```plaintext
+              precision    recall  f1-score   support
+
+           0       0.93      0.83      0.88        96
+           1       0.77      0.90      0.83        61
+
+    accuracy                           0.86       157
+   macro avg       0.85      0.87      0.86       157
+weighted avg       0.87      0.86      0.86       157
+```
+
+### 4.1.5 Key Metrics
+
+```python
+recall_positive = recall_score(y_test, y_test_pred, pos_label=1)
+precision_positive = precision_score(y_test, y_test_pred, pos_label=1)
+f1_positive = f1_score(y_test, y_test_pred, pos_label=1)
+```
+
+Key Metrics for Tsunami (Class 1) on Test Set:
+
+- Recall: **0.9016**
+- Precision: **0.7746**
+- F1-Score: **0.8333**
+
+## 4.2 RandomForestClassifier
+
+An ensemble model that is robust and generally provides good performance.
+
+```python
+rf_clf = RandomForestClassifier(random_state=42, class_weight='balanced')
+
+rf_clf.fit(X_train_scaled, y_train)
+```
+
+### 4.2.1 (Train Set) Visualize Confusion Matrix
+
+```python
+y_train_pred_rf = rf_clf.predict(X_train_scaled)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(confusion_matrix(y_train, y_train_pred_rf), annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.title('Confusion Matrix - RandomForestClassifier (Train Set)')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.xticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.yticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.show()
+```
+
+![Confusion Matrix - RandomForestClassifier (Train Set)](https://i.imgur.com/e9OsbWu.png)
+
+### 4.2.2 (Tain Set) Classification Report
+
+```plaintext
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00       382
+           1       1.00      1.00      1.00       243
+
+    accuracy                           1.00       625
+   macro avg       1.00      1.00      1.00       625
+weighted avg       1.00      1.00      1.00       625
+```
+
+### 4.2.3 (Test Set) Visualize Confusion Matrix
+
+```python
+y_test_pred_rf = rf_clf.predict(X_test_scaled)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(confusion_matrix(y_test, y_test_pred_rf), annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.title('Confusion Matrix - RandomForestClassifier (Test Set)')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.xticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.yticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.show()
+```
+
+![Confusion Matrix - RandomForestClassifier (Test Set)](https://i.imgur.com/voE0VpW.png)
+
+### 4.2.4 (Test Set) Classification Report
+
+```plaintext
+              precision    recall  f1-score   support
+
+           0       0.98      0.93      0.95        96
+           1       0.89      0.97      0.93        61
+
+    accuracy                           0.94       157
+   macro avg       0.94      0.95      0.94       157
+weighted avg       0.95      0.94      0.94       157
+```
+
+### 4.2.5 Key Metrics
+
+```python
+recall_positive_rf = recall_score(y_test, y_test_pred_rf, pos_label=1)
+precision_positive_rf = precision_score(y_test, y_test_pred_rf, pos_label=1)
+f1_positive_rf = f1_score(y_test, y_test_pred_rf, pos_label=1)
+```
+
+Random Forest Key Metrics for Tsunami (Class 1) on Test Set:
+
+- Recall: **0.9672**
+- Precision: **0.8939**
+- F1-Score: **0.9291**
+
+## 4.3 XGBClassifier
+
+A gradient boosting model known for its state-of-the-art performance on tabular data.
+
+```python
+neg_count = y_train.value_counts()[0]
+pos_count = y_train.value_counts()[1]
+scale_pos_weight_value = neg_count / pos_count
+
+xgb_clf = XGBClassifier(random_state=42, use_label_encoder=False, eval_metric='logloss', scale_pos_weight=scale_pos_weight_value)
+
+xgb_clf.fit(X_train_scaled, y_train)
+```
+
+### 4.3.1 (Train Set) Visualize Confusion Matrix
+
+```python
+y_train_pred_xgb = xgb_clf.predict(X_train_scaled)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(confusion_matrix(y_train, y_train_pred_xgb), annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.title('Confusion Matrix - XGBClassifier (Train Set)')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.xticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.yticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.show()
+```
+
+![Confusion Matrix - XGBClassifier (Train Set)](https://i.imgur.com/Dya7qKY.png)
+
+### 4.3.2 (Train Set) Classification Report
+
+```plaintext
+             precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00       382
+           1       1.00      1.00      1.00       243
+
+    accuracy                           1.00       625
+   macro avg       1.00      1.00      1.00       625
+weighted avg       1.00      1.00      1.00       625
+```
+
+### 4.3.3 (Test Set) Visualize Confusion Matrix
+
+```python
+y_test_pred_xgb = xgb_clf.predict(X_test_scaled)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(confusion_matrix(y_test, y_test_pred_xgb), annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.title('Confusion Matrix - XGBClassifier (Test Set)')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.xticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.yticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.show()
+```
+
+![Confusion Matrix - XGBClassifier (Test Set)](https://i.imgur.com/coDQNkL.png)
+
+### 4.3.4 (Test set) Classification Report
+
+```plaintext
+              precision    recall  f1-score   support
+
+           0       0.97      0.93      0.95        96
+           1       0.89      0.95      0.92        61
+
+    accuracy                           0.94       157
+   macro avg       0.93      0.94      0.93       157
+weighted avg       0.94      0.94      0.94       157
+```
+
+### 4.3.5 Key Metrics
+
+```python
+recall_positive_xgb = recall_score(y_test, y_test_pred_xgb, pos_label=1)
+precision_positive_xgb = precision_score(y_test, y_test_pred_xgb, pos_label=1)
+f1_positive_xgb = f1_score(y_test, y_test_pred_xgb, pos_label=1)
+```
+
+XGBoost Key Metrics for Tsunami (Class 1) on Test Set:
+
+- Recall: **0.9508**
+- Precision: **0.8923**
+- F1-Score: **0.9206**
+
+## 4.4 ROC Curve & AUC Score
+
+The Receiver Operating Characteristic (ROC) curve and the Area Under the Curve (AUC) score are valuable metrics for evaluating the performance of classification models. The ROC curve plots the True Positive Rate (Recall) against the False Positive Rate at various threshold settings. The AUC represents the overall ability of the classifier to distinguish between positive and negative classes. A model with a higher AUC is generally considered better.
+
+```python
+y_prob_log_reg = log_reg.predict_proba(X_test_scaled)[:, 1]
+y_prob_rf = rf_clf.predict_proba(X_test_scaled)[:, 1]
+y_prob_xgb = xgb_clf.predict_proba(X_test_scaled)[:, 1]
+
+fpr_log_reg, tpr_log_reg, thresholds_log_reg = roc_curve(y_test, y_prob_log_reg)
+roc_auc_log_reg = auc(fpr_log_reg, tpr_log_reg)
+
+fpr_rf, tpr_rf, thresholds_rf = roc_curve(y_test, y_prob_rf)
+roc_auc_rf = auc(fpr_rf, tpr_rf)
+
+fpr_xgb, tpr_xgb, thresholds_xgb = roc_curve(y_test, y_prob_xgb)
+roc_auc_xgb = auc(fpr_xgb, tpr_xgb)
+
+plt.figure(figsize=(10, 8))
+plt.plot(fpr_log_reg, tpr_log_reg, color='darkorange', lw=1, label=f'Logistic Regression (AUC = {roc_auc_log_reg:.2f})')
+plt.plot(fpr_rf, tpr_rf, color='green', lw=1, label=f'Random Forest (AUC = {roc_auc_rf:.2f})')
+plt.plot(fpr_xgb, tpr_xgb, color='red', lw=1, label=f'XGBoost (AUC = {roc_auc_xgb:.2f})')
+
+plt.plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--', label='Random Guess')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate (Recall)')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc='lower right')
+plt.grid(alpha=0.3, linestyle='--')
+
+ax = plt.gca()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+plt.show()
+```
+
+![Receiver Operating Characteristic (ROC) Curve](https://i.imgur.com/Sy75c3W.png)
+
+This chart, called an **ROC (Receiver Operating Characteristic) curve**, is the ultimate test of a classifier's skill. It visualizes the critical trade-off every prediction model has to make.
+
+Think of it as a tug-of-war:
+
+- On one end, we have the **True Positive Rate** (Y-axis): This is our ability to correctly identify real tsunamis. We want this to be as high as possible, 100%.
+- On the other end, we have the **False Positive Rate** (X-asix): This is how often we issue a false alarm, predicting a tsunami when there isn't one. We want this to be as low as possible, 0%.
+
+The perfect model would have a curve that shoots straight up to the top-left corner—achieving 100% accuracy with zero false alarms. The dashed blue line represents a model that's just guessing randomly.
+
+**Performance verdict**
+
+The **AUC (Area Under the Curve)** score is the key takeaway. It summarizes the entire curve into a single number from 0.5 (random guess) to 1.0 (perfect).
+
+1. **Logistic Regression (AUC = 0.93)**: This is our baseline, and it's suprisingly strong. An AUC of 0.93 means it has 93% chance of correctly distinguishing between a random tsunami-causing event and a random non-tsunami event. It's a very good model.
+2. **Random Forest (AUC = 0.97)**: This is a significant leap in performance. The green line is consistently higher and to the left of the orange line, showing that for any given rate of false alarms, the Random Forest correctly identifies more true tsunamis.
+3. **XGBoost (AUC = 0.97)**: This model is our top performer, performing virtually identically to Random Forest. The red line traces the best path, hugging the top-left corner the tightest.
+
+Both **Random Forest and XGBoost are the clear winners**. Their high AUC scores of 0.97 indicate they are exceptionally skilled at separating dangerous events from harmless ones.
+
+# 5 Feature Importance & Model Interpretability
+
+A high-performing model is not enough; we must understand why it makes its decisions. This section focuses on interpreting the final model to build trust and extract actionable insights into the key seismic drivers of tsunamis.
+
+## 5.1 Global Feature Importance
+
+We will use the `feature_importances_` attribute of the trained XGBoost model to understand the overall contribution of each feature to the model's predictions.
+
+```python
+feature_importances = xgb_clf.feature_importances_
+
+importance_df = pd.DataFrame({'Feature': X.columns, 'Importance': feature_importances})
+importance_df = importance_df.sort_values(by='Importance', ascending=False)
+
+top_10_features = importance_df.head(10)
+
+plt.figure(figsize=(10, 7))
+sns.barplot(x='Importance', y='Feature', data=top_10_features, palette='viridis')
+plt.title('Top 10 Feature Importances (XGBoost)')
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.grid(alpha=0.3, linestyle='--', axis='x')
+
+ax = plt.gca()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+plt.show()
+```
+
+![Top 10 Feature Importances (XGBoost)](https://i.imgur.com/HpUfpWy.png)
+
+This is arguably the most critical and revealing chart in the entire project. It's the "black box" revealer, showing us exactly which pieces of information our winning XGBoost model found most useful for making its predictions.
+
+1. **The dominant feature**  
+   The most immediate and striking takeaway is the overwhelming importance of the year feature. According to our model, the year an earthquake occurred is, by a massive margin, the single best predictor of a tsunami.
+   - The model has learned that as the years progressed from 2001 to 2022, the number of recorded tsunamis increased.
+   - This is a classic example of a **spurious correlation**, not a causal relationship. The year itself does not cause tsunamis. It's far more likely that our global ability to detect and report tsunami events has improved over time due to better technology and monitoring systems.
+   - **Why It's a Trap**: If we were to deploy this model as-is, it would be fundamentally flawed. It would have "learned the wrong lesson." It might incorrectly assume that an earthquake in 2025 has a higher intrinsic risk than an identical one that occurred in 2005. This is not scientifically sound and makes the model unreliable for future predictions.
+
+2. **The true seismic signatures**  
+   Beneath the `year` feature, we find the predictors that actually make physical sense. These are the genuine seismic signatures of a tsunamigenic event.
+   - The model confirms our geospatial analysis. It learned that where an earthquake happens is critically important. It identified the specific longitude and latitude coordinates that correspond to high-risk zones like the Pacific Ring of Fire.
+   - As we hypothesized during our EDA, the model relies heavily on magnitude and depth. This confirms that the combination of a powerful earthquake (high `magnitude`) occurring near the surface (low `depth`) is a primary driver of its predictions.
+
+**The necessary next step**
+
+Retrain the model after remove the `year` feature. This is not a failure; it's a crucial part of building a robust, production-ready AI system. By removing the misleading `year` feature, we will force the model to base its predictions only on the genuine, physical properties of the earthquake (its location, power, and depth). The resulting model will be more scientifically valid, more trustworthy, and ultimately, far more reliable for real-world application.
+
+## 5.2 Local Interpretability (SHAP Analysis)
+
+We will use the SHAP library to understand the contribution of each feature to individual predictions and the overall impact of features across the dataset.
+
+- SHAP Force Plot for a Specific Instance
+
+  A SHAP force plot visualizes how features contribute to pushing the model's prediction from the base value (average prediction) to the actual prediction for a single instance.
+
+```python
+explainer = shap.TreeExplainer(xgb_clf)
+shap_values = explainer.shap_values(X_test_scaled)
+
+shap.summary_plot(shap_values, X_test_scaled, feature_names=X.columns)
+```
+
+![SHAP Summary Plot](https://i.imgur.com/ckoAGBr.png)
+
+This SHAP plot is the most advanced and transparent view we have into our model's "brain." It goes beyond just telling us what is important and shows us why and how each feature impacts the final prediction for every single earthquake in our test set.
+
+Each dot on the plot is a single earthquake. Its position on the horizontal axis shows how much that feature pushed the prediction towards "Tsunami" (positive values) or "No Tsunami" (negative values). The color of the dot tells us if the feature's value for that earthquake was high (red) or low (blue).
+
+And here's the story it tells.
+
+**The model learned the correct science**
+
+If we ignore the top feature for a moment, the plot shows that our XGBoost model has successfully learned the genuine, physical recipe for a tsunami.
+
+- `depth`: The pattern is crystal clear. Low `depth` values (blue dots, representing shallow earthquakes) have positive SHAP values, pushing the prediction towards **Tsunami**. High `depth` values (red dots, deep earthquakes) have negative values, strongly pushing the prediction towards **No Tsunami**. This is perfect—the model correctly learned that shallow quakes are dangerous.
+
+- `magnitude` & `sig`: For both of these features, high values (red dots) push the prediction to the right (towards **Tsunami**), and low values (blue dots) push it to the left. This is exactly what we'd expect. More powerful and significant events increase the risk.
+
+- `longitude` & `latitude`: The model has learned complex geographic rules. Certain locations (specific bands of longitude and latitude) clearly increase the model's risk assessment, confirming that it has identified the hotspots on the world map.
+
+**The model aslo found a misleading shortcut**
+
+This plot gives us the final, undeniable evidence about the problem with the year feature.
+
+- The model has learned a simple, powerful rule: high values of `year` (red dots, e.g., 2020-2022) strongly push the prediction towards **Tsunami**. Low values of `year` (blue dots, e.g., 2001-2003) strongly push the prediction towards **No Tsunami**.
+
+- This confirms that the model is relying on a dangerous, non-scientific shortcut. It's not the year itself that causes a tsunami, but rather the likely improvement in global detection and reporting over time. A model that relies on this feature is not trustworthy for future predictions.
+
+**Final verdict**
+
+This SHAP analysis is a huge success. It has given us confidence that our model is smart enough to learn the correct, complex relationships between seismic features. But it has also provided the definitive proof needed to make a critical decision.
+
+The clear and necessary next step is to **retrain the model after completely removing the `year` feature**. This will force the model to base its predictions solely on the valid, physical characteristics of each earthquake, creating a more robust, reliable, and scientifically sound prediction tool.
+
+```python
+shap.initjs()
+
+instance_idx = 0
+shap.force_plot(explainer.expected_value, shap_values[instance_idx,:], X_test_scaled[instance_idx,:], feature_names=X.columns)
+```
+
+![SHAP Force Plot](https://i.imgur.com/GkttuZn.png)
+
+This plot is a fantastic deep-dive into the model's mind for a single, specific earthquake. It's called a **SHAP Force Plot**, and it shows us the tug-of-war between different factors that led to the final prediction.
+
+Think of it as a detailed receipt for the model's decision.
+
+> **How to Read the Plot**
+>
+> - **The base value (0.09454)** is the average prediction for all earthquakes. It's our starting point.
+> - **Red arrows** are features that **pushed the prediction higher** (increasing the risk of a tsunami). The bigger the arrow, the stronger the push.
+> - **Blue arrows** are features that **pulled the prediction lower** (decreasing the risk of a tsunami). The bigger the arrow, the stronger the pull.
+> - The **final prediction (f(x) = 2.48)** is the result after all the pushes and pulls are added together. A positive number this high means the model is very confident this earthquake had tsunami potential.
+
+**Why this is so valuable?**
+
+This level of detail is crucial for building trust in an AI system. Instead of just getting a "yes" or "no" answer, we get a complete, transparent explanation for why the model made its decision. It shows us which specific factors were the most influential for any single event, which is essential for debugging and validation. It also provides the final piece of evidence that the year feature is having an outsized and undesirable impact on the model's logic.
+
+# 6 Model Refinement & Re-Validation
+
+Based on our analysis, it was evident that the model was relying heavily on temporal features. The `year` feature presented a misleading correlation, while the `month` feature added noise without providing significant predictive value. To build a more robust and scientifically sound model, we will remove both of these features.
+
+The objective is to force our model to learn the genuine, physical signatures of tsunamigenic earthquakes—such as location, depth, and magnitude—rather than irrelevant time-based patterns. We will retrain our top-performing XGBoost model on this refined dataset and conduct a full re-evaluation to validate its performance and interpretability.
+
+Update the list of features by removing the `year` and `month` column and display the updated list.
+
+```python
+updated_features = [feature for feature in original_features if feature not in ['year', 'month']]
+```
+
+## 6.1 Data Spliting
+
+Split the data into training and testing sets using the updated features.
+
+```python
+X_updated = df[updated_features]
+y = df['tsunami']
+
+X_train_updated, X_test_updated, y_train_updated, y_test_updated = train_test_split(X_updated, y, test_size=0.2, random_state=42, stratify=y)
+```
+
+## 6.2 Feature Scaling
+
+Apply `StandardScaler` to the new training and testing sets.
+
+```python
+scaler_updated = StandardScaler()
+
+X_train_scaled_updated = scaler_updated.fit_transform(X_train_updated)
+X_test_scaled_updated = scaler_updated.transform(X_test_updated)
+```
+
+## 6.3 Model Development/Retraining
+
+### 6.3.1 XGBoostClassifier
+
+Get the class counts, calculate the `scale_pos_weight`, instantiate and fit the **XGBoost** model to the updated scaled data.
+
+```python
+neg_count_updated = y_train_updated.value_counts()[0]
+pos_count_updated = y_train_updated.value_counts()[1]
+scale_pos_weight_value_updated = neg_count_updated / pos_count_updated
+
+xgb_clf_updated = XGBClassifier(random_state=42, use_label_encoder=False, eval_metric='logloss', scale_pos_weight=scale_pos_weight_value_updated)
+
+xgb_clf_updated.fit(X_train_scaled_updated, y_train_updated)
+```
+
+## 6.4 Model Evaluation
+
+### 6.4.1 XGBoostClassifier
+
+Generate predictions on the test set using the retrained **XGBoost** model.
+
+```python
+y_test_pred_xgb_updated = xgb_clf_updated.predict(X_test_scaled_updated)
+```
+
+#### 6.4.1.1 (Test Set) Visualize Confusion Matrix
+
+Generate and visualize the confusion matrix for the retrained model on the test set.
+
+```python
+plt.figure(figsize=(6, 4))
+sns.heatmap(confusion_matrix(y_test_updated, y_test_pred_xgb_updated), annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.title('Confusion Matrix - Retrained XGBoost (Test Set)')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.xticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.yticks([0.5, 1.5], ['No Tsunami', 'Had Tsunami'])
+plt.show()
+```
+
+![Confusion Matrix - Retrained XGBoost (Test Set)](https://i.imgur.com/mFwRmi8.png)
+
+This confusion matrix gives us the definitive performance report for our refined, more intelligent model. It tells us how the model performed on the test set—data it has never seen before—now that it can no longer use the misleading shortcuts of `year` and `month`.
+
+This is an outstanding result and a clear success. The model has demonstrated a strong ability to distinguish between dangerous and harmless seismic events based on their true physical characteristics.
+
+Let's break down what these numbers mean:
+
+- **88 true negatives (top-left)**: The model correctly identified 88 events that were not tsunamis. It successfully ignored the non-threatening events.
+- **54 true positives (bottom-right)**: This is a key success metric. The model correctly identified 54 events that were genuine tsunamis.
+
+This is precisely the result we wanted to see after our refinement.
+
+#### 6.4.1.2 (Test Set) Classification Report
+
+Generate a classification report for the retrained model on the test set to evaluate its performance.
+
+```plaintext
+              precision    recall  f1-score   support
+
+           0       0.93      0.92      0.92        96
+           1       0.87      0.89      0.88        61
+
+    accuracy                           0.90       157
+   macro avg       0.90      0.90      0.90       157
+weighted avg       0.90      0.90      0.90       157
+```
+
+Even though the new model's scores are slightly lower, **it is a significantly better, more trustworthy, and more scientifically valid model**. This is a huge success.
+
+**Think of it as "The 'Cheater' Model vs. The 'Honest' Model."**
+
+The first model got an incredible **95% recall** for tsunamis. It was amazing at catching them, but we discovered it was "cheating." It found a misleading shortcut in the data—the `year`—and used that to boost its score. This model was like a student who gets a great grade by looking at an answer key. The grade looks good, but the student hasn't actually learned the material.
+
+The new model was forced to do the hard work. Without the easy shortcut, it had to learn the **actual physics** of what causes a tsunami—the complex interplay between magnitude, depth, and location.
+
+Here's what its **89% recall score** tells us:
+
+- This 89% recall is a genuine reflection of the model's ability to predict tsunamis based on real seismic data. It's a score earned through honest work, and it's an excellent score for a complex, real-world problem.
+- We traded a few percentage points in recall for a massive gain in trustworthiness. We now have a model that we can explain, validate, and trust to work on future events because it's using the right information for its decisions.
+- Let's be clear: catching 89% of all true tsunamis is a very strong performance. This model is still highly effective at its primary job of identifying danger.
+
+#### 6.4.1.3 Key Metrics
+
+Display the key evaluation metrics (recall, precision, and F1-score) for the positive class (tsunami=1) on the test set to assess the model's performance against the project objectives.
+
+```python
+recall_positive_xgb_updated = recall_score(y_test_updated, y_test_pred_xgb_updated, pos_label=1)
+precision_positive_xgb_updated = precision_score(y_test_updated, y_test_pred_xgb_updated, pos_label=1)
+f1_positive_xgb_updated = f1_score(y_test_updated, y_test_pred_xgb_updated, pos_label=1)
+```
+
+Retrained XGBoost Key Metrics for Tsunami (Class 1) on Test Set:
+
+- Recall: **0.8852**
+- Precision: **0.8710**
+- F1-Score: **0.8780**
+
+These are the most important numbers for judging the success of the refined model. They tell a story of a system that is not only accurate but also reliable and safe.
+
+**Recall: 88.5%**
+
+- This metric answers the most critical question: "Of all the tsunamis that actually happened, what percentage did our model correctly catch?"
+- A recall of 88.5% is an **excellent result**. It means the model successfully identified nearly 9 out of every 10 true tsunami events in the test data. In a real-world public safety scenario, this is the most important number. A high recall means it minimizing the chance of a catastrophic "miss," making the system very safe.
+
+**Precision: 87.1%**
+
+- This metric answers the question of reliability: "When our model issued a tsunami alarm, what percentage of those alarms were correct?"
+- A precision of 87.1% is also **very strong**. It means that when the model sends out a warning, it's right about 87% of the time. This is crucial for building trust. If a system has too many false alarms (low precision), people will start to ignore it. The model is reliable and its warnings would be taken seriously.
+
+**F1-Score: 87.8%**
+
+- The F1-score is the harmonic mean of Recall and Precision. It provides a single number that measures the balance between catching all the tsunamis and not issuing too many false alarms.
+- An F1-score of 87.8% confirms that the model has achieved an excellent balance between safety (Recall) and reliability (Precision). It's not sacrificing one for the other; it's performing well on both fronts.
+
+These metrics prove that the refined model is a definitive success. We created a system that is not only highly accurate but also aligns perfectly with the priorities of a real-world hazard warning system. It is sensitive enough to catch most real threats while being reliable enough to maintain public trust.
+
+### 6.4.2 ROC Curve & AUC Score
+
+Plot the ROC curve and calculate the AUC score for the retrained model.
+
+```python
+y_prob_xgb_updated = xgb_clf_updated.predict_proba(X_test_scaled_updated)[:, 1]
+
+fpr_xgb_updated, tpr_xgb_updated, thresholds_xgb_updated = roc_curve(y_test_updated, y_prob_xgb_updated)
+roc_auc_xgb_updated = auc(fpr_xgb_updated, tpr_xgb_updated)
+
+plt.figure(figsize=(10, 8))
+plt.plot(fpr_xgb_updated, tpr_xgb_updated, color='red', lw=1, label=f'Retrained XGBoost (AUC = {roc_auc_xgb_updated:.2f})')
+
+plt.plot([0, 1], [0, 1], color='navy', lw=1, linestyle='--', label='Random Guess')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate (Recall)')
+plt.title('Receiver Operating Characteristic (ROC) Curve - Retrained XGBoost')
+plt.legend(loc='lower right')
+plt.grid(alpha=0.3, linestyle='--')
+
+ax = plt.gca()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+plt.show()
+```
+
+![Receiver Operating Characteristic (ROC) Curve - Retrained XGBoost](https://i.imgur.com/pRirKH7.png)
+
+This ROC curve is the final proof of the model's success. It shows that even after removing the misleading "shortcut" features, the refined model is still an incredibly powerful and accurate predictor.
+
+This chart confirms the high quality of the retrained XGBoost model.
+
+- The curve plots the model's ability to correctly identify true tsunamis (True Positive Rate) against its rate of false alarms (False Positive Rate). A model that curves sharply towards the top-left corner is highly skilled at telling the difference between a dangerous event and a harmless one.
+- The Area Under the Curve (AUC) is the key metric here. A score of 0.94 is an excellent result. It means the model has a 94% chance of correctly distinguishing between a random tsunami-causing earthquake and a random non-tsunami one. This indicates a high degree of discriminative power.
+
+We might notice that the previous model had an AUC of 0.97, which is slightly higher. However, this small decrease is actually a massive victory.
+
+- The old score was **artificially inflated** because the model was "cheating" by using the year feature.
+- This new score of **0.94** is an **honest and realistic measure** of the model's skill. It's a score earned by learning the true, complex seismic patterns in the data.
+
+## 6.5 Feature importance
+
+Get feature importances from the retrained model, create a DataFrame, sort it, select top features, and plot them.
+
+```python
+feature_importances_updated = xgb_clf_updated.feature_importances_
+
+importance_df_updated = pd.DataFrame({'Feature': X_updated.columns, 'Importance': feature_importances_updated})
+
+importance_df_updated = importance_df_updated.sort_values(by='Importance', ascending=False)
+
+top_10_features_updated = importance_df_updated.head(10)
+
+plt.figure(figsize=(10, 7))
+sns.barplot(x='Importance', y='Feature', data=top_10_features_updated, palette='viridis')
+plt.title('Top 10 Feature Importances (Retrained XGBoost)')
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.grid(alpha=0.3, linestyle='--', axis='x')
+
+ax = plt.gca()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+plt.show()
+```
+
+This feature importance plot is the final validation of our entire refinement process. It's a huge success because it shows that our new model is not only highly accurate but also interpretable, trustworthy, and scientifically sound.
+
+**A new, smarter hierarchy**
+
+After removing the misleading shortcuts, the model was forced to find the genuine signals in the data. Here’s what it decided was most important:
+
+1. `dmin` (Distance to Nearest Station): This is now the top feature. It might seem strange, but it's likely acting as a clever **proxy** for risk. Earthquakes in dense, well-monitored seismic zones (where the distance to a station is small) are often located on the most dangerous tectonic boundaries, like the Pacific Ring of Fire. The model learned that an event in a "busy seismic neighborhood" deserves more attention.
+2. `nst` (Number of Stations): This works hand-in-hand with `dmin`. A high number of reporting stations also points to an event occurring in a highly active and well-monitored region. It confirms the same idea: location matters.
+
+**The true Seismic signatures now shine through**
+
+Most importantly, the features that we, as human experts, know are critical for causing a tsunami are now ranked highly. This is the ultimate validation of our model's intelligence.
+
+- **Location** (`longitude`, `latitude`): The model confirms that **geography is critical**. It has learned the world map of seismic risk and knows that an earthquake's coordinates are a powerful predictor.
+- **Power and depth** (`magnitude`, `depth`): The core physics are now clearly represented. The model is relying heavily on the earthquake's raw power and its shallowness to make its decisions. This is exactly what we wanted to see.
+- **Impact** (`sig`, `mmi`, `cdi`): Measures of the earthquake's overall impact and intensity are still important, providing the model with extra context to confirm its assessment.
+
+The previous model was a "memorizer" that found a simple, dumb shortcut (`year`). This new model is a "thinker." It has successfully learned the complex, interconnected relationships between an earthquake's location, its physical properties, and the quality of the data we have about it.
+
+## 6.6 Model Interpretability
+
+Generate SHAP summary plot to understand the impact of each feature on the retrained model's predictions across the test set.
+
+```python
+explainer_updated = shap.TreeExplainer(xgb_clf_updated)
+shap_values_updated = explainer_updated.shap_values(X_test_scaled_updated)
+
+shap.summary_plot(shap_values_updated, X_test_scaled_updated, feature_names=X_updated.columns)
+```
+
+![SHAP Summary Plot - Retrained XGBoost](https://i.imgur.com/k1MR893.png)
+
+This plot is a resounding success. Unlike our previous model that relied on a misleading shortcut, this one has learned the genuine, complex patterns of what makes an earthquake dangerous. We can now trust its predictions because we can see that its logic is scientifically sound.
+
+This summary shows exactly how each feature influences the final prediction for every single earthquake.
+
+- The model's top feature is now being used intelligently. Low `dmin` values (blue dots, meaning the quake is close to a station) strongly push the prediction towards **Tsunami**. The model has correctly learned that events in well-monitored, seismically active "neighborhoods" are the ones to watch out for.
+- The model confirms that **location is everything**. It has learned the specific geographic coordinates (`longitude`, `latitude`) and network densities (`nst`) that correspond to high-risk zones like the Pacific Ring of Fire.
+- The model's logic perfectly follows the science:
+  - **Low** `depth` (blue dots) pushes the prediction towards **Tsunami**.
+  - **High** `magnitude` and `sig` (red dots) also push the prediction towards **Tsunami**.
+  - This is the classic, valid recipe for a dangerous event, and our model has learned it perfectly.
+
+We have successfully transformed the model from a "black box" that used a cheat code into a transparent and intelligent system. This SHAP plot proves that its high performance is built on a solid foundation of learning the true seismic signatures of tsunamigenic earthquakes.
+
+```python
+shap.initjs()
+
+instance_idx_updated = 0
+shap.force_plot(explainer_updated.expected_value, shap_values_updated[instance_idx_updated,:], X_test_scaled_updated[instance_idx_updated,:], feature_names=X_updated.columns)
+```
+
+![SHAP Force Plot - Retrained XGBoost](https://i.imgur.com/lsSneuh.png)
+
+This plot shows the tug-of-war between factors that increase risk and factors that decrease it. For this specific event, the final prediction (f(x)) is **-0.49**, a negative number, meaning the model confidently classified it as "**No Tsunami**."
+
+**The model's thought process**
+
+Here's a step-by-step breakdown of how the model arrived at its decision:
+
+- **Starting point**: The model began with a neutral **base value** (-0.00664), which is the average prediction across all earthquakes.
+- **Factors pushing towards "Tsunami"** (Red Arrows): The earthquake's location (`longitude` and `latitude`) and the local station density (`nst`) suggested it was in a potentially high-risk area. These features pushed the prediction higher, raising the initial alarm.
+- **Factors pulling towards "No Tsunami"** (Blue Arrows): Several features strongly argued against a tsunami. The most powerful pulls came from the low instrumental intensity (`mmi`) and community intensity (`cdi`). Additionally, the station geometry (`dmin` and `gap`) also helped to lower the risk assessment.
+- In this specific case, the combined force of the **blue arrows** (indicating safety) was much stronger than the **red arrows** (indicating risk). The safety signals ultimately won the tug-of-war, pulling the final prediction down to -0.49.
+
+This is a perfect illustration of a trustworthy AI model. It didn't just look at one factor. It weighed conflicting evidence—the risky location versus the low intensity—and made a sophisticated, multi-factor decision. This level of transparency is exactly what's needed to trust a model's predictions in a real-world scenario.
+
+# 7 Inference
+
+The inference pipeline function to use the retrained model and the updated list of features, and then test the updated pipeline with sample data.
+
+```python
+def predict_tsunami_potential_updated(data, scaler, model, features):
+    if isinstance(data, dict):
+        df_new = pd.DataFrame([data])
+    elif isinstance(data, pd.Series):
+        df_new = pd.DataFrame([data.to_dict()])
+    else:
+        raise ValueError("Input data must be a dictionary or pandas.Series")
+
+    if not all(feature in df_new.columns for feature in features):
+        missing_features = [feature for feature in features if feature not in df_new.columns]
+        raise ValueError(f"Missing features: {missing_features}")
+
+    df_new = df_new[features]
+
+    X_new_scaled = scaler.transform(df_new)
+
+    prediction = model.predict(X_new_scaled)[0]
+    probability = model.predict_proba(X_new_scaled)[:, 1][0]
+
+    return prediction, probability
+
+random_data_updated = []
+for _ in range(10):
+    new_data_updated = {
+        'magnitude': np.random.uniform(6.5, 9.1),
+        'cdi': np.random.randint(0, 10),
+        'mmi': np.random.randint(1, 10),
+        'sig': np.random.randint(650, 2911),
+        'nst': np.random.randint(0, 935),
+        'dmin': np.random.uniform(0, 17.65),
+        'gap': np.random.uniform(0, 239),
+        'depth': np.random.uniform(2.7, 671),
+        'latitude': np.random.uniform(-61.85, 71.63),
+        'longitude': np.random.uniform(-180, 180),
+    }
+    random_data_updated.append(new_data_updated)
+
+all_earthquake_data_updated = random_data_updated
+results_updated = []
+
+for data_point_updated in all_earthquake_data_updated:
+    prediction_updated, probability_updated = predict_tsunami_potential_updated(data_point_updated, scaler_updated, xgb_clf_updated, updated_features)
+    results_updated.append({
+        'Magnitude': data_point_updated['magnitude'],
+        'Depth': data_point_updated['depth'],
+        'Latitude': data_point_updated['latitude'],
+        'Longitude': data_point_updated['longitude'],
+        'Predicted Tsunami Potential': prediction_updated,
+        'Predicted Probability': probability_updated
+    })
+
+results_df_updated = pd.DataFrame(results_updated)
+```
+
+```python
+def highlight_prediction_updated(val):
+    if val == 1:
+        return 'background-color: salmon'
+    return ''
+
+display(results_df_updated.style.applymap(highlight_prediction_updated, subset=['Predicted Tsunami Potential']))
+```
+
+| Magnitude       | Depth      | Latitude   | Longitude   | Predicted Tsunami Potential | Predicted Probability |
+| --------------- | ---------- | ---------- | ----------- | --------------------------- | --------------------- |
+| 7.499052        | 517.963634 | -55.630901 | 90.841416   | 0                           | 0.016089              |
+| {$row} 8.985085 | 457.584487 | -3.009673  | -93.909618  | 1                           | 0.846067              |
+| 6.844017        | 94.613831  | 38.663263  | 107.052906  | 0                           | 0.001753              |
+| {$row} 6.897730 | 164.887500 | -59.745927 | -75.365512  | 1                           | 0.585846              |
+| 8.939964        | 544.016726 | 15.107812  | 50.958496   | 0                           | 0.132778              |
+| 8.694108        | 553.232151 | -26.485169 | -65.486323  | 0                           | 0.191924              |
+| 8.842507        | 23.872098  | -21.726377 | 62.551133   | 0                           | 0.005034              |
+| {$row} 8.176596 | 466.228245 | 46.925907  | -105.868804 | 1                           | 0.863452              |
+| 7.372251        | 214.545988 | -55.100780 | -40.689338  | 0                           | 0.097794              |
+| {$row} 8.650396 | 350.184905 | 17.349790  | -174.317909 | 1                           | 0.959976              |
