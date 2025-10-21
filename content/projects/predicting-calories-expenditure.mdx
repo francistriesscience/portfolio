@@ -485,13 +485,13 @@ r2_gbr = r2_score(y_test, y_pred_gbr)
 
 **Evaluation Metrics (on the Test Set):**
 
-| Model                       | MSE        | MAE        | R-squared  |
-| :-------------------------- | :--------- | :--------- | :--------- |
-| Linear Regression           | 49.6290    | 5.1934     | 0.9877     |
-| Ridge Regression            | 49.8228    | 5.1966     | 0.9877     |
-| Lasso Regression            | 103.9032   | 7.1880     | 0.9743     |
-| Random Forest Regressor     | **7.8513** | **1.8234** | **0.9981** |
-| Gradient Boosting Regressor | 11.2890    | 2.4149     | 0.9972     |
+| Model                          | MSE      | MAE    | R-squared |
+| :----------------------------- | :------- | :----- | :-------- |
+| Linear Regression              | 49.6290  | 5.1934 | 0.9877    |
+| Ridge Regression               | 49.8228  | 5.1966 | 0.9877    |
+| Lasso Regression               | 103.9032 | 7.1880 | 0.9743    |
+| {$row} Random Forest Regressor | 7.8513   | 1.8234 | 0.9981    |
+| Gradient Boosting Regressor    | 11.2890  | 2.4149 | 0.9972    |
 
 **Analysis and Interpretation:**
 
@@ -640,9 +640,9 @@ display(predictions_df.style.apply(highlight_predicted_calories, axis=0).format(
 
 | age   | height | weight | duration | heart_rate | body_temp | gender | height_m | bmi   | age_group | duration_heart_rate | bmi_heart_rate | duration_body_temp | weight_duration | bmi_duration | heart_rate_body_temp | predicted_calories |
 | ----- | ------ | ------ | -------- | ---------- | --------- | ------ | -------- | ----- | --------- | ------------------- | -------------- | ------------------ | --------------- | ------------ | -------------------- | ------------------ |
-| 30.00 | 170.00 | 70.00  | 15.00    | 90.00      | 39.50     | female | 1.70     | 24.22 | 30-39     | 1350.00             | 1350.00        | 592.50             | 1050.00         | 363.32       | 3555.00              | 63.92              |
-| 45.00 | 180.00 | 90.00  | 30.00    | 120.00     | 41.00     | male   | 1.85     | 26.30 | 40-49     | 3600.00             | 3155.59        | 1230.00            | 2700.00         | 788.90       | 4920.00              | 258.36             |
-| 25.00 | 160.00 | 55.00  | 10.00    | 85.00      | 38.80     | female | 1.60     | 21.48 | 18-29     | 850.00              | 1826.17        | 388.00             | 550.00          | 214.84       | 3298.00              | 37.50              |
+| 30.00 | 170.00 | 70.00  | 15.00    | 90.00      | 39.50     | female | 1.70     | 24.22 | 30-39     | 1350.00             | 1350.00        | 592.50             | 1050.00         | 363.32       | 3555.00              | {$cell} 63.92      |
+| 45.00 | 180.00 | 90.00  | 30.00    | 120.00     | 41.00     | male   | 1.85     | 26.30 | 40-49     | 3600.00             | 3155.59        | 1230.00            | 2700.00         | 788.90       | 4920.00              | {$cell} 258.36     |
+| 25.00 | 160.00 | 55.00  | 10.00    | 85.00      | 38.80     | female | 1.60     | 21.48 | 18-29     | 850.00              | 1826.17        | 388.00             | 550.00          | 214.84       | 3298.00              | {$cell} 37.50      |
 
 # 7 Project Summary
 
