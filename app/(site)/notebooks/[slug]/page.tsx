@@ -17,7 +17,6 @@ import {
   MarkdownContent,
   Separator,
 } from "@/components/ui"
-import BackToTop from "@/components/features/back-to-top-button"
 
 export const dynamic = "force-static"
 
@@ -155,7 +154,6 @@ export default async function NotebookPostPage({ params }: PageProps) {
           </div>
           <Separator className="mt-4 mb-8" />
           <MarkdownContent>{post.content}</MarkdownContent>
-          <BackToTop />
         </article>
       </div>
     </div>
