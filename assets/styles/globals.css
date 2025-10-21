@@ -55,6 +55,9 @@
   --color-linkedin: var(--linkedin);
   --color-gitlab: var(--gitlab);
 
+  /** Table */
+  --color-table-cell: var(--table-cell);
+
   /** Others */
   --color-verified-blue: var(--verified-blue);
 
@@ -107,6 +110,9 @@
   --datacamp-bg: oklch(0.2069 0.0508 253.28);
   --linkedin: oklch(0.5458 0.130182 242.2738);
   --gitlab: oklch(0.6112 0.1997 31.74);
+
+  /** Table */
+  --table-cell: oklch(0.782 0.1185 289.36);
 
   /** Others */
   --verified-blue: oklch(0.5406 0.2093 269);
@@ -166,6 +172,9 @@
   --datacamp-bg: oklch(0.2069 0.0508 253.28);
   --linkedin: oklch(0.5458 0.130182 242.2738);
   --gitlab: oklch(0.6112 0.1997 31.74);
+
+  /** Table */
+  --table-cell: oklch(0.4914 0.2738 283.13);
 
   /** Others */
   --verified-blue: oklch(0.5406 0.2093 269);
