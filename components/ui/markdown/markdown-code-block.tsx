@@ -129,7 +129,7 @@ export function MarkdownCodeBlock({ children, ...props }: CodeBlockProps) {
                 )}
               >
                 <span
-                  className="flex-1 whitespace-pre-line"
+                  className="flex-1 whitespace-pre"
                   dangerouslySetInnerHTML={{ __html: html }}
                 />
               </div>
