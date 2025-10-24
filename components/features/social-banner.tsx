@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { MailIcon } from "lucide-react"
-import { RiLinkedinBoxFill, RiGitlabFill } from "react-icons/ri"
+import { RiLinkedinBoxFill, RiGitlabFill, RiGithubFill, RiLeafFill } from "react-icons/ri"
 
 import { ButtonGroup, Button, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui"
 
@@ -83,6 +83,28 @@ export function SocialBanner() {
             </Button>
           </TooltipTrigger>
           <TooltipContent>gitlab.com/francistriesscience</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button size="sm" className="bg-github hover:bg-github/90">
+              <Link
+                href="https://github.com/francistriesscience"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-row items-center gap-2"
+              >
+                <RiGithubFill size={16} className="text-white" />
+              </Link>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="flex flex-col items-center">
+            <div className="flex items-center gap-1">
+              <RiLeafFill className="text-green-500" />
+              Newly created account,{" "}
+            </div>
+            <span>github.com/francistriesscience</span>
+          </TooltipContent>
         </Tooltip>
 
         <Tooltip>
