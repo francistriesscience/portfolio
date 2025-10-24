@@ -50,5 +50,5 @@ export const header: Header = {
 
     { name: "Fiber" },
   ] as SkillItem[],
-  avatar: "https://avatars.githubusercontent.com/u/132775768?s=96&v=4",
+  avatar: "https://avatars.githubusercontent.com/u/239557641",
 }
