@@ -18,7 +18,7 @@ export function ExperiencesSection() {
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <div className="flex w-full items-end justify-between">
-        <h2 className="text-xl font-medium">Experiences</h2>
+        <h2 className="text-xl font-medium tracking-tighter">Experiences</h2>
         <div className="flex w-full justify-end">
           <div className="flex flex-row items-center gap-1">
             <Tooltip>
@@ -30,7 +30,7 @@ export function ExperiencesSection() {
                 >
                   <Link
                     href={
-                      "https://drive.google.com/file/d/1r8zQQP59ZWYI1lE0wHOxI1GdICSTPXRd/view?usp=drive_link"
+                      "https://drive.google.com/file/d/1xaXm6eqdC24ausgyVbfSvwY0VBo-dawR/view?usp=sharing"
                     }
                     target="_blank"
                     className="flex flex-row items-center gap-1"

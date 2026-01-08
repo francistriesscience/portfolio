@@ -9,7 +9,7 @@ import { track } from "@/data/track"
 import { Card, Progress } from "@/components/ui"
 import { SpecialEffectParticles } from "@/components/ui/special-effect/special-effect-particles"
 
-export function LearningTrack() {
+export function LearningTrackSection() {
   return (
     <Card className="bg-datacamp-bg group relative flex h-full w-full flex-col items-start !gap-1 overflow-hidden border-none p-3 shadow-lg">
       <SpecialEffectParticles

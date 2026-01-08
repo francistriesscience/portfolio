@@ -6,7 +6,6 @@ import { getAllProjects } from "@/lib/projects/get-all-projects"
 
 import { Card, CardContent, BackgroundRipple, Button } from "@/components/ui"
 import { ProjectCard } from "@/components/card/project-card"
-import { IncomingProjectCard } from "@/components/card/incoming-project-card"
 
 export async function ProjectsSection() {
   const projects = getAllProjects()
@@ -14,7 +13,7 @@ export async function ProjectsSection() {
   return (
     <div className="relative flex w-full flex-col items-start gap-4">
       <div className="flex w-full items-end justify-between">
-        <h2 className="text-xl font-medium">Projects</h2>
+        <h2 className="text-xl font-medium tracking-tighter">Projects</h2>
         <div className="flex w-full justify-end">
           <div className="flex flex-row items-center gap-1">
             <div className="flex w-full justify-end">
@@ -32,24 +31,19 @@ export async function ProjectsSection() {
           </div>
         </div>
       </div>
-      {projects.length > 0 ? (
-        <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-          {projects.slice(0, 3).map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
-          <IncomingProjectCard />
-        </div>
-      ) : (
-        <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-          <Card className="relative h-36 overflow-hidden border border-dashed bg-transparent p-4">
+      <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
+        {projects.slice(0, 3).map((project) => (
+          <ProjectCard key={project.slug} project={project} />
+        ))}
+        {projects.length < 4 && (
+          <Card className="relative h-full overflow-hidden border border-dashed bg-transparent p-4">
             <BackgroundRipple className="opacity-20" numCircles={5} />
             <CardContent className="text-muted-foreground relative z-10 flex h-full flex-col justify-center text-center text-sm">
-              Collecting projects...
+              Working on something
             </CardContent>
           </Card>
-          <IncomingProjectCard />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

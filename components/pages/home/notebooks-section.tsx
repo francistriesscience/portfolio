@@ -6,7 +6,6 @@ import { getAllNotebooks } from "@/lib/notebooks/get-all-notebooks"
 
 import { Card, CardContent, BackgroundRipple, Button } from "@/components/ui"
 import { NotebookCard } from "@/components/card/notebook-card"
-import { WritingNotebookCard } from "@/components/card/writing-notebook-card"
 
 export async function NotebooksSection() {
   const notebooks = getAllNotebooks()
@@ -14,7 +13,7 @@ export async function NotebooksSection() {
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <div className="flex w-full items-end justify-between">
-        <h2 className="text-xl font-medium">Notebooks</h2>
+        <h2 className="text-xl font-medium tracking-tighter">Notebooks</h2>
         <div className="flex w-full justify-end">
           <Button
             variant="link"
@@ -29,24 +28,19 @@ export async function NotebooksSection() {
         </div>
       </div>
 
-      {notebooks.length > 0 ? (
-        <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-          {notebooks.slice(0, 3).map((notebook) => (
-            <NotebookCard key={notebook.slug} post={notebook} />
-          ))}
-          <WritingNotebookCard />
-        </div>
-      ) : (
-        <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-          <Card className="relative h-36 overflow-hidden border border-dashed bg-transparent p-4">
+      <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
+        {notebooks.slice(0, 3).map((notebook) => (
+          <NotebookCard key={notebook.slug} post={notebook} />
+        ))}
+        {notebooks.length < 4 && (
+          <Card className="relative h-full overflow-hidden border border-dashed bg-transparent p-4">
             <BackgroundRipple className="opacity-20" numCircles={5} />
             <CardContent className="text-muted-foreground relative z-10 flex h-full flex-col justify-center text-center text-sm">
-              Stay tuned, notebooks are coming soon...
+              Writing on it
             </CardContent>
           </Card>
-          <WritingNotebookCard />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
