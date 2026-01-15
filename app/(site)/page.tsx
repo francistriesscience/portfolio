@@ -12,8 +12,8 @@ export default function HomePage() {
       <LearningTrackSection />
       <ProjectsSection />
       <ExperiencesSection />
-      <NotebooksSection />
       <RepositoriesSection />
+      <NotebooksSection />
     </>
   )
 }
