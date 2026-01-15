@@ -66,7 +66,7 @@ export function SocialBanner() {
               </Link>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Send me an email</TooltipContent>
+          <TooltipContent>Click to get in touch</TooltipContent>
         </Tooltip>
 
         <Tooltip>
