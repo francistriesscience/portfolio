@@ -9,7 +9,7 @@ export function RepositoriesSection() {
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <div className="flex w-full items-end justify-between">
-        <h2 className="text-xl font-medium tracking-tighter">Repositories</h2>
+        <h2 className="text-xl font-medium tracking-tighter">Featured repositories</h2>
       </div>
 
       <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
