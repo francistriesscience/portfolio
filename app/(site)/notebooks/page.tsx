@@ -1,11 +1,21 @@
 import * as React from "react"
 import Link from "next/link"
-import { HouseIcon } from "lucide-react"
+import { House } from "lucide-react"
 
 import { getAllNotebooks } from "@/lib/notebooks/get-all-notebooks"
 import { NotebookCard } from "@/components/card/notebook-card"
 
-import { Card, CardContent, Button, BackgroundRipple } from "@/components/ui"
+import {
+  Card,
+  CardContent,
+  BackgroundRipple,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui"
 
 export const dynamic = "force-static"
 
@@ -14,19 +24,21 @@ export default async function NotebookPage() {
 
   return (
     <div className="flex w-full flex-col items-start gap-4">
-      <div className="flex w-full items-end justify-between">
-        <h2 className="text-xl font-medium">Notebooks</h2>
-        <Button
-          variant="link"
-          size="sm"
-          className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
-        >
-          <Link href={"/"} className="flex flex-row items-center gap-1">
-            <HouseIcon className="size-3" />
-            Home
-          </Link>
-        </Button>
-      </div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">
+              <House className="h-4 w-4" />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage className="text-xl font-medium tracking-tighter">
+              Notebooks
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       {posts.length > 0 ? (
         <div className="flex w-full flex-col items-start gap-2">
           {posts.map((post) => (

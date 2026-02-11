@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { HouseIcon, SproutIcon } from "lucide-react"
+import { HouseIcon } from "lucide-react"
 
 import { getProjectBySlug } from "@/lib/projects/get-project-by-slug"
 import { getAllProjects } from "@/lib/projects/get-all-projects"
@@ -19,6 +19,12 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui"
 
 export const dynamic = "force-static"
@@ -42,14 +48,23 @@ export default async function ProjectPostPage({ params }: PageProps) {
       <div className="mx-auto w-full max-w-3xl">
         <article>
           <header>
-            <div className="mb-4 flex flex-col items-center gap-2 lg:flex-row lg:items-center lg:justify-between">
-              <div className="order-2 flex flex-row items-center gap-2 lg:order-1">
-                {project.active && (
-                  <span className="relative flex size-3">
-                    <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
-                    <span className="bg-success relative inline-flex size-3 rounded-full"></span>
-                  </span>
-                )}
+            <div className="mb-4 grid w-full grid-cols-2 items-center justify-between gap-2">
+              <div className="whitespace-warp flex w-full flex-row items-center justify-start gap-2">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="/">
+                        <HouseIcon className="h-4 w-4" />
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </div>
+              <div className="flex w-full flex-row items-center justify-end gap-2">
                 {project.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
@@ -59,28 +74,12 @@ export default async function ProjectPostPage({ params }: PageProps) {
                     ))}
                   </div>
                 )}
-              </div>
-              <div className="order-1 flex flex-row items-center gap-2 lg:order-2">
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
-                >
-                  <Link href={"/"} className="flex flex-row items-center gap-1">
-                    <HouseIcon className="size-3" />
-                    Home
-                  </Link>
-                </Button>
-                <span className="text-muted-foreground">/</span>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
-                >
-                  <Link href={"/projects"} className="flex flex-row items-center gap-1">
-                    <SproutIcon className="size-3" /> View projects
-                  </Link>
-                </Button>
+                {project.active && (
+                  <span className="relative flex size-3">
+                    <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+                    <span className="bg-success relative inline-flex size-3 rounded-full"></span>
+                  </span>
+                )}
               </div>
             </div>
             {project.banner && (

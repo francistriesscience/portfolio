@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { HouseIcon, LibraryIcon } from "lucide-react"
+import { HouseIcon } from "lucide-react"
 import { RiTwitterXLine, RiRedditLine } from "react-icons/ri"
 
 import { getNotebookBySlug } from "@/lib/notebooks/get-notebook-by-slug"
@@ -16,6 +16,12 @@ import {
   Button,
   MarkdownContent,
   Separator,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui"
 
 export const dynamic = "force-static"
@@ -41,14 +47,23 @@ export default async function NotebookPostPage({ params }: PageProps) {
       <div className="mx-auto w-full max-w-3xl">
         <article>
           <header>
-            <div className="mb-4 flex flex-col items-center gap-2 lg:flex-row lg:items-center lg:justify-between">
-              <div className="order-2 flex flex-row items-center gap-2 lg:order-1">
-                {post.active && (
-                  <span className="relative flex size-3">
-                    <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
-                    <span className="bg-success relative inline-flex size-3 rounded-full"></span>
-                  </span>
-                )}
+            <div className="mb-4 grid w-full grid-cols-2 items-center justify-between gap-2">
+              <div className="whitespace-warp flex w-full flex-row items-center justify-start gap-2">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="/">
+                        <HouseIcon className="h-4 w-4" />
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="/notebooks">Notebooks</BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </div>
+              <div className="flex w-full flex-row items-center justify-end gap-2">
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
@@ -58,29 +73,12 @@ export default async function NotebookPostPage({ params }: PageProps) {
                     ))}
                   </div>
                 )}
-              </div>
-              <div className="order-1 flex flex-row items-center gap-2 lg:order-2">
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
-                >
-                  <Link href={"/"} className="flex flex-row items-center gap-1">
-                    <HouseIcon className="size-3" />
-                    Home
-                  </Link>
-                </Button>
-                <span className="text-muted-foreground">/</span>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-muted-foreground hover:text-primary flex h-auto flex-row items-center gap-1 p-0 text-sm"
-                >
-                  <Link href={"/notebooks"} className="flex flex-row items-center gap-1">
-                    <LibraryIcon className="size-3" />
-                    View notebooks
-                  </Link>
-                </Button>
+                {post.active && (
+                  <span className="relative flex size-3">
+                    <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+                    <span className="bg-success relative inline-flex size-3 rounded-full"></span>
+                  </span>
+                )}
               </div>
             </div>
             {post.banner && (
