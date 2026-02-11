@@ -38,7 +38,22 @@ export const jobSeekingStatus: JobSeekingStatus = {
 
 export const experiences: Experience[] = [
   {
-    company: "SimpleProjeX",
+    company: "Mnemora",
+    location: "Mabalacat City, Pampanga, PH",
+    roles: [
+      {
+        role: "Founding Engineer",
+        dates: {
+          start: "Jan 2026",
+          end: "Present",
+        },
+        description:
+          "Crafting custom software and AI automation built to help businesses run smarter, cut inefficiencies, and scale.",
+      },
+    ],
+  },
+  {
+    company: "Avorino",
     location: "California, USA",
     roles: [
       {
