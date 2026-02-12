@@ -1,5 +1,6 @@
 import "@/assets/styles/globals.css"
 import { metadata } from "@/lib/metadata"
+import { libreBaskerville } from "@/lib/fonts"
 
 export { metadata }
 
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-writer overflow-x-hidden tracking-tight antialiased">
+      <body
+        className={`font-writer ${libreBaskerville.variable} overflow-x-hidden tracking-tight antialiased`}
+      >
         {children}
         <BackToTopButton />
         <ProgressScroll />

@@ -31,7 +31,7 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
           h1: ({ className, ...props }: any) => (
             <h1
               className={cn(
-                "font-georgia text-foreground mt-8 mb-4 text-3xl font-medium tracking-tight first:mt-0",
+                "font-libre text-foreground mt-8 mb-4 text-3xl font-medium tracking-tight first:mt-0",
                 className,
               )}
               {...props}
@@ -40,7 +40,7 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
           h2: ({ className, ...props }: any) => (
             <h2
               className={cn(
-                "font-georgia text-foreground mt-6 mb-3 text-2xl font-medium tracking-tight",
+                "font-libre text-foreground mt-6 mb-3 text-2xl font-medium tracking-tight",
                 className,
               )}
               {...props}
@@ -49,7 +49,7 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
           h3: ({ className, ...props }: any) => (
             <h3
               className={cn(
-                "font-georgia text-foreground mt-5 mb-2 text-xl font-medium tracking-tight",
+                "font-libre text-foreground mt-5 mb-2 text-xl font-medium tracking-tight",
                 className,
               )}
               {...props}
@@ -58,7 +58,7 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
           h4: ({ className, ...props }: any) => (
             <h4
               className={cn(
-                "font-georgia text-foreground mt-4 mb-2 text-lg font-medium tracking-tight",
+                "font-libre text-foreground mt-4 mb-2 text-lg font-medium tracking-tight",
                 className,
               )}
               {...props}

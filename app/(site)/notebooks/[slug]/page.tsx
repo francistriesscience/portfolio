@@ -92,7 +92,7 @@ export default async function NotebookPostPage({ params }: PageProps) {
                 />
               </div>
             )}
-            <h1 className="font-georgia text-foreground mb-4 w-full text-3xl font-medium tracking-tight lg:text-5xl">
+            <h1 className="font-libre text-foreground mb-4 w-full text-3xl font-medium tracking-tight lg:text-4xl">
               {post.title}
             </h1>
             <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-2 text-sm">
