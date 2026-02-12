@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: ProjectPost }) {
           <IconComponent className="h-5 w-5" />
         </div>
       )}
-      <Card className="group-hover:border-primary/50 hover:from-primary/5 hover:via-background hover:to-primary/10 h-full cursor-pointer bg-gradient-to-br hover:shadow-md">
+      <Card className="group hover:border-primary/50 hover:from-primary/5 hover:via-background hover:to-primary/10 cursor-pointer bg-gradient-to-br transition-all hover:shadow-md">
         <CardHeader className="flex flex-col items-start">
           <CardTitle className="group-hover:text-primary line-clamp-2 flex flex-row items-start gap-1 text-sm leading-tight font-medium transition-colors">
             {project.title}

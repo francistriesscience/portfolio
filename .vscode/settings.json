@@ -9,5 +9,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "files.autoSave": "onWindowChange"
+  "files.autoSave": "onWindowChange",
+  "files.associations": {
+    "wrangler.json": "jsonc"
+  }
 }

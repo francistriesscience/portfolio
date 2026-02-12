@@ -1,6 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
-import { SearchIcon, SoupIcon, FileTextIcon } from "lucide-react"
+import { SearchIcon, SoupIcon } from "lucide-react"
 
 import { experiences, jobSeekingStatus, type Experience, type RoleEntry } from "@/data/experiences"
 
@@ -35,8 +35,7 @@ export function ExperiencesSection() {
                     target="_blank"
                     className="flex flex-row items-center gap-1"
                   >
-                    <FileTextIcon className="size-3" />
-                    Resume
+                    View my resume
                   </Link>
                 </Button>
               </TooltipTrigger>

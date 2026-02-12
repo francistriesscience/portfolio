@@ -1,10 +1,26 @@
 {
-  "name": "prod-personal-portfolio-francistriesscience",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2025-09-05",
-  "compatibility_flags": ["nodejs_compat"],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "assets",
-  },
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "portfolio",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2025-12-01",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".open-next/assets"
+	},
+	"images": {
+		"binding": "IMAGES"
+	},
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "portfolio"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
 }

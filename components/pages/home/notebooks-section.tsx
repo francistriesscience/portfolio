@@ -1,6 +1,5 @@
 import * as React from "react"
 import Link from "next/link"
-import { LibraryIcon } from "lucide-react"
 
 import { getAllNotebooks } from "@/lib/notebooks/get-all-notebooks"
 
@@ -21,7 +20,6 @@ export async function NotebooksSection() {
             className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
           >
             <Link href="/notebooks" className="flex flex-row items-center gap-1">
-              <LibraryIcon className="size-3" />
               View notebooks
             </Link>
           </Button>

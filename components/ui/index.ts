@@ -104,3 +104,13 @@ export { ProgressScroll } from "./progress/progress-scroll"
 export { ButtonGroup } from "./button-group/button-group"
 export { ButtonGroupText } from "./button-group/button-group-text"
 export { ButtonGroupSeparator } from "./button-group/button-group-separator"
+/**
+ * Breadcrumb
+ */
+export { Breadcrumb } from "./breadcrumb/breadcrumb"
+export { BreadcrumbList } from "./breadcrumb/breadcrumb-list"
+export { BreadcrumbItem } from "./breadcrumb/breadcrumb-item"
+export { BreadcrumbLink } from "./breadcrumb/breadcrumb-link"
+export { BreadcrumbPage } from "./breadcrumb/breadcrumb-page"
+export { BreadcrumbSeparator } from "./breadcrumb/breadcrumb-separator"
+export { BreadcrumbEllipsis } from "./breadcrumb/breadcrumb-ellipsis"

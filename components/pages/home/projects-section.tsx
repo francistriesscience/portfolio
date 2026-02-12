@@ -1,6 +1,4 @@
-import * as React from "react"
 import Link from "next/link"
-import { SproutIcon } from "lucide-react"
 
 import { getAllProjects } from "@/lib/projects/get-all-projects"
 
@@ -23,7 +21,6 @@ export async function ProjectsSection() {
                 className="text-muted-foreground hover:text-primary h-auto p-0 text-sm"
               >
                 <Link href="/projects" className="flex flex-row items-center gap-1">
-                  <SproutIcon className="size-3" />
                   View projects
                 </Link>
               </Button>
