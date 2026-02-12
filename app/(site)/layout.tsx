@@ -29,9 +29,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                     <AvatarImage src={header.avatar} />
                     <AvatarFallback>FI</AvatarFallback>
                   </Avatar>
-                  <h1 className="font-georgia text-3xl font-medium tracking-tighter">
-                    {header.name}
-                  </h1>
+                  <h1 className="font-libre text-3xl font-medium">{header.name}</h1>
                 </Link>
                 <div className="flex flex-row items-center gap-1">
                   <h2 className="text-muted-foreground text-sm">— {header.subtitle}</h2>

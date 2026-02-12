@@ -66,11 +66,12 @@
   /** Fonts */
   --font-georgia: Georgia, ui-serif, serif;
   --font-writer: Writer, ui-sans-serif, sans-serif;
+  --font-libre: var(--font-libre-baskerville);
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #f8f8f7;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
