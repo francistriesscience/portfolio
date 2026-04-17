@@ -7,6 +7,7 @@ import { IconArrowRight, IconBrandGithub, IconPackage } from "@tabler/icons-reac
 import { PROJECTS } from "@portfolio/web/data/projects"
 
 import {
+  Badge,
   Button,
   Empty,
   EmptyContent,
@@ -23,9 +24,14 @@ export function Projects() {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex w-full items-center gap-4">
-        <h2 className="text-muted-foreground shrink-0 text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
-          What I&apos;m proud of
-        </h2>
+        <div className="flex items-center gap-2 shrink-0">
+          <h2 className="text-muted-foreground text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
+            What I&apos;m proud of
+          </h2>
+          <Badge variant="outline" size="sm" className="font-mono tabular-nums">
+            {PROJECTS.length}
+          </Badge>
+        </div>
         <Separator className="flex-1" />
       </div>
 
