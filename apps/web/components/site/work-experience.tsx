@@ -33,7 +33,7 @@ export function WorkExperience() {
               </div>
               <div className="text-right">
                 <p className="text-foreground font-medium">Mnemora</p>
-                <p className="text-muted-foreground">Pampanga, Philippines</p>
+                <p className="text-muted-foreground">City of Mabalacat, PH</p>
               </div>
             </div>
           </CardPanel>
