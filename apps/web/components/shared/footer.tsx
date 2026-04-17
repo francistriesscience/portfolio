@@ -41,7 +41,7 @@ export function Footer() {
       </div>
 
       <div className="text-muted-foreground/60 flex items-center justify-between text-xs">
-        <p suppressHydrationWarning>© {new Date().getFullYear()}</p>
+        <p suppressHydrationWarning>© {new Date().getFullYear()} — francistriesscience</p>
         <p suppressHydrationWarning>Manila, PH — {time}</p>
       </div>
     </footer>
