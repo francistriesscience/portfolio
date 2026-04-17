@@ -1,8 +1,9 @@
 "use client"
 
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
-import { cn } from "@packages/ui/lib/utils"
 import * as React from "react"
+
+import { cn } from "@packages/ui/lib/utils"
 
 export function AlertDialogBackdrop({
   className,
