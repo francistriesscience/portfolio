@@ -18,7 +18,7 @@ export function AboutMe() {
       <CardFrame className="w-full">
         <Card>
           <CardPanel>
-            <div className="text-muted-foreground text-base leading-tight">
+            <div className="text-muted-foreground text-sm leading-tight">
               <p>
                 I truly love building things that live in the cloud and solve puzzles on the ground.
                 Over the last 4+ years, I have been a Software Engineer and Tech Lead, bridging the
