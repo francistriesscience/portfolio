@@ -1,3 +1,8 @@
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+
+@source "..";
+
 @theme inline {
   --font-sans: var(
     --font-dm-sans,
@@ -55,7 +60,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Core theme variables */
 :root {
   --radius: 0.625rem;
   --background: var(--color-white);
@@ -93,7 +97,6 @@
   --sidebar-ring: var(--color-neutral-400);
 }
 
-/* Dark overrides */
 .dark {
   --background: color-mix(in srgb, var(--color-neutral-950) 95%, var(--color-white));
   --foreground: var(--color-neutral-100);
@@ -130,12 +133,7 @@
   --sidebar-ring: var(--color-neutral-400);
 }
 
-/* Apply mapped font variables to the document and provide fallbacks.
-   Important: next/font injects variables (e.g. --font-dm-sans, --font-libre-baskerville)
-   when you add the font `.variable` class to <html> or <body>.
-   We map those into our logical variables above in @theme inline and use them here. */
 html {
-  /* Respect the logical variable with fallback stack if the injected var is missing */
   font-family: var(
     --font-sans,
     system-ui,
@@ -154,7 +152,6 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Body inherits the html stack and keeps the antialiased appearance */
 body {
   margin: 0;
   font-family: inherit;
@@ -166,21 +163,18 @@ body {
   -ms-text-size-adjust: 100%;
 }
 
-/* Headings use the heading font (serif) with sensible fallbacks */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading, Georgia, "Times New Roman", serif);
+  font-family: var(--font-sans,);
   margin: 0;
   line-height: 1.15;
   color: inherit;
-  font-weight: 700;
 }
 
-/* Utility classes for explicit usage in templates/components */
 .font-sans {
   font-family: var(
     --font-sans,
@@ -193,15 +187,14 @@ h6 {
   ) !important;
 }
 
-.font-heading {
-  font-family: var(--font-heading, Georgia, "Times New Roman", serif) !important;
-}
-
-/* Preserve the existing skeleton animation and other helpers */
 @keyframes skeleton {
   to {
     background-position: -200% 0;
   }
 }
 
-/* Keep any other project styles below... */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
