@@ -1,0 +1,19 @@
+"use client"
+
+import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
+import * as React from "react"
+
+import { cn } from "@packages/ui/lib/utils"
+
+export function AccordionItem({
+  className,
+  ...props
+}: AccordionPrimitive.Item.Props): React.ReactElement {
+  return (
+    <AccordionPrimitive.Item
+      className={cn("border-b last:border-b-0", className)}
+      data-slot="accordion-item"
+      {...props}
+    />
+  )
+}
