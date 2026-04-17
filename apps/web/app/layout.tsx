@@ -4,6 +4,12 @@ import "@packages/ui/styles/globals.css"
 import { metadata } from "@/lib/metadata"
 export { metadata }
 
+import { ThemeProvider } from "@packages/ui/providers/theme-provider"
+
+import { NavigationPill } from "@/components/shared/navigation-pill"
+import { Footer } from "@/components/shared/footer"
+import { BackgroundFlickeringGrid } from "@packages/ui/shared/background/background-flickering-grid"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -11,8 +17,34 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${libreBaskerville.variable} ${dmSans.variable} bg-background antialiased`}>
-        {children}
+      <body
+        className={`${libreBaskerville.variable} ${dmSans.variable} bg-background text-foreground font-sans antialiased`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="relative min-h-screen w-full selection:bg-white selection:text-black">
+            <NavigationPill />
+            <main className="relative z-10 mx-auto max-w-xl px-6 pt-32">
+              {children}
+              <Footer />
+            </main>
+
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 overflow-hidden mask-[linear-gradient(to_bottom,transparent,black)]">
+              <BackgroundFlickeringGrid
+                className="h-full w-full"
+                squareSize={3}
+                gridGap={6}
+                color="#64748b"
+                maxOpacity={0.3}
+                flickerChance={0.2}
+              />
+            </div>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )
