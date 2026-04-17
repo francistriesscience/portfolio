@@ -1,8 +1,9 @@
 "use client"
 
+import * as React from "react"
+
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import { IconChevronDown } from "@tabler/icons-react"
-import * as React from "react"
 
 import { cn } from "@packages/ui/lib/utils"
 

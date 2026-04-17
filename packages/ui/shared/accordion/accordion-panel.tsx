@@ -1,7 +1,8 @@
 "use client"
 
-import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import * as React from "react"
+
+import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 
 import { cn } from "@packages/ui/lib/utils"
 
