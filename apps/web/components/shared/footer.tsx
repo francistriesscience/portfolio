@@ -32,7 +32,8 @@ export function Footer() {
           <Link
             key={link.label}
             href={link.href}
-            className="hover:text-foreground flex items-center gap-2 transition-colors"
+            target="_blank"
+            className="hover:text-foreground flex items-center gap-1 transition-colors"
           >
             <link.Icon className="h-4 w-4" />
             <span>{link.label}</span>
