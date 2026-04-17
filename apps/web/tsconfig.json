@@ -1,0 +1,33 @@
+{
+  "extends": "@packages/typescript/nextjs.json",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@packages/ui/*": [
+        "../../packages/ui/*"
+      ]
+    },
+    "types": [
+      "./cloudflare-env.d.ts",
+      "node"
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
