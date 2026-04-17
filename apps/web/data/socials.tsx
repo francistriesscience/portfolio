@@ -1,4 +1,4 @@
-import { IconBrandGithub, IconBrandLinkedin, IconBrandX, IconMail } from "@tabler/icons-react"
+import { IconBrandGithub, IconBrandLinkedin, IconMail } from "@tabler/icons-react"
 
 export const SOCIAL_LINKS = [
   {
