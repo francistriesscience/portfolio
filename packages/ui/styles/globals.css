@@ -1,7 +1,16 @@
 @theme inline {
-  --font-sans: var(--font-sans);
-  --font-heading: var(--font-heading);
+  --font-sans: var(
+    --font-dm-sans,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial
+  );
+  --font-heading: var(--font-libre-baskerville, Georgia, "Times New Roman", serif);
   --font-mono: var(--font-mono);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -46,6 +55,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Core theme variables */
 :root {
   --radius: 0.625rem;
   --background: var(--color-white);
@@ -59,9 +69,7 @@
   --secondary: --alpha(var(--color-black) / 4%);
   --secondary-foreground: var(--color-neutral-800);
   --muted: --alpha(var(--color-black) / 4%);
-  --muted-foreground: color-mix(in srgb,
-      var(--color-neutral-500) 90%,
-      var(--color-black));
+  --muted-foreground: color-mix(in srgb, var(--color-neutral-500) 90%, var(--color-black));
   --accent: --alpha(var(--color-black) / 4%);
   --accent-foreground: var(--color-neutral-800);
   --destructive: var(--color-red-500);
@@ -76,9 +84,7 @@
   --input: --alpha(var(--color-black) / 10%);
   --ring: var(--color-neutral-400);
   --sidebar: var(--color-neutral-50);
-  --sidebar-foreground: color-mix(in srgb,
-      var(--color-neutral-800) 64%,
-      var(--sidebar));
+  --sidebar-foreground: color-mix(in srgb, var(--color-neutral-800) 64%, var(--sidebar));
   --sidebar-primary: var(--color-neutral-800);
   --sidebar-primary-foreground: var(--color-neutral-50);
   --sidebar-accent: --alpha(var(--color-black) / 4%);
@@ -87,10 +93,9 @@
   --sidebar-ring: var(--color-neutral-400);
 }
 
+/* Dark overrides */
 .dark {
-  --background: color-mix(in srgb,
-      var(--color-neutral-950) 95%,
-      var(--color-white));
+  --background: color-mix(in srgb, var(--color-neutral-950) 95%, var(--color-white));
   --foreground: var(--color-neutral-100);
   --card: color-mix(in srgb, var(--background) 98%, var(--color-white));
   --card-foreground: var(--color-neutral-100);
@@ -101,14 +106,10 @@
   --secondary: --alpha(var(--color-white) / 4%);
   --secondary-foreground: var(--color-neutral-100);
   --muted: --alpha(var(--color-white) / 4%);
-  --muted-foreground: color-mix(in srgb,
-      var(--color-neutral-500) 90%,
-      var(--color-white));
+  --muted-foreground: color-mix(in srgb, var(--color-neutral-500) 90%, var(--color-white));
   --accent: --alpha(var(--color-white) / 4%);
   --accent-foreground: var(--color-neutral-100);
-  --destructive: color-mix(in srgb,
-      var(--color-red-500) 90%,
-      var(--color-white));
+  --destructive: color-mix(in srgb, var(--color-red-500) 90%, var(--color-white));
   --destructive-foreground: var(--color-red-400);
   --info: var(--color-blue-500);
   --info-foreground: var(--color-blue-400);
@@ -119,12 +120,8 @@
   --border: --alpha(var(--color-white) / 6%);
   --input: --alpha(var(--color-white) / 8%);
   --ring: var(--color-neutral-500);
-  --sidebar: color-mix(in srgb,
-      var(--color-neutral-950) 97%,
-      var(--color-white));
-  --sidebar-foreground: color-mix(in srgb,
-      var(--color-neutral-100) 64%,
-      var(--sidebar));
+  --sidebar: color-mix(in srgb, var(--color-neutral-950) 97%, var(--color-white));
+  --sidebar-foreground: color-mix(in srgb, var(--color-neutral-100) 64%, var(--sidebar));
   --sidebar-primary: var(--color-neutral-100);
   --sidebar-primary-foreground: var(--color-neutral-800);
   --sidebar-accent: --alpha(var(--color-white) / 4%);
@@ -132,3 +129,79 @@
   --sidebar-border: --alpha(var(--color-white) / 5%);
   --sidebar-ring: var(--color-neutral-400);
 }
+
+/* Apply mapped font variables to the document and provide fallbacks.
+   Important: next/font injects variables (e.g. --font-dm-sans, --font-libre-baskerville)
+   when you add the font `.variable` class to <html> or <body>.
+   We map those into our logical variables above in @theme inline and use them here. */
+html {
+  /* Respect the logical variable with fallback stack if the injected var is missing */
+  font-family: var(
+    --font-sans,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial
+  );
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Body inherits the html stack and keeps the antialiased appearance */
+body {
+  margin: 0;
+  font-family: inherit;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Headings use the heading font (serif) with sensible fallbacks */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading, Georgia, "Times New Roman", serif);
+  margin: 0;
+  line-height: 1.15;
+  color: inherit;
+  font-weight: 700;
+}
+
+/* Utility classes for explicit usage in templates/components */
+.font-sans {
+  font-family: var(
+    --font-sans,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial
+  ) !important;
+}
+
+.font-heading {
+  font-family: var(--font-heading, Georgia, "Times New Roman", serif) !important;
+}
+
+/* Preserve the existing skeleton animation and other helpers */
+@keyframes skeleton {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Keep any other project styles below... */

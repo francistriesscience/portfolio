@@ -27,3 +27,23 @@ export { AlertDialogPortal } from "./alert-dialog/alert-dialog-portal"
 export { AlertDialogTitle } from "./alert-dialog/alert-dialog-title"
 export { AlertDialogTrigger } from "./alert-dialog/alert-dialog-trigger"
 export { AlertDialogViewport } from "./alert-dialog/alert-dialog-viewport"
+/**
+ * Avatar
+ */
+export { Avatar } from "./avatar/avatar"
+export { AvatarFallback } from "./avatar/avatar-fallback"
+export { AvatarImage } from "./avatar/avatar-image"
+/**
+ * Badge
+ */
+export { Badge } from "./badge/badge"
+/**
+ * Breadcrumb
+ */
+export { Breadcrumb } from "./breadcrumb/breadcrumb"
+export { BreadcrumbEllipsis } from "./breadcrumb/breadcrumb-ellipsis"
+export { BreadcrumbItem } from "./breadcrumb/breadcrumb-item"
+export { BreadcrumbLink } from "./breadcrumb/breadcrumb-link"
+export { BreadcrumbList } from "./breadcrumb/breadcrumb-list"
+export { BreadcrumbPage } from "./breadcrumb/breadcrumb-page"
+export { BreadcrumbSeparator } from "./breadcrumb/breadcrumb-separator"
