@@ -7,17 +7,10 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@packages/ui/*": [
-        "../../packages/ui/*"
-      ]
+      "@/*": ["./*"],
+      "@packages/ui/*": ["../../packages/ui/*"]
     },
-    "types": [
-      "./cloudflare-env.d.ts",
-      "node"
-    ]
+    "types": ["./cloudflare-env.d.ts", "node"]
   },
   "include": [
     "next-env.d.ts",
@@ -27,7 +20,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
