@@ -22,7 +22,7 @@ export function FormerRoles() {
   return (
     <Collapsible className="group/collapsible flex w-full flex-col gap-4">
       <div className="flex w-full items-center gap-4">
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex shrink-0 items-center gap-2">
           <h2 className="text-muted-foreground text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
             And previously
           </h2>
@@ -42,7 +42,7 @@ export function FormerRoles() {
       </div>
 
       <CollapsiblePanel>
-        <Accordion className="w-full">
+        <Accordion className="w-full" defaultValue={[FORMER_ROLES[0]?.id]}>
           {FORMER_ROLES.map((role) => (
             <AccordionItem key={role.id} value={role.id} className="border-none">
               <AccordionTrigger className="px-0 py-4 outline-none hover:no-underline">
