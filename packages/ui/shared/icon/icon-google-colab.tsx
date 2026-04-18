@@ -15,7 +15,7 @@ export function IconGoogleColab({
   const defaultProps = {
     className: cn("size-4", className),
     "data-slot": "icon-google-colab",
-    fill: "#F9AB00",
+    fill: "currentColor",
     role: "img",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg",
