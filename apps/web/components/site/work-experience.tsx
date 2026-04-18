@@ -21,7 +21,7 @@ export function WorkExperience() {
       <CardFrame className="w-full">
         <CardFrameHeader>
           <CardFrameTitle className="text-muted-foreground text-end text-xs font-semibold tracking-wide uppercase">
-            Got an offer?
+            Open for opportunities
           </CardFrameTitle>
         </CardFrameHeader>
         <Card>
