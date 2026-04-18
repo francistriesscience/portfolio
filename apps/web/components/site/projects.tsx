@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { IconLink, IconPackage } from "@tabler/icons-react"
+import { IconWorld, IconPackage } from "@tabler/icons-react"
 
 import { PROJECTS } from "@portfolio/web/data/projects"
 
@@ -90,7 +90,7 @@ export function Projects() {
                   {project.colab ? (
                     <IconGoogleColab className="size-4 shrink-0" />
                   ) : (
-                    <IconLink className="size-4 shrink-0" />
+                    <IconWorld className="size-4 shrink-0" />
                   )}
                 </Link>
               </CardFrameFooter>

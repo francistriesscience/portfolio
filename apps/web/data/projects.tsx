@@ -9,6 +9,22 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    name: "ADU Portal",
+    url: "https://aduportal.com/",
+    image: "https://i.imgur.com/WoSfnHg.gif",
+    stack: [
+      "Next.js",
+      "Hono",
+      "Flask",
+      "PostgreSQL",
+      "Google Gemini 3.1 Pro",
+      "TailwindCSS",
+      "TypeScript",
+      "Python",
+    ],
+    colab: false,
+  },
+  {
     name: "Chromiq",
     url: "https://chromiq.mnemora.org",
     image: "https://i.imgur.com/mozUPte.gif",
