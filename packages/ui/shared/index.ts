@@ -99,6 +99,10 @@ export { EmptyContent } from "./empty/empty-content"
  */
 export { FXAnimatedThemeToggler } from "./fx/fx-animated-theme-toggler"
 /**
+ * Icon
+ */
+export { IconGoogleColab } from "./icon/icon-google-colab"
+/**
  * Preview Card
  */
 export { PreviewCard } from "./preview-card/preview-card"
