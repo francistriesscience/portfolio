@@ -34,7 +34,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build and Deploy to Cloudflare Pages
-        run: bun x turbo run deploy:cloudflare --filter=@mnemoraorg/bitewise-web
+        run: bun x turbo run deploy:cloudflare --filter=@portfolio/web
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
