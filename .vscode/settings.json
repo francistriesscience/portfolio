@@ -12,5 +12,38 @@
   "files.autoSave": "onWindowChange",
   "files.associations": {
     "wrangler.json": "jsonc"
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/.turbo": true,
+    "**/dist": true,
+    "**/.wrangler": true,
+    "**/__pycache__": true,
+    "**/.ruff_cache": true,
+    "**/.venv": true,
+    "**/venv": true,
+    "**/.pytest_cache": true
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "go.useLanguageServer": true,
+  "go.lintTool": "golangci-lint",
+  "go.lintOnSave": "package",
+  "go.lintFlags": ["--config=${workspaceFolder}/.golangci.yml"],
+  "gopls": {
+    "formatting.gofumpt": true
   }
 }

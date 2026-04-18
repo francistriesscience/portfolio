@@ -1,26 +1,35 @@
 # Dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+node_modules
+.pnp
+.pnp.js
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Testing
-/coverage
+coverage
 
-# Next.js
-/.next/
-/out/
+# Turbo
+.turbo
 
-# Production
-/build
+# Vercel
+.vercel
 
-# Misc
-.DS_Store
-*.pem
+# Build Outputs
+.next/
+out/
+build
+dist
+
+# DataGrip
+shelf/
+workspace.xml
+dataSources/
+dataSources.*
 
 # Debug
 npm-debug.log*
@@ -28,15 +37,18 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Environments
-.env*
+# Misc
+.DS_Store
+*.pem
 
-# CloudFlare
-.open-next
+# OpenNext
+/.open-next
 
 # Typescript
 *.tsbuildinfo
 next-env.d.ts
 
-# Wrangler
-.wrangler/
+# Wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example

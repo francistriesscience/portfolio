@@ -1,0 +1,23 @@
+{
+  "extends": "@packages/typescript/react-library.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "strictNullChecks": true,
+    "paths": {
+      "@packages/ui/*": ["./*"],
+    },
+  },
+  "include": [
+    "shared",
+    "lib",
+    "styles",
+    "hooks",
+    "providers",
+    "contexts",
+    "constants",
+    "helpers",
+    "types",
+  ],
+  "exclude": ["node_modules", "dist"],
+}
