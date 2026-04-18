@@ -38,7 +38,7 @@ export function AvatarStatusDot({
 
   return (
     <div className={cn("relative inline-block shrink-0", className)}>
-      <Avatar className={cn(sizeClasses[size], "border-border border")}>
+      <Avatar className={cn(sizeClasses[size], "border-border border-2")}>
         {src && <AvatarImage alt={alt} src={src} className="object-cover" />}
         <AvatarFallback>{fallback}</AvatarFallback>
       </Avatar>
