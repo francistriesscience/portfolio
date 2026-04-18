@@ -30,7 +30,7 @@ export function Footer() {
 
   return (
     <footer className="flex flex-col gap-4 py-16">
-      <div className="text-muted-foreground flex flex-wrap gap-6 text-sm font-medium">
+      <div className="text-muted-foreground flex flex-wrap justify-center gap-6 text-sm font-medium">
         {SOCIAL_LINKS.map((link) => (
           <Tooltip key={link.label}>
             <TooltipTrigger
