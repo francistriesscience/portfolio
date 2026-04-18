@@ -13,7 +13,7 @@ export function CardFrameFooter({
   ...props
 }: useRender.ComponentProps<"div">): React.ReactElement {
   const defaultProps = {
-    className: cn("px-6 py-4", className),
+    className: cn("p-4", className),
     "data-slot": "card-frame-footer",
   }
 

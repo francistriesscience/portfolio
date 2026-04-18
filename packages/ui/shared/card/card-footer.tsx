@@ -14,7 +14,7 @@ export function CardFooter({
 }: useRender.ComponentProps<"div">): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "flex items-center p-6 in-[[data-slot=card]:has(>[data-slot=card-panel])]:pt-4",
+      "flex items-center p-4 in-[[data-slot=card]:has(>[data-slot=card-panel])]:pt-4",
       className,
     ),
     "data-slot": "card-footer",
