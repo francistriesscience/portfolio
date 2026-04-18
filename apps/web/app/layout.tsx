@@ -26,7 +26,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative min-h-screen w-full selection:bg-white selection:text-black">
+          <div className="selection:bg-foreground selection:text-background relative min-h-screen w-full">
             <NavigationPill />
             <main className="relative z-10 mx-auto max-w-xl px-6 pt-32">
               {children}
