@@ -112,3 +112,10 @@ export { Separator } from "./separator/separator"
  * Spinner
  */
 export { Spinner } from "./spinner/spinner"
+/**
+ * Tooltip
+ */
+export { TooltipCreateHandle } from "./tooltip/tooltip-create-handle"
+export { Tooltip } from "./tooltip/tooltip"
+export { TooltipTrigger } from "./tooltip/tooltip-trigger"
+export { TooltipPopup } from "./tooltip/tooltip-popup"
