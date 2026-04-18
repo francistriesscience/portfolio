@@ -2,19 +2,22 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { IconArrowRight, IconBrandGithub, IconPackage } from "@tabler/icons-react"
+import Image from "next/image"
+import { IconLink, IconPackage } from "@tabler/icons-react"
 
 import { PROJECTS } from "@portfolio/web/data/projects"
 
 import {
   Badge,
-  Button,
+  Card,
+  CardFrame,
+  CardFrameFooter,
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
+  IconGoogleColab,
   Separator,
 } from "@packages/ui/shared"
 
@@ -24,7 +27,7 @@ export function Projects() {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex w-full items-center gap-4">
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex shrink-0 items-center gap-2">
           <h2 className="text-muted-foreground text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
             What I&apos;m proud of
           </h2>
@@ -48,16 +51,50 @@ export function Projects() {
           </EmptyHeader>
         </Empty>
       ) : (
-        <div className="flex w-full flex-col items-start gap-4">
+        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
           {PROJECTS.map((project) => (
-            <Link
-              key={project.name}
-              href={project.url}
-              className="flex w-full items-center justify-between"
-            >
-              <span className="text-muted-foreground font-medium">{project.name}</span>
-              <IconArrowRight className="text-muted-foreground size-4" />
-            </Link>
+            <CardFrame key={project.name}>
+              <Card className="overflow-hidden">
+                <div className="bg-muted relative aspect-video w-full">
+                  <Image
+                    src={project.image}
+                    alt={project.name}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                    {project.stack.slice(0, 2).map((s) => (
+                      <Badge key={s} size="sm" className="opacity-90">
+                        {s}
+                      </Badge>
+                    ))}
+                    {project.stack.length > 2 && (
+                      <Badge size="sm" className="opacity-90">
+                        +{project.stack.length - 2}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </Card>
+              <CardFrameFooter>
+                <Link
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-foreground text-muted-foreground flex w-full items-center justify-between gap-3 text-sm transition-colors"
+                >
+                  <span className="min-w-0 truncate text-end text-xs font-bold tracking-wide uppercase">
+                    {project.name}
+                  </span>
+                  {project.colab ? (
+                    <IconGoogleColab className="size-4 shrink-0" />
+                  ) : (
+                    <IconLink className="size-4 shrink-0" />
+                  )}
+                </Link>
+              </CardFrameFooter>
+            </CardFrame>
           ))}
         </div>
       )}
