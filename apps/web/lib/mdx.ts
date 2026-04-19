@@ -53,8 +53,11 @@ export type NoteFrontmatter = z.infer<typeof noteFrontmatterSchema>
 export interface NoteEntry {
   slug: string
   frontmatter: NoteFrontmatter
+  readingTimeMinutes: number
   source: string
 }
+
+const WORDS_PER_MINUTE = 200
 
 function getNoteFilePath(slug: string) {
   const filePath = path.resolve(notesDirectory, `${slug}.mdx`)
@@ -85,6 +88,24 @@ async function readNoteFile(filePath: string) {
   }
 }
 
+function estimateReadingTimeMinutes(source: string) {
+  const normalizedSource = source
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
+    .replace(/\[[^\]]*]\([^)]*\)/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[#>*_~\-]+/g, " ")
+
+  const wordCount = normalizedSource.trim().split(/\s+/).filter(Boolean).length
+
+  if (wordCount === 0) {
+    return 1
+  }
+
+  return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE))
+}
+
 async function getNoteSlugsFromDisk() {
   const entries = await fs.readdir(notesDirectory, { withFileTypes: true })
 
@@ -104,6 +125,7 @@ export async function getNoteBySlug(slug: string): Promise<NoteEntry | null> {
     return {
       slug,
       frontmatter,
+      readingTimeMinutes: estimateReadingTimeMinutes(source),
       source,
     }
   } catch (error) {
@@ -152,6 +174,10 @@ export function formatNoteDate(date: string) {
     year: "numeric",
     timeZone: "UTC",
   }).format(new Date(date))
+}
+
+export function formatReadingTime(minutes: number) {
+  return `${minutes} min read`
 }
 
 export function getNotePath(slug: string) {
