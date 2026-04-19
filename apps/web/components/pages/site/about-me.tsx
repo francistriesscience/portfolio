@@ -24,8 +24,8 @@ export function AboutMe() {
         </h2>
         <Separator className="flex-1" />
         <div className="flex items-center gap-3">
-          {SOCIAL_LINKS.map((link) => (
-            <Tooltip key={link.label}>
+          {SOCIAL_LINKS.map((link, index) => (
+            <Tooltip key={index}>
               <TooltipTrigger
                 render={
                   <Link
