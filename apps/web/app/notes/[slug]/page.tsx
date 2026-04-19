@@ -13,6 +13,7 @@ import {
   TypographyLead,
   TypographyProse,
 } from "@packages/ui/shared"
+import { BackToTop } from "@/components/shared/back-to-top"
 import { MDXContent } from "@/components/shared/mdx-content"
 
 export const dynamic = "force-static"
@@ -89,6 +90,7 @@ export default async function NotePage({ params }: NotePageProps) {
       <TypographyProse>
         <MDXContent html={note.html} />
       </TypographyProse>
+      <BackToTop />
     </article>
   )
 }
