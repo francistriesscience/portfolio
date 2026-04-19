@@ -3,7 +3,8 @@ import path from "node:path"
 
 import matter from "gray-matter"
 
-import { noteFrontmatterSchema, type GeneratedNoteRecord } from "../lib/schema/note"
+import { renderNoteHtml } from "@/components/utils/render-note-html"
+import { noteFrontmatterSchema, type GeneratedNoteRecord } from "@/lib/schema/note"
 
 const notesDirectory = new URL("../contents/notes/", import.meta.url)
 const outputDirectory = new URL("../lib/generated/", import.meta.url)
@@ -40,6 +41,7 @@ async function getGeneratedNotes(): Promise<GeneratedNoteRecord[]> {
         slug: getNoteSlugFromFileName(fileName),
         frontmatter: noteFrontmatterSchema.parse(data),
         source: content,
+        html: await renderNoteHtml(content),
       }
     }),
   )
