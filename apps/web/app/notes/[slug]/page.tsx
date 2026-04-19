@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-
 import { IconArrowLeft } from "@tabler/icons-react"
+
+import { formatNoteDate, formatReadingTime, getNoteBySlug, getPublishedNoteSlugs } from "@/lib/mdx"
 
 import {
   Badge,
@@ -24,8 +25,6 @@ import {
   TypographyPre,
   TypographyProse,
 } from "@packages/ui/shared"
-
-import { formatNoteDate, formatReadingTime, getNoteBySlug, getPublishedNoteSlugs } from "@/lib/mdx"
 import MDXContent from "@/components/shared/mdx-content"
 
 export const dynamic = "force-static"
