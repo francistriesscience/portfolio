@@ -9,6 +9,7 @@ import { ThemeProvider } from "@packages/ui/providers/theme-provider"
 import { TooltipProvider } from "@packages/ui/providers/tooltip-provider"
 
 import { BackgroundFlickeringGrid } from "@packages/ui/shared/background/background-flickering-grid"
+import { BackToTop } from "@/components/shared/back-to-top"
 import { NavigationPill } from "@/components/shared/navigation-pill"
 import { Footer } from "@/components/shared/footer"
 
@@ -35,6 +36,7 @@ export default function RootLayout({
                 {children}
                 <Footer />
               </main>
+              <BackToTop />
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 overflow-hidden mask-[linear-gradient(to_bottom,transparent,black)]">
                 <BackgroundFlickeringGrid

@@ -34,14 +34,14 @@ export const PROJECTS: Project[] = [
   {
     name: "Seismic Signature Analysis for Tsunami",
     url: "https://colab.research.google.com/drive/17rKFbYb_F5gqIyFtYP8f8Ejnkdm-YRsW?usp=sharing",
-    image: "https://i.imgur.com/CtAE79v.gif",
+    image: "https://i.imgur.com/3FVtuTr.gif",
     stack: ["Python", "Scikit-learn", "XGBoost"],
     colab: true,
   },
   {
     name: "Predicting Calorie Expenditure",
     url: "https://colab.research.google.com/drive/1VB8UHgkbE989lxI_j9FIOAdTtK_zFF6K?usp=drive_link",
-    image: "https://i.imgur.com/CeVn61E.gif",
+    image: "https://i.imgur.com/XbpJvYj.gif",
     stack: ["Python", "Scikit-learn"],
     colab: true,
   },
