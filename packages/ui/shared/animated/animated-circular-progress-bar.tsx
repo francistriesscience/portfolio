@@ -11,6 +11,8 @@ interface AnimatedCircularProgressBarProps {
   className?: string
   children?: ReactNode
   showValue?: boolean
+  transitionDuration?: string
+  transitionTimingFunction?: CSSProperties["transitionTimingFunction"]
 }
 
 export function AnimatedCircularProgressBar({
@@ -22,6 +24,8 @@ export function AnimatedCircularProgressBar({
   className,
   children,
   showValue = true,
+  transitionDuration = "180ms",
+  transitionTimingFunction = "linear",
 }: AnimatedCircularProgressBarProps) {
   const circumference = 2 * Math.PI * 45
   const percentPx = circumference / 100
@@ -37,10 +41,11 @@ export function AnimatedCircularProgressBar({
           "--percent-to-px": `${percentPx}px`,
           "--gap-percent": "5",
           "--offset-factor": "0",
-          "--transition-length": "1s",
+          "--transition-length": transitionDuration,
           "--transition-step": "200ms",
           "--delay": "0s",
           "--percent-to-deg": "3.6deg",
+          "--transition-timing-function": transitionTimingFunction,
           transform: "translateZ(0)",
         } as CSSProperties
       }
@@ -65,7 +70,8 @@ export function AnimatedCircularProgressBar({
                   "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
                 transform:
                   "rotate(calc(1turn - 90deg - (var(--gap-percent) * var(--percent-to-deg) * var(--offset-factor-secondary)))) scaleY(-1)",
-                transition: "all var(--transition-length) ease var(--delay)",
+                transition:
+                  "all var(--transition-length) var(--transition-timing-function) var(--delay)",
                 transformOrigin: "calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)",
               } as CSSProperties
             }
@@ -87,7 +93,7 @@ export function AnimatedCircularProgressBar({
               strokeDasharray:
                 "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
               transition:
-                "var(--transition-length) ease var(--delay),stroke var(--transition-length) ease var(--delay)",
+                "var(--transition-length) var(--transition-timing-function) var(--delay),stroke var(--transition-length) var(--transition-timing-function) var(--delay)",
               transitionProperty: "stroke-dasharray,transform",
               transform:
                 "rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) * var(--percent-to-deg)))",
@@ -104,7 +110,9 @@ export function AnimatedCircularProgressBar({
           {currentPercent}
         </span>
       ) : null}
-      {children ? <span className="absolute inset-0 grid place-items-center">{children}</span> : null}
+      {children ? (
+        <span className="absolute inset-0 grid place-items-center">{children}</span>
+      ) : null}
     </div>
   )
 }
