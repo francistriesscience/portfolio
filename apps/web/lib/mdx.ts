@@ -6,6 +6,7 @@ import { noteFrontmatterSchema, type NoteFrontmatter } from "@/lib/schema/note"
 export interface NoteEntry {
   slug: string
   frontmatter: NoteFrontmatter
+  html: string
   readingTimeMinutes: number
   source: string
 }
@@ -38,6 +39,7 @@ function estimateReadingTimeMinutes(source: string) {
 const notes = generatedNotes.map((note) => ({
   slug: note.slug,
   frontmatter: noteFrontmatterSchema.parse(note.frontmatter),
+  html: note.html,
   readingTimeMinutes: estimateReadingTimeMinutes(note.source),
   source: note.source,
 }))
