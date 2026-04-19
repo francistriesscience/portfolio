@@ -27,27 +27,6 @@ The main app lives in `apps/web` and is built with Next.js. It includes the land
 └── packages/                    # Shared packages
 ```
 
-## Notes Workflow
-
-Notes are authored as `.mdx` files in:
-
-```text
-apps/web/contents/notes
-```
-
-Each note needs frontmatter such as:
-
-```md
----
-title: Example Note
-description: Short summary
-date: 2026-04-19
-tags:
-  - Example
-draft: false
----
-```
-
 ### Generate Notes
 
 Generate the note modules locally with:
@@ -72,6 +51,8 @@ apps/web/contents/notes/my-note.mdx
 
 The notes are generated ahead of time so production does not need to read MDX files from the filesystem at runtime. This is important for the Cloudflare/OpenNext deployment target.
 
+The Cloudflare deploy scripts assume the generated note files are already committed. CI does not regenerate notes during deploy.
+
 ### Recommended Note Editing Flow
 
 1. Add or edit a note in `apps/web/contents/notes`.
@@ -84,4 +65,4 @@ The notes are generated ahead of time so production does not need to read MDX fi
 
 - If notes change, regenerate them before pushing.
 - Generated note files are part of the deployable app output and should stay in sync with the source MDX files.
-- If you later decide to stop generating during CI, this README still supports a local-first generation workflow.
+- CI deploys use the committed generated note files and do not run `generate:notes`.
