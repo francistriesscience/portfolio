@@ -3,8 +3,9 @@
 import * as React from "react"
 import { IconArrowUp } from "@tabler/icons-react"
 
-import { AnimatedCircularProgressBar } from "@packages/ui/shared"
 import { cn } from "@packages/ui/lib/utils"
+
+import { AnimatedCircularProgressBar } from "@packages/ui/shared"
 
 const VISIBILITY_SCROLL_OFFSET = 240
 
@@ -15,7 +16,8 @@ function getScrollProgress() {
 
   const scrollTop = window.scrollY
   const scrollHeight = document.documentElement.scrollHeight - window.innerHeight
-  const progress = scrollHeight <= 0 ? 0 : Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100))
+  const progress =
+    scrollHeight <= 0 ? 0 : Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100))
 
   return {
     isVisible: scrollTop > VISIBILITY_SCROLL_OFFSET,
@@ -24,7 +26,10 @@ function getScrollProgress() {
 }
 
 export function BackToTop() {
-  const [{ isVisible, progress }, setState] = React.useState(() => getScrollProgress())
+  const [{ isVisible, progress }, setState] = React.useState({
+    isVisible: false,
+    progress: 0,
+  })
 
   React.useEffect(() => {
     const updateScrollState = () => {
@@ -51,8 +56,8 @@ export function BackToTop() {
       aria-label="Back to top"
       onClick={handleClick}
       className={cn(
-        "fixed right-6 bottom-6 z-40 rounded-full transition-all duration-300",
-        "focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        "fixed right-6 bottom-6 z-40 cursor-pointer rounded-full transition-all duration-300",
+        "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
         isVisible
           ? "pointer-events-auto translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0",
@@ -63,9 +68,11 @@ export function BackToTop() {
         max={100}
         min={0}
         showValue={false}
+        transitionDuration="90ms"
+        transitionTimingFunction="linear"
         gaugePrimaryColor="var(--color-foreground)"
         gaugeSecondaryColor="color-mix(in oklab, var(--color-border) 75%, transparent)"
-        className="bg-background/85 text-foreground size-14 rounded-full border border-border/70 p-1 shadow-lg backdrop-blur-sm"
+        className="bg-background/85 text-foreground border-border/70 size-14 rounded-full border p-1 shadow-lg backdrop-blur-sm"
       >
         <IconArrowUp className="size-4" />
       </AnimatedCircularProgressBar>
