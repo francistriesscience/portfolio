@@ -3,5 +3,5 @@ type MDXContentProps = {
 }
 
 export function MDXContent({ html }: MDXContentProps) {
-  return <div dangerouslySetInnerHTML={{ __html: html }} />
+  return <div className="contents" dangerouslySetInnerHTML={{ __html: html }} />
 }
