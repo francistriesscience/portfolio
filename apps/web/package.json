@@ -8,10 +8,10 @@
     "build": "bun run generate:notes && next build",
     "start": "next start",
     "lint": "next lint",
-    "build:cloudflare": "bun run generate:notes && opennextjs-cloudflare build",
-    "preview:cloudflare": "bun run generate:notes && opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "upload:cloudflare": "bun run generate:notes && opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "deploy:cloudflare": "bun run generate:notes && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "build:cloudflare": "opennextjs-cloudflare build",
+    "preview:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "upload:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "deploy:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "typegen:cloudflare": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
   },
   "dependencies": {
