@@ -28,7 +28,6 @@ import {
 import MDXContent from "@/components/shared/mdx-content"
 
 export const dynamic = "force-static"
-export const dynamicParams = false
 export const revalidate = false
 
 type NotePageProps = {
