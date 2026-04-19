@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
-    "build": "next build",
+    "generate:notes": "bun run ./scripts/generate-notes.ts",
+    "dev": "bun run generate:notes && next dev --port 3000",
+    "build": "bun run generate:notes && next build",
     "start": "next start",
     "lint": "next lint",
     "build:cloudflare": "opennextjs-cloudflare build",
