@@ -2,11 +2,11 @@
 
 import * as React from "react"
 
-import { ProfileIntro } from "@/components/site/profile-intro"
-import { AboutMe } from "@/components/site/about-me"
-import { WorkExperience } from "@/components/site/work-experience"
-import { FormerRoles } from "@/components/site/former-roles"
-import { Projects } from "@/components/site/projects"
+import { ProfileIntro } from "@/components/pages/site/profile-intro"
+import { AboutMe } from "@/components/pages/site/about-me"
+import { WorkExperience } from "@/components/pages/site/work-experience"
+import { FormerRoles } from "@/components/pages/site/former-roles"
+import { Projects } from "@/components/pages/site/projects"
 
 export default function HomePage() {
   return (
