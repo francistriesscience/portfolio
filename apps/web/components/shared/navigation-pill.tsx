@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { motion } from "motion/react"
 import { usePathname } from "next/navigation"
 
 import { Badge, FXAnimatedThemeToggler } from "@packages/ui/shared"
@@ -17,21 +18,26 @@ export function NavigationPill() {
       <nav className="border-border bg-secondary/50 flex items-center rounded-full border p-1 shadow-2xl backdrop-blur-md">
         <div className="flex items-center gap-1 overflow-x-auto mask-[linear-gradient(to_right,black_85%,transparent)] [scrollbar-width:none] sm:mask-none [&::-webkit-scrollbar]:hidden">
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href
+            const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
             return (
               <Link
                 key={item.label}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-secondary text-foreground"
-                    : "text-muted-foreground hover:text-foreground",
+                  "relative flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+                  isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                {item.label}
+                {isActive ? (
+                  <motion.span
+                    layoutId="navigation-pill-active"
+                    className="bg-secondary absolute inset-0 rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30, mass: 0.7 }}
+                  />
+                ) : null}
+                <span className="relative z-10">{item.label}</span>
                 {item.badge && (
-                  <Badge variant="secondary" size="sm">
+                  <Badge variant="secondary" size="sm" className="relative z-10">
                     {item.badge}
                   </Badge>
                 )}
