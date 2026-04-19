@@ -7,22 +7,22 @@ import { useRender } from "@base-ui/react/use-render"
 
 import { cn } from "@packages/ui/lib/utils"
 
-export function CardHeader({
+export function TypographyH3({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"div">): React.ReactElement {
+}: useRender.ComponentProps<"h3">): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 p-4 has-data-[slot=card-action]:grid-cols-[1fr_auto]",
+      "scroll-m-20 mt-8 mb-2 text-lg font-semibold tracking-tight text-foreground",
       className,
     ),
-    "data-slot": "card-header",
+    "data-slot": "typography-h3",
   }
 
   return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(defaultProps, props),
+    defaultTagName: "h3",
+    props: mergeProps<"h3">(defaultProps, props),
     render,
   })
 }

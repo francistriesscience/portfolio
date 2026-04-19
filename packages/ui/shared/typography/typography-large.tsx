@@ -7,17 +7,14 @@ import { useRender } from "@base-ui/react/use-render"
 
 import { cn } from "@packages/ui/lib/utils"
 
-export function CardHeader({
+export function TypographyLarge({
   className,
   render,
   ...props
 }: useRender.ComponentProps<"div">): React.ReactElement {
   const defaultProps = {
-    className: cn(
-      "grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 p-4 has-data-[slot=card-action]:grid-cols-[1fr_auto]",
-      className,
-    ),
-    "data-slot": "card-header",
+    className: cn("text-lg font-semibold", className),
+    "data-slot": "typography-large",
   }
 
   return useRender({

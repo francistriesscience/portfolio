@@ -7,22 +7,22 @@ import { useRender } from "@base-ui/react/use-render"
 
 import { cn } from "@packages/ui/lib/utils"
 
-export function CardHeader({
+export function TypographyInlineCode({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"div">): React.ReactElement {
+}: useRender.ComponentProps<"code">): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 p-4 has-data-[slot=card-action]:grid-cols-[1fr_auto]",
+      "bg-muted relative rounded-md px-1.5 py-0.5 font-mono text-[0.92em] text-foreground",
       className,
     ),
-    "data-slot": "card-header",
+    "data-slot": "typography-inline-code",
   }
 
   return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(defaultProps, props),
+    defaultTagName: "code",
+    props: mergeProps<"code">(defaultProps, props),
     render,
   })
 }

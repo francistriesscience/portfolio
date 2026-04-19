@@ -1,4 +1,4 @@
-import { DM_Sans, Libre_Baskerville } from "next/font/google"
+import { DM_Sans, Libre_Baskerville, JetBrains_Mono } from "next/font/google"
 
 export const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -10,4 +10,10 @@ export const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
+})
+
+export const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-jetbrains-mono",
 })

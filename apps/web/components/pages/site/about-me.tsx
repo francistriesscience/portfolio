@@ -1,8 +1,17 @@
 import * as React from "react"
-
+import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
 
-import { Card, CardFrame, CardPanel, Separator } from "@packages/ui/shared"
+import { SOCIAL_LINKS } from "@/data/socials"
+import {
+  Card,
+  CardFrame,
+  CardPanel,
+  Separator,
+  Tooltip,
+  TooltipPopup,
+  TooltipTrigger,
+} from "@packages/ui/shared"
 
 export function AboutMe() {
   const [isExpanded, setIsExpanded] = React.useState(false)
@@ -14,6 +23,25 @@ export function AboutMe() {
           But, Who I am?
         </h2>
         <Separator className="flex-1" />
+        <div className="flex items-center gap-3">
+          {SOCIAL_LINKS.map((link) => (
+            <Tooltip key={link.label}>
+              <TooltipTrigger
+                render={
+                  <Link
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  />
+                }
+              >
+                <link.Icon className="h-4 w-4" />
+              </TooltipTrigger>
+              <TooltipPopup>{link.handler}</TooltipPopup>
+            </Tooltip>
+          ))}
+        </div>
       </div>
       <CardFrame className="w-full">
         <Card>

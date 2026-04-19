@@ -2,7 +2,7 @@
 
 import type * as React from "react"
 
-import { IconChevronRight } from "@tabler/icons-react"
+import { IconSlash } from "@tabler/icons-react"
 
 import { cn } from "@packages/ui/lib/utils"
 
@@ -19,7 +19,7 @@ export function BreadcrumbSeparator({
       role="presentation"
       {...props}
     >
-      {children ?? <IconChevronRight />}
+      {children ?? <IconSlash />}
     </li>
   )
 }
