@@ -27,18 +27,18 @@ When you're building fast, whether that's a suite of targeted micro-apps or the 
 2.  **Slashing Compute Costs:** Training from scratch takes weeks on expensive hardware. Transfer learning converges in hours or even minutes.
 3.  **Superior Generalization:** Pre-trained models start with a rich understanding of the world, making them highly resistant to overfitting on small datasets.
 
-### The Two Core Strategies: Extract or Fine-Tune?
+### The Two Core Strategies — Extract or Fine-Tune?
 
 Once you’ve picked your pre-trained "giant," you have to decide how to handle its existing knowledge. Think of it like walking into a Michelin-star kitchen: do you use the master chef's base sauce as-is, or do you tweak the recipe?
 
-#### 1. Feature Extraction: The "Frozen Base" (Fast & Safe)
+#### 1. Feature Extraction (Fast & Safe)
 
 You take the pre-trained model and **freeze** its weights. It acts purely as a feature extractor. You simply chop off the final classification layer, bolt on a new, simple classifier specific to your task, and train _only_ that new layer.
 
 - **Best for:** Very small datasets, or when your new task is practically identical to the original training data.
 - **The Vibe:** Low compute, low risk of overfitting.
 
-#### 2. Fine-Tuning: The "Custom Blend" (Powerful & Precise)
+#### 2. Fine-Tuning (Powerful & Precise)
 
 This is where it gets interesting. After training your new head, you **unfreeze** the later layers of the base model and train the whole stack together at a very low learning rate.
 
@@ -66,7 +66,7 @@ Ready to write the code? Here is the standard operating procedure for transferri
 4.  **Freeze & Train:** _Crucial step._ Keep the base layers frozen. Train only your newly initialized random head. If you don't do this, the massive error gradients from your random head will backpropagate and obliterate the pre-trained weights.
 5.  **Unfreeze & Fine-Tune:** Once the head is stable, unfreeze the top layers of the base. Lower your learning rate drastically ($1e^{-5}$ or lower) and gently bend the model to your specific domain.
 
-### The Dark Side: Negative Transfer
+### The Dark Side, Negative Transfer
 
 A word of warning: transfer learning is not magic. If you try to apply the skills of driving a car to flying a helicopter, you're going to crash.
 
