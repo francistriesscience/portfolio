@@ -28,6 +28,10 @@ export { AlertDialogTitle } from "./alert-dialog/alert-dialog-title"
 export { AlertDialogTrigger } from "./alert-dialog/alert-dialog-trigger"
 export { AlertDialogViewport } from "./alert-dialog/alert-dialog-viewport"
 /**
+ * Animated
+ */
+export { AnimatedCircularProgressBar } from "./animated/animated-circular-progress-bar"
+/**
  * Avatar
  */
 export { Avatar } from "./avatar/avatar"
