@@ -14,7 +14,16 @@
     Arial
   );
   --font-heading: var(--font-libre-baskerville, Georgia, "Times New Roman", serif);
-  --font-mono: var(--font-mono);
+  --font-mono: var(
+    --font-jetbrains-mono,
+    SF Mono,
+    SF Mono-Regular,
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    Courier,
+    monospace
+  );
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -197,4 +206,10 @@ h6 {
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.25rem;
 }
