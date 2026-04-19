@@ -8,46 +8,18 @@ import { formatNoteDate, formatReadingTime, getNoteBySlug, getPublishedNoteSlugs
 import {
   Badge,
   Separator,
-  TypographyBlockquote,
   TypographyEyebrow,
   TypographyH1,
-  TypographyH2,
-  TypographyH3,
-  TypographyH4,
-  TypographyHr,
-  TypographyImage,
-  TypographyInlineCode,
   TypographyLead,
-  TypographyLink,
-  TypographyList,
-  TypographyOrderedList,
-  TypographyP,
-  TypographyPre,
   TypographyProse,
 } from "@packages/ui/shared"
-import MDXContent from "@/components/shared/mdx-content"
+import { MDXContent } from "@/components/shared/mdx-content"
 
 export const dynamic = "force-static"
 export const revalidate = false
 
 type NotePageProps = {
   params: Promise<{ slug: string }>
-}
-
-const noteMdxComponents = {
-  a: TypographyLink,
-  blockquote: TypographyBlockquote,
-  code: TypographyInlineCode,
-  h1: TypographyH1,
-  h2: TypographyH2,
-  h3: TypographyH3,
-  h4: TypographyH4,
-  hr: TypographyHr,
-  img: TypographyImage,
-  ol: TypographyOrderedList,
-  p: TypographyP,
-  pre: TypographyPre,
-  ul: TypographyList,
 }
 
 export async function generateStaticParams() {
@@ -115,7 +87,7 @@ export default async function NotePage({ params }: NotePageProps) {
       </header>
       <Separator />
       <TypographyProse>
-        <MDXContent source={note.source} components={noteMdxComponents} />
+        <MDXContent html={note.html} />
       </TypographyProse>
     </article>
   )
