@@ -13,7 +13,7 @@ export function TypographyBlockquote({
   ...props
 }: useRender.ComponentProps<"blockquote">): React.ReactElement {
   const defaultProps = {
-    className: cn("border-l-2 border-border pl-4 italic", className),
+    className: cn("border-l-2 border-border pl-4 leading-tight", className),
     "data-slot": "typography-blockquote",
   }
 

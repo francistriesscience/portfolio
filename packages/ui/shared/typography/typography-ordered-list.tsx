@@ -13,7 +13,7 @@ export function TypographyOrderedList({
   ...props
 }: useRender.ComponentProps<"ol">): React.ReactElement {
   const defaultProps = {
-    className: cn("my-0 list-decimal space-y-2 pl-6", className),
+    className: cn("my-0 list-decimal leading-relaxed space-y-2 pl-6", className),
     "data-slot": "typography-ordered-list",
   }
 

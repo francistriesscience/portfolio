@@ -14,7 +14,7 @@ export function TypographyH2({
 }: useRender.ComponentProps<"h2">): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "scroll-m-20 mt-10 mb-3 font-heading text-2xl font-semibold tracking-tight text-foreground first:mt-0",
+      "scroll-m-20 mt-10 mb-3 font-heading text-xl font-semibold tracking-tight text-foreground first:mt-0",
       className,
     ),
     "data-slot": "typography-h2",

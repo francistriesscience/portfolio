@@ -13,7 +13,7 @@ export function TypographyList({
   ...props
 }: useRender.ComponentProps<"ul">): React.ReactElement {
   const defaultProps = {
-    className: cn("my-0 list-disc space-y-2 pl-6", className),
+    className: cn("my-0 list-disc pl-8 leading-relaxed", className),
     "data-slot": "typography-list",
   }
 

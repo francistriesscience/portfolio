@@ -13,7 +13,7 @@ export function TypographyLead({
   ...props
 }: useRender.ComponentProps<"p">): React.ReactElement {
   const defaultProps = {
-    className: cn("text-muted-foreground text-base", className),
+    className: cn("text-muted-foreground text-sm", className),
     "data-slot": "typography-lead",
   }
 

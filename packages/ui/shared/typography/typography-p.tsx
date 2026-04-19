@@ -13,7 +13,7 @@ export function TypographyP({
   ...props
 }: useRender.ComponentProps<"p">): React.ReactElement {
   const defaultProps = {
-    className: cn("my-0 leading-7", className),
+    className: cn("leading-relaxed", className),
     "data-slot": "typography-p",
   }
 
