@@ -1,10 +1,13 @@
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare"
 import type { NextConfig } from "next"
 
-initOpenNextCloudflareForDev()
+if (process.env.NODE_ENV === "development") {
+  void initOpenNextCloudflareForDev()
+}
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   transpilePackages: ["@packages/ui"],
+  turbopack: {},
   images: {
     remotePatterns: [
       {
@@ -27,6 +30,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-}
+} as unknown as NextConfig
 
 export default nextConfig
