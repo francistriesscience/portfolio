@@ -31,7 +31,7 @@ export default async function NotesPage() {
             build.
           </div>
         ) : (
-          <div className="flex flex-col">
+          <div className="flex w-full flex-col gap-4">
             {notes.map((note, index) => (
               <NoteList key={note.slug} note={note} index={index} />
             ))}
