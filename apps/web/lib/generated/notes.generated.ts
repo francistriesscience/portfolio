@@ -2,7 +2,7 @@
 
 import type { GeneratedNoteRecord } from "../schema/note"
 
-import { secret_engine_of_ai_agentsGeneratedNote } from "./notes/secret-engine-of-ai-agents"
+import { demos_are_easy_production_is_warGeneratedNote } from "./notes/demos-are-easy-production-is-war"
 import { stop_training_for_scratchGeneratedNote } from "./notes/stop-training-for-scratch"
 
-export const generatedNotes: GeneratedNoteRecord[] = [secret_engine_of_ai_agentsGeneratedNote, stop_training_for_scratchGeneratedNote]
+export const generatedNotes: GeneratedNoteRecord[] = [demos_are_easy_production_is_warGeneratedNote, stop_training_for_scratchGeneratedNote]

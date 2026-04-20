@@ -2,8 +2,8 @@
 
 import type { GeneratedNoteRecord } from "../../schema/note"
 
-export const secret_engine_of_ai_agentsGeneratedNote: GeneratedNoteRecord = {
-  "slug": "secret-engine-of-ai-agents",
+export const demos_are_easy_production_is_warGeneratedNote: GeneratedNoteRecord = {
+  "slug": "demos-are-easy-production-is-war",
   "frontmatter": {
     "title": "Demos are Easy, Production is War",
     "description": "Your LLM isn't failing; your infrastructure is. An engineer's guide to the 11 pillars of production-grade AI agents.",
