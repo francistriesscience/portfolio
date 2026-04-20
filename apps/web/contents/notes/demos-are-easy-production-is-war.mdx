@@ -12,7 +12,7 @@ tags:
 
 Demos are cute. Production is a warzone.
 
-A basic ReAct loop is fine for a weekend project, but scale it to 10+ autonomous steps—like having an agent orchestrate complex workflows across a suite of micro-apps—and watch it silently choke. When an agent hallucinates a tool call, forgets its objective, or gets stuck in an infinite loop, developers are quick to blame the model.
+A basic ReAct loop is fine for a weekend project, but scale it to 10+ autonomous steps, like having an agent orchestrate complex workflows across a suite of micro-apps, and watch it silently choke. When an agent hallucinates a tool call, forgets its objective, or gets stuck in an infinite loop, developers are quick to blame the model.
 
 Usually, the model isn't the problem. **Your infrastructure is.**
 
@@ -20,7 +20,7 @@ Consider this: LangChain jumped from outside the top 30 to rank 5 on TerminalBen
 
 As Beren Millidge put it: a raw LLM is just a CPU. It has no RAM, no disk, and no I/O. In an agentic architecture, your context window is the RAM, your databases are the disk, and your tools are the device drivers.
 
-The code binding it all together—whether you're writing it in Go, TypeScript, or Python—is the operating system. We call it **The Harness**.
+The code binding it all together, whether you're writing it in Go, TypeScript, or Python, is the operating system. We call it **The Harness**.
 
 _"If you're not the model, you're the harness." — Vivek Trivedy_
 
@@ -30,7 +30,7 @@ To graduate from toy scripts to autonomous systems, you have to master three con
 
 1.  **Prompt Engineering:** Tweaking the instructions and few-shot examples. (The table stakes).
 2.  **Context Engineering:** Curating _what_ the model sees and _when_ it sees it to maximize signal-to-noise.
-3.  **Harness Engineering:** Building the heavy-duty infrastructure—state persistence, orchestration, error recovery, and safety.
+3.  **Harness Engineering:** Building the heavy-duty infrastructure, state persistence, orchestration, error recovery, and safety.
 
 ## The 11 Pillars of a Production Harness
 
