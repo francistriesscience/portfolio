@@ -19,11 +19,11 @@ export function NoteList({ note, index }: NoteItemProps) {
     <PreviewCard>
       <PreviewCardTrigger render={<div />}>
         <Link href={`/notes/${note.slug}`} className="group flex w-full">
-          <div className="flex min-w-0 flex-1 items-start gap-2">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
             <span className="text-muted-foreground font-mono text-xs tabular-nums">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <h3 className="text-foreground group-hover:text-primary line-clamp-2 max-w-[28ch] min-w-0 text-sm font-semibold transition-colors">
+            <h3 className="text-foreground line-clamp-1 max-w-[28ch] min-w-0 text-sm font-semibold transition-colors">
               {title}
             </h3>
           </div>
