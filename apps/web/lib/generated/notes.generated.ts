@@ -2,6 +2,7 @@
 
 import type { GeneratedNoteRecord } from "../schema/note"
 
-import { dont_reinvent_the_wheel_stand_on_the_shoulders_of_giantsGeneratedNote } from "./notes/dont-reinvent-the-wheel-stand-on-the-shoulders-of-giants"
+import { demos_are_easy_production_is_warGeneratedNote } from "./notes/demos-are-easy-production-is-war"
+import { stop_training_for_scratchGeneratedNote } from "./notes/stop-training-for-scratch"
 
-export const generatedNotes: GeneratedNoteRecord[] = [dont_reinvent_the_wheel_stand_on_the_shoulders_of_giantsGeneratedNote]
+export const generatedNotes: GeneratedNoteRecord[] = [demos_are_easy_production_is_warGeneratedNote, stop_training_for_scratchGeneratedNote]
