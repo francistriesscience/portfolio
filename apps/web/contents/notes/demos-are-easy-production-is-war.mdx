@@ -24,7 +24,7 @@ The code binding it all together—whether you're writing it in Go, TypeScript, 
 
 _"If you're not the model, you're the harness." — Vivek Trivedy_
 
-### The Three Levels of Agent Engineering
+## The Three Levels of Agent Engineering
 
 To graduate from toy scripts to autonomous systems, you have to master three concentric layers:
 
@@ -32,7 +32,7 @@ To graduate from toy scripts to autonomous systems, you have to master three con
 2.  **Context Engineering:** Curating _what_ the model sees and _when_ it sees it to maximize signal-to-noise.
 3.  **Harness Engineering:** Building the heavy-duty infrastructure—state persistence, orchestration, error recovery, and safety.
 
-### The 11 Pillars of a Production Harness
+## The 11 Pillars of a Production Harness
 
 A production-grade harness isn't just a `while` loop. It’s a complex state machine built on 11 core components:
 
@@ -56,13 +56,13 @@ A production-grade harness isn't just a `while` loop. It’s a complex state mac
 - **Verification Loops:** The "Ralph Loop." Use linters or LLM-as-judge checks before outputting to the user. This alone can 2x output quality.
 - **Subagent Orchestration:** Specialist delegation. When tasks get too broad, spin up isolated sub-agents with narrow scopes to handle specific domains.
 
-### The Scaffolding Metaphor
+## The Scaffolding Metaphor
 
 Think of your harness as **scaffolding**. It’s temporary infrastructure that allows a model to reach heights it can’t yet achieve natively.
 
 As underlying foundation models get smarter, your harness should naturally thin out. If you plug a next-generation model into your architecture and performance scales up _without_ needing new code complexity, your harness is architecturally sound.
 
-### The Architect’s Cheat Sheet
+## The Architect’s Cheat Sheet
 
 Before you deploy your next agentic system, run through this checklist:
 
