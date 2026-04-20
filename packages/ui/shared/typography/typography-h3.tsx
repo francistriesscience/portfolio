@@ -13,10 +13,7 @@ export function TypographyH3({
   ...props
 }: useRender.ComponentProps<"h3">): React.ReactElement {
   const defaultProps = {
-    className: cn(
-      "scroll-m-20 mt-8 mb-2 text-lg font-semibold tracking-tight text-foreground",
-      className,
-    ),
+    className: cn("text-lg font-semibold tracking-tight text-foreground", className),
     "data-slot": "typography-h3",
   }
 
