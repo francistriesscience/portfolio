@@ -1,0 +1,15 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/generator ./cmd/generator"
+bin = "./tmp/generator"
+args_bin = ["watch"]
+include_ext = ["go"]
+include_dir = ["cmd", "internal", "contents", "public", "templates"]
+exclude_dir = ["tmp", "node_modules"]
+delay = 500
+stop_on_error = true
+
+[log]
+time = true
