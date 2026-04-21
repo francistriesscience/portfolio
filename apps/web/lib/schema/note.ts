@@ -47,5 +47,4 @@ export interface GeneratedNoteRecord {
   slug: string
   frontmatter: NoteFrontmatter
   source: string
-  html: string
 }

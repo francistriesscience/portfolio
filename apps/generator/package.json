@@ -1,0 +1,15 @@
+{
+  "name": "@portfolio/generator",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "make build",
+    "dev": "make dev",
+    "notes": "make notes",
+    "ogs": "make ogs",
+    "sync": "make build"
+  },
+  "devDependencies": {
+    "playwright": "^1.59.1"
+  }
+}
