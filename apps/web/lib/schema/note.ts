@@ -38,6 +38,7 @@ export const noteFrontmatterSchema = z.object({
   tags: noteTagsSchema.default([]),
   draft: z.boolean().optional().default(false),
   image: z.string().optional(),
+  og: z.string().optional(),
 })
 
 export type NoteFrontmatter = z.infer<typeof noteFrontmatterSchema>
