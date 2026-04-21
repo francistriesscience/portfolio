@@ -2,7 +2,7 @@
   "name": "portfolio",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "bun run --cwd apps/generator build && turbo run build --filter=@portfolio/web",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
