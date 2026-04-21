@@ -124,7 +124,7 @@ export default async function NotePage({ params }: NotePageProps) {
       </header>
       <Separator />
       <TypographyProse>
-        <MDXContent html={note.html} />
+        <MDXContent source={note.source} />
       </TypographyProse>
     </article>
   )
