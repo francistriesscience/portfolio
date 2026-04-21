@@ -35,9 +35,46 @@ export async function generateMetadata({ params }: NotePageProps): Promise<Metad
     return { title: "Note not found" }
   }
 
+  const siteUrl = "https://francistries.science"
+  const noteUrl = `${siteUrl}/notes/${slug}`
+  const ogImageUrl = note.frontmatter.og
+    ? note.frontmatter.og.startsWith("http")
+      ? note.frontmatter.og
+      : new URL(note.frontmatter.og, siteUrl).toString()
+    : null
+
   return {
     title: `${note.frontmatter.title}`,
     description: note.frontmatter.description,
+    alternates: {
+      canonical: noteUrl,
+    },
+    openGraph: {
+      type: "article",
+      url: noteUrl,
+      title: note.frontmatter.title,
+      description: note.frontmatter.description,
+      siteName: "Francis Ignacio",
+      images: ogImageUrl
+        ? [
+            {
+              url: ogImageUrl,
+              width: 1200,
+              height: 630,
+              alt: note.frontmatter.title,
+            },
+          ]
+        : undefined,
+      publishedTime: note.frontmatter.date,
+      modifiedTime: note.frontmatter.updated ?? note.frontmatter.date,
+      tags: note.frontmatter.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: note.frontmatter.title,
+      description: note.frontmatter.description,
+      images: ogImageUrl ? [ogImageUrl] : undefined,
+    },
   }
 }
 

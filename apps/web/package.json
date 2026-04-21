@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "generate:notes": "bun run ./scripts/generate-notes.ts",
-    "dev": "bun run generate:notes && next dev --port 3000",
-    "build": "bun run generate:notes && next build",
+    "generate:ogs": "bun run ./scripts/generate-ogs.ts",
+    "dev": "bun run generate:notes && bun run generate:ogs && next dev --port 3000",
+    "build": "bun run generate:notes && bun run generate:ogs && next build",
     "start": "next start",
     "lint": "next lint",
     "build:cloudflare": "opennextjs-cloudflare build",
@@ -37,6 +38,7 @@
     "@types/react-dom": "^19.1.5",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
+    "playwright": "^1.59.1",
     "tailwindcss": "^4",
     "typescript": "^5.7.4",
     "wrangler": "^4.74.0"
