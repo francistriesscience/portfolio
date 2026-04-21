@@ -10,6 +10,9 @@ import { noteFrontmatterSchema, type NoteFrontmatter } from "@/lib/schema/note"
 const notesDirectory = new URL("../contents/notes/", import.meta.url)
 const templateFile = new URL("../templates/og.html", import.meta.url)
 const publicDirectory = new URL("../public/", import.meta.url)
+const fontDirectory = new URL("../public/fonts/dm-sans/", import.meta.url)
+const fontLatinExtFile = new URL("dm-sans-latin-ext.woff2", fontDirectory)
+const fontLatinFile = new URL("dm-sans-latin.woff2", fontDirectory)
 const ogRootDirectory = new URL("../public/og/", import.meta.url)
 const noteOgDirectory = new URL("../public/og/notes/", import.meta.url)
 const legacySiteOgPngFile = new URL("../public/og.png", import.meta.url)
@@ -87,77 +90,84 @@ function buildTagsMarkup(tags: string[]) {
     .join("")
 }
 
-async function findFirstMatchingFile(rootDirectory: URL, pattern: RegExp): Promise<URL | null> {
-  try {
-    const entries = await fs.readdir(rootDirectory, { withFileTypes: true })
-
-    for (const entry of entries) {
-      const entryUrl = new URL(entry.name, rootDirectory)
-
-      if (entry.isDirectory()) {
-        const nestedMatch = await findFirstMatchingFile(entryUrl, pattern)
-        if (nestedMatch) {
-          return nestedMatch
-        }
-        continue
-      }
-
-      if (entry.isFile() && pattern.test(entry.name)) {
-        return entryUrl
-      }
-    }
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return null
-    }
-    throw error
-  }
-
-  return null
-}
-
 async function getFontFaceCss() {
-  const candidateDirectories = [
-    new URL("../.next/dev/static/chunks/", import.meta.url),
-    new URL("../.next/static/chunks/", import.meta.url),
-  ]
+  const [latinExtBuffer, latinBuffer] = await Promise.all([
+    fs.readFile(fontLatinExtFile),
+    fs.readFile(fontLatinFile),
+  ])
 
-  let fontCssFile: URL | null = null
+  const latinExtDataUrl = `data:font/woff2;base64,${latinExtBuffer.toString("base64")}`
+  const latinDataUrl = `data:font/woff2;base64,${latinBuffer.toString("base64")}`
 
-  for (const directory of candidateDirectories) {
-    fontCssFile =
-      (await findFirstMatchingFile(directory, /dm_sans.*\.css$/)) ??
-      (await findFirstMatchingFile(directory, /font_google_dm_sans.*\.css$/))
-
-    if (fontCssFile) {
-      break
-    }
-  }
-
-  if (!fontCssFile) {
-    throw new Error("Unable to locate the DM Sans font CSS emitted by Next.js")
-  }
-
-  const css = await fs.readFile(fontCssFile, "utf8")
-  const fontCssDirectory = new URL(".", fontCssFile)
-  const assetUrls = [...css.matchAll(/url\((["']?)([^)"']+)\1\)/g)]
-
-  let inlinedCss = css
-
-  for (const assetUrl of assetUrls) {
-    const rawAssetPath = assetUrl[2] ?? ""
-    if (!rawAssetPath.startsWith("../media/")) {
-      continue
-    }
-
-    const assetFile = new URL(rawAssetPath, fontCssDirectory)
-    const assetBuffer = await fs.readFile(assetFile)
-    const mimeType = rawAssetPath.endsWith(".woff2") ? "font/woff2" : "font/woff"
-    const dataUrl = `data:${mimeType};base64,${assetBuffer.toString("base64")}`
-    inlinedCss = inlinedCss.replace(assetUrl[0], `url("${dataUrl}")`)
-  }
-
-  return inlinedCss.replace(/\/\*# sourceMappingURL=.*?\*\//s, "")
+  return [
+    "@font-face {",
+    "  font-family: DM Sans;",
+    "  font-style: normal;",
+    "  font-weight: 400;",
+    "  font-display: swap;",
+    `  src: url("${latinExtDataUrl}") format("woff2");`,
+    "  unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;",
+    "}",
+    "",
+    "@font-face {",
+    "  font-family: DM Sans;",
+    "  font-style: normal;",
+    "  font-weight: 400;",
+    "  font-display: swap;",
+    `  src: url("${latinDataUrl}") format("woff2");`,
+    "  unicode-range: U+??, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;",
+    "}",
+    "",
+    "@font-face {",
+    "  font-family: DM Sans;",
+    "  font-style: normal;",
+    "  font-weight: 500;",
+    "  font-display: swap;",
+    `  src: url("${latinExtDataUrl}") format("woff2");`,
+    "  unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;",
+    "}",
+    "",
+    "@font-face {",
+    "  font-family: DM Sans;",
+    "  font-style: normal;",
+    "  font-weight: 500;",
+    "  font-display: swap;",
+    `  src: url("${latinDataUrl}") format("woff2");`,
+    "  unicode-range: U+??, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;",
+    "}",
+    "",
+    "@font-face {",
+    "  font-family: DM Sans;",
+    "  font-style: normal;",
+    "  font-weight: 700;",
+    "  font-display: swap;",
+    `  src: url("${latinExtDataUrl}") format("woff2");`,
+    "  unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;",
+    "}",
+    "",
+    "@font-face {",
+    "  font-family: DM Sans;",
+    "  font-style: normal;",
+    "  font-weight: 700;",
+    "  font-display: swap;",
+    `  src: url("${latinDataUrl}") format("woff2");`,
+    "  unicode-range: U+??, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;",
+    "}",
+    "",
+    "@font-face {",
+    "  font-family: DM Sans Fallback;",
+    "  src: local(Arial);",
+    "  ascent-override: 94.9%;",
+    "  descent-override: 29.66%;",
+    "  line-gap-override: 0.0%;",
+    "  size-adjust: 104.53%;",
+    "}",
+    "",
+    ".dm_sans_fallback {",
+    "  font-family: DM Sans, DM Sans Fallback;",
+    "  font-style: normal;",
+    "}",
+  ].join("\n")
 }
 
 function applyTemplate(template: string, context: RenderContext) {
