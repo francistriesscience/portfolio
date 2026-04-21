@@ -2,8 +2,7 @@ import { dmSans, libreBaskerville } from "@packages/ui/lib/fonts"
 import "@packages/ui/styles/globals.css"
 import "katex/dist/katex.min.css"
 
-import { metadata } from "@/lib/metadata"
-export { metadata }
+export { metadata } from "@/lib/metadata"
 
 import { ThemeProvider } from "@packages/ui/providers/theme-provider"
 import { TooltipProvider } from "@packages/ui/providers/tooltip-provider"
