@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "bun run --cwd apps/generator build && turbo run build --filter=@portfolio/web",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=@portfolio/web",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
