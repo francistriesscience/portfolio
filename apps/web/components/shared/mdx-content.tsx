@@ -1,11 +1,10 @@
 import "server-only"
 
-import { compile, run } from "@mdx-js/mdx"
+import * as React from "react"
+import ReactMarkdown, { type Components } from "react-markdown"
 import rehypeKatex from "rehype-katex"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
-import * as React from "react"
-import * as jsxRuntime from "react/jsx-runtime"
 
 import {
   TypographyBlockquote,
@@ -24,7 +23,7 @@ import {
   TypographyTable,
 } from "@packages/ui/shared"
 
-type MdxComponentMap = Record<string, React.ElementType>
+type MdxComponentMap = Components
 
 const noteMdxComponents: MdxComponentMap = {
   a: TypographyLink,
@@ -56,21 +55,14 @@ type MDXContentProps = {
   source: string
 }
 
-export async function MDXContent({ source }: MDXContentProps) {
-  const compiled = await compile(source, {
-    outputFormat: "function-body",
-    remarkPlugins: [remarkGfm, remarkMath],
-    rehypePlugins: [rehypeKatex],
-  })
-
-  const evaluated = await run(compiled, {
-    ...jsxRuntime,
-    baseUrl: import.meta.url,
-  })
-
-  const Content = evaluated.default as React.ComponentType<{
-    components?: MdxComponentMap
-  }>
-
-  return <Content components={{ ...defaultComponents, ...noteMdxComponents }} />
+export function MDXContent({ source }: MDXContentProps) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
+      components={{ ...defaultComponents, ...noteMdxComponents }}
+    >
+      {source}
+    </ReactMarkdown>
+  )
 }
