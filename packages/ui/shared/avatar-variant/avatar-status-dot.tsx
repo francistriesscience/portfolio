@@ -53,7 +53,7 @@ export function AvatarStatusDot({
           />
           <span
             className={cn(
-              "border-background relative inline-flex rounded-full border",
+              "border-border relative inline-flex rounded-full border",
               dotSizeClasses[size],
               statusColor,
             )}
