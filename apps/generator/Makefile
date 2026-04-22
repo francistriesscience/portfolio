@@ -4,7 +4,7 @@ GO ?= go
 BUN ?= bun
 AIR ?= air
 
-.PHONY: build dev notes ogs clean
+.PHONY: build watch notes ogs clean
 
 build:
 	$(GO) run ./cmd/generator sync
@@ -15,7 +15,7 @@ notes:
 ogs:
 	$(GO) run ./cmd/generator ogs
 
-dev:
+watch:
 	$(AIR) -c .air.toml
 
 clean:
