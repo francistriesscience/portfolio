@@ -35,7 +35,7 @@ type noteRecord struct {
 	Slug        string
 	Frontmatter notes.Frontmatter
 	Source      string
-	OgPath      string
+	PreviewPath string
 }
 
 type renderContext struct {
@@ -59,9 +59,8 @@ func (g *Generator) Generate() error {
 	notesDir := filepath.Join(g.workingDir, "contents", "notes")
 	templateFile := filepath.Join(g.workingDir, "templates", "og.html")
 	fontDir := filepath.Join(g.workingDir, "public", "fonts", "dm-sans")
+	previewRootDir := filepath.Join(g.workingDir, "public", "og", "notes")
 	webPublicDir := filepath.Join(g.workingDir, "..", "web", "public")
-	ogRootDir := filepath.Join(webPublicDir, "og")
-	noteOgDir := filepath.Join(ogRootDir, "notes")
 	siteOgFile := filepath.Join(webPublicDir, "og.webp")
 	legacySiteOgPngFile := filepath.Join(webPublicDir, "og.png")
 
@@ -80,7 +79,7 @@ func (g *Generator) Generate() error {
 		return fmt.Errorf("Load notes: %w", err)
 	}
 
-	if err := os.RemoveAll(ogRootDir); err != nil {
+	if err := os.RemoveAll(previewRootDir); err != nil {
 		return fmt.Errorf("Clean og output: %w", err)
 	}
 
@@ -92,7 +91,7 @@ func (g *Generator) Generate() error {
 		return fmt.Errorf("Remove legacy site og: %w", err)
 	}
 
-	if err := os.MkdirAll(noteOgDir, 0o755); err != nil {
+	if err := os.MkdirAll(previewRootDir, 0o755); err != nil {
 		return fmt.Errorf("Create og output dir: %w", err)
 	}
 
@@ -127,12 +126,11 @@ func (g *Generator) Generate() error {
 		ReadingTime:  "Minimal portfolio",
 		TagsMarkup:   htmltemplate.HTML(buildTagsMarkup([]string{"Software Engineer", "AI Engineer"})),
 		FontFaceCss:  htmltemplate.CSS(fontFaceCss),
-	}, siteOgFile); err != nil {
+	}, siteOgFile, page.CaptureScreenshotFormatWebp); err != nil {
 		return fmt.Errorf("Render site og: %w", err)
 	}
 
 	for _, record := range records {
-		outputPath := resolveOutputPath(webPublicDir, record.OgPath)
 		if err := g.renderToFile(browserCtx, template, renderContext{
 			SiteName:     siteName,
 			VariantClass: "variant-note",
@@ -142,11 +140,11 @@ func (g *Generator) Generate() error {
 			ReadingTime:  estimateReadingTimeMinutes(record.Source),
 			TagsMarkup:   htmltemplate.HTML(buildTagsMarkup(tagsForNote(record.Frontmatter.Tags))),
 			FontFaceCss:  htmltemplate.CSS(fontFaceCss),
-		}, outputPath); err != nil {
+		}, record.PreviewPath, page.CaptureScreenshotFormatPng); err != nil {
 			return fmt.Errorf("Render note og %s: %w", record.Slug, err)
 		}
 
-		fmt.Printf("%s: %s\n", record.Slug, record.OgPath)
+		fmt.Printf("%s: %s\n", record.Slug, record.PreviewPath)
 	}
 
 	fmt.Println("site: /og.webp")
@@ -182,7 +180,7 @@ func (g *Generator) runCommand(ctx context.Context, name string, args ...string)
 	return nil
 }
 
-func (g *Generator) renderToFile(parentCtx context.Context, template *htmltemplate.Template, data renderContext, outputPath string) error {
+func (g *Generator) renderToFile(parentCtx context.Context, template *htmltemplate.Template, data renderContext, outputPath string, format page.CaptureScreenshotFormat) error {
 	renderedHTML, err := renderTemplate(template, data)
 	if err != nil {
 		return err
@@ -199,10 +197,12 @@ func (g *Generator) renderToFile(parentCtx context.Context, template *htmltempla
 		chromedp.WaitReady("body", chromedp.ByQuery),
 		chromedp.Sleep(150 * time.Millisecond),
 		chromedp.ActionFunc(func(ctx context.Context) error {
-			data, err := page.CaptureScreenshot().
-				WithFormat(page.CaptureScreenshotFormatWebp).
-				WithQuality(90).
-				Do(ctx)
+			capture := page.CaptureScreenshot().WithFormat(format)
+			if format != page.CaptureScreenshotFormatPng {
+				capture = capture.WithQuality(90)
+			}
+
+			data, err := capture.Do(ctx)
 			if err != nil {
 				return err
 			}
@@ -244,16 +244,11 @@ func loadNotes(notesDir string) ([]noteRecord, error) {
 
 	records := make([]noteRecord, 0, len(files))
 	for _, file := range files {
-		ogPath := file.Frontmatter.Og
-		if ogPath == "" {
-			ogPath = "/og/notes/" + file.Slug + ".webp"
-		}
-
 		records = append(records, noteRecord{
 			Slug:        file.Slug,
 			Frontmatter: file.Frontmatter,
 			Source:      file.Source,
-			OgPath:      ogPath,
+			PreviewPath: filepath.Join("public", "og", "notes", file.Slug+".png"),
 		})
 	}
 
@@ -418,17 +413,6 @@ func stripMarkdownArtifacts(source string) string {
 	}
 
 	return result
-}
-
-func resolveOutputPath(webPublicDir string, assetPath string) string {
-	normalizedPath := assetPath
-	if strings.HasPrefix(assetPath, "http") {
-		if parsed, err := url.Parse(assetPath); err == nil {
-			normalizedPath = parsed.Path
-		}
-	}
-
-	return filepath.Join(webPublicDir, strings.TrimLeft(normalizedPath, "/"))
 }
 
 func toBase64(data []byte) string {
