@@ -2,7 +2,7 @@
 
 This generator owns the content pipeline for the portfolio site.
 
-It reads note source from `apps/generator/contents/notes`, generates note modules into `apps/web/lib/generated`, and renders social preview images into `apps/web/public/og`.
+It reads note source from `apps/generator/contents/notes`, generates note modules into `apps/web/lib/generated`, and renders social preview assets into `apps/generator/public/og/notes`.
 
 ## Commands
 
@@ -33,7 +33,7 @@ Convenience wrappers exist in `apps/generator`:
 - OG template lives in `apps/generator/templates/og.html`
 - DM Sans font assets live in `apps/generator/public/fonts/dm-sans/`
 
-Each note can include an `og` frontmatter field. If it is present, the generator uses that path for the note card image. If it is missing, the generator falls back to `/og/notes/<slug>.webp`.
+Each note can include an `og` frontmatter field. If it is present, the generator uses that path for the note card image. If it is missing, the generator falls back to `/og/notes/<slug>.png`.
 
 ## Outputs
 
@@ -42,18 +42,20 @@ Each note can include an `og` frontmatter field. If it is present, the generator
   - `apps/web/lib/generated/notes/*.ts`
 - Social previews:
   - `apps/web/public/og.webp`
-  - `apps/web/public/og/notes/*.webp`
+  - `apps/generator/public/og/notes/*.png`
 
 ## Editing Workflow
 
 1. Edit or add a note in `apps/generator/contents/notes`.
 2. Update the note frontmatter, including `og` if you want a custom output path.
 3. Run `go run ./cmd/generator sync`.
-4. Review the generated files in `apps/web/lib/generated` and `apps/web/public/og`.
-5. Run `bun run --cwd apps/web build` to verify the site.
+4. Review the generated files in `apps/web/lib/generated` and `apps/generator/public/og/notes`.
+5. Upload the PNGs to your image host of choice and update the note `og` frontmatter values to those URLs.
+6. Run `bun run --cwd apps/web build` to verify the site.
 
 ## Notes
 
 - The site does not generate notes or OGs at runtime.
 - The generator may install Chromium the first time OGs are rendered if a compatible browser is not already present in the local Playwright cache.
 - `apps/web` should stay deploy-only and consume the generated outputs.
+- Note PNGs are staging artifacts and are not expected to be served by the web app directly once you switch `og` frontmatter to hosted URLs.
