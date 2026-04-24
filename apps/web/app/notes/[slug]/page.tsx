@@ -3,7 +3,13 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { IconArrowLeft } from "@tabler/icons-react"
 
-import { formatNoteDate, formatReadingTime, getNoteBySlug, getPublishedNoteSlugs } from "@/lib/mdx"
+import {
+  formatNoteDate,
+  formatReadingTime,
+  getNoteBySlug,
+  getPublishedNoteSlugs,
+  isNewNote,
+} from "@/lib/mdx"
 
 import {
   Badge,
@@ -87,6 +93,7 @@ export default async function NotePage({ params }: NotePageProps) {
   }
 
   const { date, description, tags = [], title, updated } = note.frontmatter
+  const shouldShowNewBadge = isNewNote(date)
 
   return (
     <article className="flex flex-col gap-8">
@@ -112,8 +119,13 @@ export default async function NotePage({ params }: NotePageProps) {
         </TypographyEyebrow>
         <TypographyH1>{title}</TypographyH1>
         <TypographyLead className="max-w-prose">{description}</TypographyLead>
-        {tags.length > 0 ? (
+        {shouldShowNewBadge || tags.length > 0 ? (
           <div className="flex flex-wrap gap-2">
+            {shouldShowNewBadge ? (
+              <Badge size="sm" variant="info" className="font-mono uppercase">
+                New
+              </Badge>
+            ) : null}
             {tags.map((tag) => (
               <Badge key={tag} variant="outline" size="sm" className="font-mono">
                 {tag}

@@ -2,7 +2,8 @@
 
 import type { GeneratedNoteRecord } from "../schema/note"
 
+import { beyondTheWrapperGeneratedNote } from "./notes/beyond-the-wrapper"
 import { demosAreEasyProductionIsWarGeneratedNote } from "./notes/demos-are-easy-production-is-war"
 import { stopTrainingForScratchGeneratedNote } from "./notes/stop-training-for-scratch"
 
-export const generatedNotes: GeneratedNoteRecord[] = [demosAreEasyProductionIsWarGeneratedNote, stopTrainingForScratchGeneratedNote]
+export const generatedNotes: GeneratedNoteRecord[] = [beyondTheWrapperGeneratedNote, demosAreEasyProductionIsWarGeneratedNote, stopTrainingForScratchGeneratedNote]
