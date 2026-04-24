@@ -79,6 +79,24 @@ export function formatNoteDate(date: string) {
   }).format(new Date(date))
 }
 
+export function isNewNote(date: string, now = new Date()) {
+  const publishedAt = new Date(`${date}T00:00:00.000Z`)
+
+  if (Number.isNaN(publishedAt.getTime())) {
+    return false
+  }
+
+  const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+  const publishedUtc = Date.UTC(
+    publishedAt.getUTCFullYear(),
+    publishedAt.getUTCMonth(),
+    publishedAt.getUTCDate(),
+  )
+  const ageInDays = Math.floor((todayUtc - publishedUtc) / 86_400_000)
+
+  return ageInDays >= 0 && ageInDays <= 3
+}
+
 export function formatReadingTime(minutes: number) {
   return `${minutes} min read`
 }

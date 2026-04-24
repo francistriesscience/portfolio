@@ -5,7 +5,7 @@ import { IconArrowUpRight } from "@tabler/icons-react"
 
 import { PreviewCard, PreviewCardPopup, PreviewCardTrigger, Badge } from "@packages/ui/shared"
 
-import { formatNoteDate, formatReadingTime, type NoteEntry } from "@/lib/mdx"
+import { formatNoteDate, formatReadingTime, isNewNote, type NoteEntry } from "@/lib/mdx"
 
 interface NoteItemProps {
   note: NoteEntry
@@ -14,6 +14,7 @@ interface NoteItemProps {
 
 export function NoteList({ note, index }: NoteItemProps) {
   const { date, description, title, image } = note.frontmatter
+  const shouldShowNewBadge = isNewNote(date)
 
   return (
     <PreviewCard>
@@ -23,9 +24,16 @@ export function NoteList({ note, index }: NoteItemProps) {
             <span className="text-muted-foreground font-mono text-xs tabular-nums">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <h3 className="text-foreground line-clamp-1 max-w-[28ch] min-w-0 text-sm font-semibold transition-colors">
-              {title}
-            </h3>
+            <div className="flex min-w-0 items-center gap-2">
+              <h3 className="text-foreground line-clamp-1 max-w-[28ch] min-w-0 text-sm font-semibold transition-colors">
+                {title}
+              </h3>
+              {shouldShowNewBadge ? (
+                <Badge size="sm" variant="info" className="font-mono uppercase">
+                  New
+                </Badge>
+              ) : null}
+            </div>
           </div>
           <div className="text-muted-foreground relative flex shrink-0 flex-row items-center">
             <time
@@ -61,6 +69,11 @@ export function NoteList({ note, index }: NoteItemProps) {
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex flex-wrap gap-2">
+                {shouldShowNewBadge ? (
+                  <Badge size="sm" variant="info" className="font-mono uppercase">
+                    New
+                  </Badge>
+                ) : null}
                 {note.frontmatter.tags.map((tag) => (
                   <Badge key={tag} variant="outline" size="sm" className="font-mono tabular-nums">
                     {tag}
