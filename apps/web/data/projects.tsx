@@ -27,8 +27,8 @@ export const PROJECTS: Project[] = [
   {
     name: "Chromiq",
     url: "https://chromiq.mnemora.org",
-    image: "https://i.imgur.com/mozUPte.gif",
-    stack: ["Next.js", "Flask"],
+    image: "https://i.imgur.com/j3mfovT.gif",
+    stack: ["Next.js", "FastAPI", "TailwindCSS", "TypeScript", "Python"],
     colab: false,
   },
   {
