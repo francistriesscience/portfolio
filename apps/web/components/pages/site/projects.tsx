@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { IconWorld, IconPackage } from "@tabler/icons-react"
 
-import { PROJECTS } from "@portfolio/web/data/projects"
+import { PROJECTS, PROJECT_STATUS_LABELS } from "@portfolio/web/data/projects"
 
 import {
   Badge,
@@ -63,6 +63,14 @@ export function Projects() {
                     unoptimized
                     className="object-cover"
                   />
+                  {project.status ? (
+                    <Badge
+                      size="sm"
+                      className="absolute top-2 left-2 font-mono uppercase opacity-95"
+                    >
+                      {PROJECT_STATUS_LABELS[project.status]}
+                    </Badge>
+                  ) : null}
                   <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
                     {project.stack.slice(0, 2).map((s) => (
                       <Badge key={s} size="sm" className="opacity-90">
