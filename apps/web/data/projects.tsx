@@ -1,3 +1,9 @@
+export const PROJECT_STATUS_LABELS = {
+  ongoing: "Building",
+} as const
+
+export type ProjectStatus = keyof typeof PROJECT_STATUS_LABELS
+
 export interface Project {
   name: string
   url: string
@@ -5,9 +11,18 @@ export interface Project {
   image: string
   stack: string[]
   colab: boolean
+  status?: ProjectStatus
 }
 
 export const PROJECTS: Project[] = [
+  {
+    name: "Applywise",
+    url: "https://applywise.mnemora.org",
+    image: "https://i.imgur.com/yOtHt6G.gif",
+    stack: ["Go", "Next.js", "FastAPI", "TailwindCSS", "TypeScript", "Python"],
+    colab: false,
+    status: "ongoing",
+  },
   {
     name: "ADU Portal",
     url: "https://aduportal.com/",
