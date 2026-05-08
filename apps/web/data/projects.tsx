@@ -17,7 +17,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     name: "Applywise",
-    url: "https://applywise.mnemora.org",
+    url: "https://applywise.today",
     image: "https://i.imgur.com/yOtHt6G.gif",
     stack: ["Go", "Next.js", "FastAPI", "TailwindCSS", "TypeScript", "Python"],
     colab: false,
