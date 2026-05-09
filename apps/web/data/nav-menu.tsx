@@ -15,7 +15,6 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Projects",
-    href: "#",
-    badge: "Uploading",
+    href: "/projects",
   },
 ]
