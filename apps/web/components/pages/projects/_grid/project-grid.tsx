@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
-import { IconWorld } from "@tabler/icons-react"
+import { IconHammer, IconWorld } from "@tabler/icons-react"
 
 import { PROJECT_STATUS_LABELS, type Project } from "@portfolio/web/data/projects"
+import { RenderingImage } from "@portfolio/web/components/shared/rendering-image"
 
 import { Badge, Card, CardFrame, CardFrameFooter, IconGoogleColab } from "@packages/ui/shared"
 
@@ -18,16 +18,15 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
       {projects.map((project) => (
         <CardFrame key={project.name}>
           <Card className="overflow-hidden">
-            <div className="bg-muted relative aspect-video w-full">
-              <Image
-                src={project.image}
-                alt={project.name}
-                fill
-                unoptimized
-                className="object-cover"
-              />
+            <RenderingImage
+              wrapperClassName="aspect-video w-full"
+              imageClassName="object-cover"
+              src={project.image}
+              alt={project.name}
+            >
               {project.status ? (
                 <Badge size="sm" className="absolute top-2 left-2 font-mono uppercase opacity-95">
+                  <IconHammer className="size-3.5" />
                   {PROJECT_STATUS_LABELS[project.status]}
                 </Badge>
               ) : null}
@@ -43,7 +42,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
                   </Badge>
                 )}
               </div>
-            </div>
+            </RenderingImage>
           </Card>
           <CardFrameFooter>
             <Link

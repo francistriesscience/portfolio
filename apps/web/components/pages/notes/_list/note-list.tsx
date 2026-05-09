@@ -1,7 +1,7 @@
-import * as React from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { IconArrowUpRight } from "@tabler/icons-react"
+
+import { RenderingImage } from "@portfolio/web/components/shared/rendering-image"
 
 import { PreviewCard, PreviewCardPopup, PreviewCardTrigger, Badge } from "@packages/ui/shared"
 
@@ -55,9 +55,12 @@ export function NoteList({ note, index }: NoteItemProps) {
       <PreviewCardPopup className="border-border bg-background w-80 overflow-hidden p-0 shadow-2xl">
         <div className="flex flex-col">
           {image && (
-            <div className="relative aspect-video w-full overflow-hidden">
-              <Image src={image} alt={title} fill unoptimized className="object-cover" />
-            </div>
+            <RenderingImage
+              wrapperClassName="aspect-video w-full overflow-hidden"
+              imageClassName="object-cover"
+              src={image}
+              alt={title}
+            />
           )}
           <div className="flex flex-col items-start gap-2 p-4">
             <div className="flex w-full flex-col gap-2">
