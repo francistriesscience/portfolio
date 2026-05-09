@@ -11,7 +11,7 @@ import {
   Card,
   CardFrame,
   CardFrameFooter,
-  IconGoogleColab,
+  IconGoogleColabMono,
   Separator,
 } from "@packages/ui/shared"
 
@@ -81,7 +81,7 @@ export function Building() {
                   {project.name}
                 </span>
                 {project.colab ? (
-                  <IconGoogleColab className="size-4 shrink-0" />
+                  <IconGoogleColabMono className="size-4 shrink-0" />
                 ) : (
                   <IconWorld className="size-4 shrink-0" />
                 )}

@@ -6,7 +6,7 @@ import { IconHammer, IconWorld } from "@tabler/icons-react"
 import { PROJECT_STATUS_LABELS, type Project } from "@portfolio/web/data/projects"
 import { RenderingImage } from "@portfolio/web/components/shared/rendering-image"
 
-import { Badge, Card, CardFrame, CardFrameFooter, IconGoogleColab } from "@packages/ui/shared"
+import { Badge, Card, CardFrame, CardFrameFooter, IconGoogleColabMono } from "@packages/ui/shared"
 
 interface ProjectGridProps {
   projects: Project[]
@@ -55,7 +55,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
                 {project.name}
               </span>
               {project.colab ? (
-                <IconGoogleColab className="size-4 shrink-0" />
+                <IconGoogleColabMono className="size-4 shrink-0" />
               ) : (
                 <IconWorld className="size-4 shrink-0" />
               )}
