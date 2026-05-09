@@ -7,15 +7,15 @@ import { useRender } from "@base-ui/react/use-render"
 
 import { cn } from "@packages/ui/lib/utils"
 
-export function IconGoogleColab({
+export function IconGoogleColabMono({
   className,
   render,
   ...props
 }: useRender.ComponentProps<"svg">): React.ReactElement {
   const defaultProps = {
-    className: cn("h-4 w-auto", className),
+    className: cn("size-4", className),
     "data-slot": "icon-google-colab",
-    fill: "#F9AB00",
+    fill: "currentColor",
     role: "img",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg",
