@@ -16,10 +16,18 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    name: "Safegate",
+    url: "https://safegate.mnemora.org",
+    image: "https://i.imgur.com/K05LjiN.gif",
+    stack: ["Go", "Python", "TypeScript", "TailwindCSS", "FastAPI", "Next.js"],
+    colab: false,
+    status: "ongoing",
+  },
+  {
     name: "Applywise",
     url: "https://applywise.today",
     image: "https://i.imgur.com/yOtHt6G.gif",
-    stack: ["Go", "Next.js", "FastAPI", "TailwindCSS", "TypeScript", "Python"],
+    stack: ["Go", "Python", "TypeScript", "TailwindCSS", "FastAPI", "Next.js"],
     colab: false,
     status: "ongoing",
   },
