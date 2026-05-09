@@ -17,6 +17,7 @@
     "@opennextjs/cloudflare": "^1.17.1",
     "@packages/metadata": "*",
     "@packages/ui": "*",
+    "@thesvg/react": "^2.1.9",
     "katex": "^0.16.22",
     "next": "16.1.6",
     "next-mdx-remote": "^6.0.0",

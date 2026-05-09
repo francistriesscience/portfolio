@@ -8,12 +8,13 @@ import { SubtleInfoPreviewCard } from "@/components/pages/site/_preview-card/sub
 export function ProfileIntro() {
   return (
     <section className="flex items-center gap-4">
-      <AvatarStatusDot src="/img/profile.webp" alt="Francis" fallback="FR" size="lg" />
+      <AvatarStatusDot src="/img/profile.webp" alt="Francis" fallback="FR" size="md" />
       <p className="text-muted-foreground text-md leading-tight">
         <span className="text-muted-foreground">
           Hello, I&apos;m <SubtleInfoPreviewCard />
         </span>
-        , and I enjoy building thoughtful digital experiences while constantly learning along the way.
+        , and I enjoy building thoughtful digital experiences while constantly learning along the
+        way.
       </p>
     </section>
   )
