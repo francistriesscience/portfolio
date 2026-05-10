@@ -17,7 +17,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     name: "Safegate",
-    url: "https://safegate.mnemora.org",
+    url: "https://usesafegate.com",
     image: "https://i.imgur.com/K05LjiN.gif",
     stack: ["Go", "Python", "TypeScript", "TailwindCSS", "FastAPI", "Next.js"],
     colab: false,
