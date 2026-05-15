@@ -11,7 +11,7 @@ export function AlertDialogTitle({
 }: AlertDialogPrimitive.Title.Props): React.ReactElement {
   return (
     <AlertDialogPrimitive.Title
-      className={cn("text-xl leading-none font-semibold", className)}
+      className={cn("text-xl leading-none font-medium", className)}
       data-slot="alert-dialog-title"
       {...props}
     />

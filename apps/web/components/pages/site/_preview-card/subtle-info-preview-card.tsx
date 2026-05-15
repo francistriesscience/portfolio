@@ -16,7 +16,7 @@ export function SubtleInfoPreviewCard() {
           <div className="p-4">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <span className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                <span className="text-muted-foreground text-[10px] font-medium tracking-wider uppercase">
                   Currently
                 </span>
                 <p className="text-foreground text-sm leading-relaxed">
@@ -25,7 +25,7 @@ export function SubtleInfoPreviewCard() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <span className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                <span className="text-muted-foreground text-[10px] font-medium tracking-wider uppercase">
                   Most Used Languages
                 </span>
                 <div className="flex flex-wrap items-center gap-2">

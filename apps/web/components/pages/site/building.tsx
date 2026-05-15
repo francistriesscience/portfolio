@@ -26,7 +26,7 @@ export function Building() {
     <section className="flex flex-col gap-4">
       <div className="flex w-full items-center gap-4">
         <div className="flex shrink-0 items-center gap-2">
-          <h2 className="text-muted-foreground text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
+          <h2 className="text-muted-foreground text-xs font-medium tracking-widest whitespace-nowrap uppercase">
             What I&apos;m building ...
           </h2>
           <Badge variant="outline" size="sm" className="font-mono tabular-nums">
@@ -36,7 +36,7 @@ export function Building() {
         <Separator className="flex-1" />
         <Link
           href="/projects"
-          className="text-muted-foreground hover:text-foreground shrink-0 text-xs font-semibold tracking-widest whitespace-nowrap uppercase transition-colors"
+          className="text-muted-foreground hover:text-foreground shrink-0 text-xs font-medium tracking-widest whitespace-nowrap uppercase transition-colors"
         >
           See all
         </Link>
@@ -79,7 +79,7 @@ export function Building() {
                 rel="noopener noreferrer"
                 className="hover:text-foreground text-muted-foreground flex w-full items-center justify-between gap-3 text-sm transition-colors"
               >
-                <span className="min-w-0 truncate text-end text-xs font-bold tracking-wide uppercase">
+                <span className="min-w-0 truncate text-end text-xs font-medium tracking-wide uppercase">
                   {project.name}
                 </span>
                 {project.colab ? (

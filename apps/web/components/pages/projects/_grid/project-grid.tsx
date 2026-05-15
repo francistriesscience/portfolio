@@ -53,7 +53,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
               rel="noopener noreferrer"
               className="hover:text-foreground text-muted-foreground flex w-full items-center justify-between gap-3 text-sm transition-colors"
             >
-              <span className="min-w-0 truncate text-end text-xs font-bold tracking-wide uppercase">
+              <span className="min-w-0 truncate text-end text-xs font-medium tracking-wide uppercase">
                 {project.name}
               </span>
               {project.colab ? (
