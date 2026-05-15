@@ -1,10 +1,10 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { IconHammer, IconWorld } from "@tabler/icons-react"
 
 import { PROJECTS, PROJECT_STATUS_LABELS } from "@portfolio/web/data/projects"
-import { RenderingImage } from "@portfolio/web/components/shared/rendering-image"
 
 import {
   Badge,
@@ -46,12 +46,14 @@ export function Building() {
         {ongoingProjects.map((project) => (
           <CardFrame key={project.name}>
             <Card className="overflow-hidden">
-              <RenderingImage
-                wrapperClassName="aspect-video w-full"
-                imageClassName="object-cover"
-                src={project.image}
-                alt={project.name}
-              >
+              <div className="bg-muted relative aspect-video w-full">
+                <Image
+                  src={project.image}
+                  alt={project.name}
+                  fill
+                  unoptimized
+                  className="z-0 object-cover"
+                />
                 <Badge size="sm" className="absolute top-2 left-2 font-mono uppercase opacity-95">
                   <IconHammer className="size-3.5" />
                   {PROJECT_STATUS_LABELS[project.status!]}
@@ -68,7 +70,7 @@ export function Building() {
                     </Badge>
                   )}
                 </div>
-              </RenderingImage>
+              </div>
             </Card>
             <CardFrameFooter>
               <Link
