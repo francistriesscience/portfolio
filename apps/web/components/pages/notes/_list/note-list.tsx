@@ -24,7 +24,7 @@ export function NoteList({ note, index }: NoteItemProps) {
               {String(index + 1).padStart(2, "0")}
             </span>
             <div className="flex min-w-0 items-center gap-2">
-              <h3 className="text-foreground line-clamp-1 max-w-[28ch] min-w-0 text-sm font-semibold transition-colors">
+              <h3 className="text-foreground line-clamp-1 max-w-[28ch] min-w-0 text-sm font-medium transition-colors">
                 {title}
               </h3>
               {shouldShowNewBadge ? (
@@ -60,7 +60,7 @@ export function NoteList({ note, index }: NoteItemProps) {
           )}
           <div className="flex flex-col items-start gap-2 p-4">
             <div className="flex w-full flex-col gap-2">
-              <div className="text-muted-foreground flex w-full flex-row items-center justify-between text-[10px] font-semibold tracking-wider uppercase">
+              <div className="text-muted-foreground flex w-full flex-row items-center justify-between text-[10px] font-medium tracking-wider uppercase">
                 <span>Description</span>
                 <span>{formatReadingTime(note.readingTimeMinutes)}</span>
               </div>
@@ -80,7 +80,7 @@ export function NoteList({ note, index }: NoteItemProps) {
                 ))}
               </div>
             </div>
-            <div className="text-muted-foreground flex text-[10px] font-semibold tracking-wider uppercase"></div>
+            <div className="text-muted-foreground flex text-[10px] font-medium tracking-wider uppercase"></div>
           </div>
         </div>
       </PreviewCardPopup>

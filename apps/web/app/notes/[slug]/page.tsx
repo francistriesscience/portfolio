@@ -99,7 +99,7 @@ export default async function NotePage({ params }: NotePageProps) {
     <article className="flex flex-col gap-8">
       <Link
         href="/notes"
-        className="text-muted-foreground hover:text-foreground flex w-fit flex-row items-center gap-2 text-xs font-semibold tracking-wide uppercase transition-colors"
+        className="text-muted-foreground hover:text-foreground flex w-fit flex-row items-center gap-2 text-xs font-medium tracking-wide uppercase transition-colors"
       >
         <IconArrowLeft className="size-4" />
         Back to notes
