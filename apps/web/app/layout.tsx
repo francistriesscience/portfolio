@@ -22,12 +22,7 @@ export default function RootLayout({
       <body
         className={`${libreBaskerville.variable} ${dmSans.variable} bg-background text-foreground font-sans antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <TooltipProvider delay={0}>
             <div className="selection:bg-foreground selection:text-background relative min-h-screen w-full">
               <NavigationPill />
