@@ -14,7 +14,7 @@ export function TypographyH4({
 }: useRender.ComponentProps<"h4">): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "scroll-m-20 mt-6 mb-2 text-base font-semibold tracking-tight text-foreground",
+      "scroll-m-20 mt-6 mb-2 text-base font-medium tracking-tight text-foreground",
       className,
     ),
     "data-slot": "typography-h4",
