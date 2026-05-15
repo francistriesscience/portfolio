@@ -13,7 +13,7 @@ export function TypographyLarge({
   ...props
 }: useRender.ComponentProps<"div">): React.ReactElement {
   const defaultProps = {
-    className: cn("text-lg font-semibold", className),
+    className: cn("text-lg font-medium", className),
     "data-slot": "typography-large",
   }
 

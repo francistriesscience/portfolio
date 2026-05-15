@@ -21,7 +21,7 @@ export function WorkingAs() {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex w-full items-center gap-4">
-        <h2 className="text-muted-foreground shrink-0 text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
+        <h2 className="text-muted-foreground shrink-0 text-xs font-medium tracking-widest whitespace-nowrap uppercase">
           Working as
         </h2>
         <Separator className="flex-1" />
@@ -39,7 +39,7 @@ export function WorkingAs() {
             <CardFrame key={`${work.company}-${work.role}`} className="w-full">
               {work.availability ? (
                 <CardFrameHeader>
-                  <CardFrameTitle className="text-muted-foreground text-end text-xs font-semibold tracking-wide uppercase">
+                  <CardFrameTitle className="text-muted-foreground text-end text-xs font-medium tracking-wide uppercase">
                     {work.availability}
                   </CardFrameTitle>
                 </CardFrameHeader>

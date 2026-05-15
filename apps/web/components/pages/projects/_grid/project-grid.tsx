@@ -1,10 +1,10 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { IconHammer, IconWorld } from "@tabler/icons-react"
 
 import { PROJECT_STATUS_LABELS, type Project } from "@portfolio/web/data/projects"
-import { RenderingImage } from "@portfolio/web/components/shared/rendering-image"
 
 import { Badge, Card, CardFrame, CardFrameFooter, IconGoogleColabMono } from "@packages/ui/shared"
 
@@ -18,12 +18,14 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
       {projects.map((project) => (
         <CardFrame key={project.name}>
           <Card className="overflow-hidden">
-            <RenderingImage
-              wrapperClassName="aspect-video w-full"
-              imageClassName="object-cover"
-              src={project.image}
-              alt={project.name}
-            >
+            <div className="bg-muted relative aspect-video w-full">
+              <Image
+                src={project.image}
+                alt={project.name}
+                fill
+                unoptimized
+                className="z-0 object-cover"
+              />
               {project.status ? (
                 <Badge size="sm" className="absolute top-2 left-2 font-mono uppercase opacity-95">
                   <IconHammer className="size-3.5" />
@@ -42,7 +44,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
                   </Badge>
                 )}
               </div>
-            </RenderingImage>
+            </div>
           </Card>
           <CardFrameFooter>
             <Link
@@ -51,7 +53,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
               rel="noopener noreferrer"
               className="hover:text-foreground text-muted-foreground flex w-full items-center justify-between gap-3 text-sm transition-colors"
             >
-              <span className="min-w-0 truncate text-end text-xs font-bold tracking-wide uppercase">
+              <span className="min-w-0 truncate text-end text-xs font-medium tracking-wide uppercase">
                 {project.name}
               </span>
               {project.colab ? (

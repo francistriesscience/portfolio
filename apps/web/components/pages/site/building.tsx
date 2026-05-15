@@ -1,10 +1,10 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { IconHammer, IconWorld } from "@tabler/icons-react"
 
 import { PROJECTS, PROJECT_STATUS_LABELS } from "@portfolio/web/data/projects"
-import { RenderingImage } from "@portfolio/web/components/shared/rendering-image"
 
 import {
   Badge,
@@ -26,7 +26,7 @@ export function Building() {
     <section className="flex flex-col gap-4">
       <div className="flex w-full items-center gap-4">
         <div className="flex shrink-0 items-center gap-2">
-          <h2 className="text-muted-foreground text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
+          <h2 className="text-muted-foreground text-xs font-medium tracking-widest whitespace-nowrap uppercase">
             What I&apos;m building ...
           </h2>
           <Badge variant="outline" size="sm" className="font-mono tabular-nums">
@@ -36,7 +36,7 @@ export function Building() {
         <Separator className="flex-1" />
         <Link
           href="/projects"
-          className="text-muted-foreground hover:text-foreground shrink-0 text-xs font-semibold tracking-widest whitespace-nowrap uppercase transition-colors"
+          className="text-muted-foreground hover:text-foreground shrink-0 text-xs font-medium tracking-widest whitespace-nowrap uppercase transition-colors"
         >
           See all
         </Link>
@@ -46,12 +46,14 @@ export function Building() {
         {ongoingProjects.map((project) => (
           <CardFrame key={project.name}>
             <Card className="overflow-hidden">
-              <RenderingImage
-                wrapperClassName="aspect-video w-full"
-                imageClassName="object-cover"
-                src={project.image}
-                alt={project.name}
-              >
+              <div className="bg-muted relative aspect-video w-full">
+                <Image
+                  src={project.image}
+                  alt={project.name}
+                  fill
+                  unoptimized
+                  className="z-0 object-cover"
+                />
                 <Badge size="sm" className="absolute top-2 left-2 font-mono uppercase opacity-95">
                   <IconHammer className="size-3.5" />
                   {PROJECT_STATUS_LABELS[project.status!]}
@@ -68,7 +70,7 @@ export function Building() {
                     </Badge>
                   )}
                 </div>
-              </RenderingImage>
+              </div>
             </Card>
             <CardFrameFooter>
               <Link
@@ -77,7 +79,7 @@ export function Building() {
                 rel="noopener noreferrer"
                 className="hover:text-foreground text-muted-foreground flex w-full items-center justify-between gap-3 text-sm transition-colors"
               >
-                <span className="min-w-0 truncate text-end text-xs font-bold tracking-wide uppercase">
+                <span className="min-w-0 truncate text-end text-xs font-medium tracking-wide uppercase">
                   {project.name}
                 </span>
                 {project.colab ? (

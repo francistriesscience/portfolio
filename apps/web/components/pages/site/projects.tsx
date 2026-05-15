@@ -40,7 +40,7 @@ export function Projects() {
     <section className="flex flex-col gap-4">
       <div className="flex w-full items-center gap-4">
         <div className="flex shrink-0 items-center gap-2">
-          <h2 className="text-muted-foreground text-xs font-semibold tracking-widest whitespace-nowrap uppercase">
+          <h2 className="text-muted-foreground text-xs font-medium tracking-widest whitespace-nowrap uppercase">
             What I&apos;m proud of
           </h2>
           <Badge variant="outline" size="sm" className="font-mono tabular-nums">

@@ -1,7 +1,6 @@
+import Image from "next/image"
 import Link from "next/link"
 import { IconArrowUpRight } from "@tabler/icons-react"
-
-import { RenderingImage } from "@portfolio/web/components/shared/rendering-image"
 
 import { PreviewCard, PreviewCardPopup, PreviewCardTrigger, Badge } from "@packages/ui/shared"
 
@@ -25,7 +24,7 @@ export function NoteList({ note, index }: NoteItemProps) {
               {String(index + 1).padStart(2, "0")}
             </span>
             <div className="flex min-w-0 items-center gap-2">
-              <h3 className="text-foreground line-clamp-1 max-w-[28ch] min-w-0 text-sm font-semibold transition-colors">
+              <h3 className="text-foreground line-clamp-1 max-w-[28ch] min-w-0 text-sm font-medium transition-colors">
                 {title}
               </h3>
               {shouldShowNewBadge ? (
@@ -55,16 +54,13 @@ export function NoteList({ note, index }: NoteItemProps) {
       <PreviewCardPopup className="border-border bg-background w-80 overflow-hidden p-0 shadow-2xl">
         <div className="flex flex-col">
           {image && (
-            <RenderingImage
-              wrapperClassName="aspect-video w-full overflow-hidden"
-              imageClassName="object-cover"
-              src={image}
-              alt={title}
-            />
+            <div className="bg-muted relative aspect-video w-full overflow-hidden">
+              <Image src={image} alt={title} fill unoptimized className="object-cover" />
+            </div>
           )}
           <div className="flex flex-col items-start gap-2 p-4">
             <div className="flex w-full flex-col gap-2">
-              <div className="text-muted-foreground flex w-full flex-row items-center justify-between text-[10px] font-semibold tracking-wider uppercase">
+              <div className="text-muted-foreground flex w-full flex-row items-center justify-between text-[10px] font-medium tracking-wider uppercase">
                 <span>Description</span>
                 <span>{formatReadingTime(note.readingTimeMinutes)}</span>
               </div>
@@ -84,7 +80,7 @@ export function NoteList({ note, index }: NoteItemProps) {
                 ))}
               </div>
             </div>
-            <div className="text-muted-foreground flex text-[10px] font-semibold tracking-wider uppercase"></div>
+            <div className="text-muted-foreground flex text-[10px] font-medium tracking-wider uppercase"></div>
           </div>
         </div>
       </PreviewCardPopup>
