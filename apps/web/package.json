@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "sync:github-contributions": "bun ./scripts/sync-github-contributions.ts",
     "build:cloudflare": "opennextjs-cloudflare build",
     "preview:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "upload:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare upload",

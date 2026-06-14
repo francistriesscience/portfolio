@@ -49,8 +49,8 @@ export function AboutMe() {
             <div className="text-muted-foreground text-sm leading-tight">
               <p>
                 I truly love building things that live in the cloud and solve puzzles on the ground.
-                Over the last 4+ years, I have been a Software Engineer and Tech Lead, bridging the
-                gap between fast-moving startups and deep-thinking academia.{" "}
+                Over the last 4+ years, I have been a Software Engineer and Product Engineer,
+                bridging the gap between fast-moving startups and deep-thinking academia.{" "}
                 {!isExpanded && (
                   <button
                     onClick={() => setIsExpanded(true)}

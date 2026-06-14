@@ -5,6 +5,7 @@ import { AboutMe } from "@/components/pages/site/about-me"
 import { WorkingAs } from "@/components/pages/site/working-as"
 import { FormerRoles } from "@/components/pages/site/former-roles"
 import { Building } from "@/components/pages/site/building"
+import { Contribution } from "@/components/pages/site/contribution"
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <FormerRoles />
       <AboutMe />
       <Building />
+      <Contribution />
     </div>
   )
 }
