@@ -9,14 +9,7 @@ export interface WorkingAs {
 
 export const WORKING_AS: WorkingAs[] = [
   {
-    role: "Artificial Intelligence Engineer",
-    company: "Idea Venture Studio",
-    location: "California, US",
-    startYear: "2026",
-    endYear: "Present",
-  },
-  {
-    role: "Technical Lead",
+    role: "Product Engineer",
     company: "Mnemora",
     location: "City of Mabalacat, PH",
     startYear: "2026",
