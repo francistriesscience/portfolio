@@ -18,6 +18,7 @@ interface ContributionsResponse {
 
 export function Contribution() {
   const today = React.useMemo(() => new Date(), [])
+  const graphCacheKey = React.useMemo(() => today.toISOString().slice(0, 10), [today])
   const fallbackRangeStart = React.useMemo(
     () => new Date(today.getFullYear(), today.getMonth() - 8, 1),
     [today],
@@ -40,7 +41,9 @@ export function Contribution() {
 
     async function loadContributions() {
       try {
-        const response = await fetch("/graph/github-contributions.json")
+        const response = await fetch(`/graph/github-contributions.json?v=${graphCacheKey}`, {
+          cache: "no-store",
+        })
         const payload = (await response.json()) as ContributionsResponse & { error?: string }
 
         if (!response.ok) {
@@ -80,7 +83,7 @@ export function Contribution() {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [graphCacheKey])
 
   return (
     <section className="flex w-full flex-col gap-4">
