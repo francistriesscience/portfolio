@@ -1314,13 +1314,18 @@
       "count": 40,
       "date": "2026-06-20",
       "level": 2
+    },
+    {
+      "count": 0,
+      "date": "2026-06-21",
+      "level": 0
     }
   ],
-  "end": "2026-06-20",
+  "end": "2026-06-21",
   "start": "2025-10-01",
   "totalContributions": 12201,
   "totalLastYearContributions": 12459,
-  "updatedAt": "2026-06-20T02:33:32.506Z",
+  "updatedAt": "2026-06-21T16:27:22.517Z",
   "username": "francistriesscience",
   "year": 2026
 }
