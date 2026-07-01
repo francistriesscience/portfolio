@@ -1,161 +1,6 @@
 {
   "data": [
     {
-      "count": 29,
-      "date": "2025-10-01",
-      "level": 1
-    },
-    {
-      "count": 30,
-      "date": "2025-10-02",
-      "level": 1
-    },
-    {
-      "count": 29,
-      "date": "2025-10-03",
-      "level": 1
-    },
-    {
-      "count": 37,
-      "date": "2025-10-04",
-      "level": 2
-    },
-    {
-      "count": 42,
-      "date": "2025-10-05",
-      "level": 2
-    },
-    {
-      "count": 37,
-      "date": "2025-10-06",
-      "level": 2
-    },
-    {
-      "count": 55,
-      "date": "2025-10-07",
-      "level": 2
-    },
-    {
-      "count": 35,
-      "date": "2025-10-08",
-      "level": 1
-    },
-    {
-      "count": 34,
-      "date": "2025-10-09",
-      "level": 1
-    },
-    {
-      "count": 38,
-      "date": "2025-10-10",
-      "level": 2
-    },
-    {
-      "count": 26,
-      "date": "2025-10-11",
-      "level": 1
-    },
-    {
-      "count": 39,
-      "date": "2025-10-12",
-      "level": 2
-    },
-    {
-      "count": 40,
-      "date": "2025-10-13",
-      "level": 2
-    },
-    {
-      "count": 35,
-      "date": "2025-10-14",
-      "level": 1
-    },
-    {
-      "count": 35,
-      "date": "2025-10-15",
-      "level": 1
-    },
-    {
-      "count": 14,
-      "date": "2025-10-16",
-      "level": 1
-    },
-    {
-      "count": 63,
-      "date": "2025-10-17",
-      "level": 2
-    },
-    {
-      "count": 69,
-      "date": "2025-10-18",
-      "level": 2
-    },
-    {
-      "count": 33,
-      "date": "2025-10-19",
-      "level": 1
-    },
-    {
-      "count": 43,
-      "date": "2025-10-20",
-      "level": 2
-    },
-    {
-      "count": 29,
-      "date": "2025-10-21",
-      "level": 1
-    },
-    {
-      "count": 44,
-      "date": "2025-10-22",
-      "level": 2
-    },
-    {
-      "count": 12,
-      "date": "2025-10-23",
-      "level": 1
-    },
-    {
-      "count": 50,
-      "date": "2025-10-24",
-      "level": 2
-    },
-    {
-      "count": 30,
-      "date": "2025-10-25",
-      "level": 1
-    },
-    {
-      "count": 47,
-      "date": "2025-10-26",
-      "level": 2
-    },
-    {
-      "count": 56,
-      "date": "2025-10-27",
-      "level": 2
-    },
-    {
-      "count": 37,
-      "date": "2025-10-28",
-      "level": 2
-    },
-    {
-      "count": 28,
-      "date": "2025-10-29",
-      "level": 1
-    },
-    {
-      "count": 20,
-      "date": "2025-10-30",
-      "level": 1
-    },
-    {
-      "count": 28,
-      "date": "2025-10-31",
-      "level": 1
-    },
-    {
       "count": 38,
       "date": "2025-11-01",
       "level": 2
@@ -1364,13 +1209,18 @@
       "count": 0,
       "date": "2026-06-30",
       "level": 0
+    },
+    {
+      "count": 0,
+      "date": "2026-07-01",
+      "level": 0
     }
   ],
-  "end": "2026-06-30",
-  "start": "2025-10-01",
-  "totalContributions": 12065,
+  "end": "2026-07-01",
+  "start": "2025-11-01",
+  "totalContributions": 10921,
   "totalLastYearContributions": 12323,
-  "updatedAt": "2026-06-30T02:32:17.502Z",
+  "updatedAt": "2026-07-01T02:38:34.022Z",
   "username": "francistriesscience",
   "year": 2026
 }
