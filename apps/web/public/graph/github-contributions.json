@@ -1336,16 +1336,21 @@
       "level": 1
     },
     {
-      "count": 0,
+      "count": 17,
       "date": "2026-08-25",
+      "level": 1
+    },
+    {
+      "count": 0,
+      "date": "2026-08-26",
       "level": 0
     }
   ],
-  "end": "2026-08-25",
+  "end": "2026-08-26",
   "start": "2025-12-01",
-  "totalContributions": 10070,
-  "totalLastYearContributions": 12532,
-  "updatedAt": "2026-08-25T00:42:34.137Z",
+  "totalContributions": 10087,
+  "totalLastYearContributions": 12549,
+  "updatedAt": "2026-08-26T00:43:23.352Z",
   "username": "francistriesscience",
   "year": 2026
 }
